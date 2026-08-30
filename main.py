@@ -88,9 +88,10 @@ def generate_ai_response(user_query: str, image_part=None) -> str:
 
 
 # ─── FastAPI ilovasi ──────────────────────────────────────────────
-app = FastAPI(title="Avto AI — YHQ Maslahatchi")
+app = FastAPI(title="Inspektor AI — YHQ Maslahatchi")
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+app.mount("/icon", StaticFiles(directory=str(BASE_DIR / "icon")), name="icon")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 class ChatRequest(BaseModel):
