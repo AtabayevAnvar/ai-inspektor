@@ -246,12 +246,54 @@
             align-items: center;
         }
 
+        /* Empty State Hero Screen */
+        .empty-state-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: auto 0;
+            padding: 40px 20px 20px 20px;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .empty-hero-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            background: #1133A3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            box-shadow: 0 12px 32px rgba(17, 51, 163, 0.4);
+        }
+
+        .empty-hero-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 14px;
+            letter-spacing: -0.4px;
+        }
+
+        .empty-hero-subtitle {
+            font-size: 14px;
+            color: #7e7e84;
+            max-width: 530px;
+            line-height: 1.65;
+            margin: 0 auto;
+        }
+
         .centered-chat-content {
             width: 100%;
             max-width: 800px;
             display: flex;
             flex-direction: column;
             gap: 22px;
+            min-height: 100%;
         }
 
         /* User Message Bubble */
@@ -851,6 +893,19 @@
         chatContent.innerHTML = '';
 
         if (!currentChat || currentChat.messages.length === 0) {
+            chatContent.innerHTML = `
+                <div class="empty-state-hero">
+                    <div class="empty-hero-logo">
+                        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 16.5V7.5L18 12L11 16.5Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <h1 class="empty-hero-title">Inspektor AI</h1>
+                    <p class="empty-hero-subtitle">
+                        Yo'l harakati qoidalari bo'chi istalgan savolingizga javob olishinigiz mumkin. Javoblar faqat O'zbekiston Respublikasi Yo'l Harakati qoidali ning 186 bandi va atamalari ga asosan holda beriladi
+                    </p>
+                </div>
+            `;
             return;
         }
 
