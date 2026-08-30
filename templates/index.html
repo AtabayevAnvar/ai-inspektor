@@ -628,10 +628,7 @@
     <!-- Brand Header -->
     <div class="sidebar-brand">
         <div class="brand-icon-wrap">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 16.5V7.5L18 12L11 16.5Z" fill="#1133A3"/>
-                <circle cx="12" cy="12" r="10" stroke="#2563EB" stroke-width="1.5"/>
-            </svg>
+            <img src="/icon/logo.png" style="width: 26px; height: 26px; object-fit: contain;" alt="Logo">
         </div>
         <span class="brand-title">Inspektor AI</span>
     </div>
@@ -895,10 +892,8 @@
         if (!currentChat || currentChat.messages.length === 0) {
             chatContent.innerHTML = `
                 <div class="empty-state-hero">
-                    <div class="empty-hero-logo">
-                        <svg width="38" height="38" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 16.5V7.5L18 12L11 16.5Z" fill="white"/>
-                        </svg>
+                    <div class="empty-hero-logo" style="background: transparent; box-shadow: none; width: auto; height: auto;">
+                        <img src="/icon/logo.png" style="width: 72px; height: 72px; object-fit: contain;" alt="Inspektor AI Logo">
                     </div>
                     <h1 class="empty-hero-title">Inspektor AI</h1>
                     <p class="empty-hero-subtitle">
