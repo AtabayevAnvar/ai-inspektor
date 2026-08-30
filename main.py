@@ -53,6 +53,9 @@ MUHIM QOIDALAR VA XULQ-ATVOR:
    - Qaysi bandga asoslanganingni ko'rsat (masalan: "YHQning 78-bandiga ko'ra...").
    - Bandma-band, tartibli va tushunarli qilib ber.
 
+5. JAVOBNI HECH QACHON YARIMTA QILIB TO'XTATIB QO'YMA:
+   - Javobni mantiqan to'liq va tugallangan holda ber. Barcha ro'yxat va fikrlarni to'liq oxiriga yetkaz.
+
 TEGISHLI YHQ QOIDALARI:
 ---
 {relevant_rules}
@@ -64,7 +67,7 @@ Foydalanuvchi xabari: {user_query}
 def generate_ai_response(user_query: str, image_part=None) -> str:
     """RAG + Gemini orqali tezkor va kvotasiz javob olish"""
     # 1. Savolga mos bandlarni qidirish
-    relevant_rules = RULES_KB.search(user_query, top_k=6)
+    relevant_rules = RULES_KB.search(user_query, top_k=5)
     prompt_text = build_prompt(user_query, relevant_rules)
 
     contents = []
@@ -79,7 +82,7 @@ def generate_ai_response(user_query: str, image_part=None) -> str:
                 model_name=model_name,
                 generation_config=genai.types.GenerationConfig(
                     temperature=0.3,
-                    max_output_tokens=3000,
+                    max_output_tokens=8192,
                 )
             )
             res = m.generate_content(contents)
