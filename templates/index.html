@@ -251,6 +251,12 @@
             opacity: 0.95;
             pointer-events: none;
             z-index: 1;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        .bg-ellipse-glow.hidden-glow {
+            opacity: 0;
+            visibility: hidden;
         }
 
         /* Messages Scroll Window */
@@ -692,7 +698,7 @@
 <!-- ─── MAIN CHAT AREA (CENTERED 800PX • #000000) ─────── -->
 <main class="main-chat-container">
     <!-- Figma Ellipse Ambient Blur Background (W: 661px, H: 88px, Fill: #1133A3, Blur: 340) -->
-    <div class="bg-ellipse-glow"></div>
+    <div class="bg-ellipse-glow" id="bgEllipseGlow"></div>
 
     <!-- Messages Scroll Viewport -->
     <div class="messages-viewport" id="messagesViewport">
@@ -768,6 +774,7 @@
 
     // DOM References
     const sidebar = document.getElementById('sidebar');
+    const bgEllipseGlow = document.getElementById('bgEllipseGlow');
     const chatListContainer = document.getElementById('chatListContainer');
     const messagesViewport = document.getElementById('messagesViewport');
     const chatContent = document.getElementById('chatContent');
@@ -912,6 +919,7 @@
         chatContent.innerHTML = '';
 
         if (!currentChat || currentChat.messages.length === 0) {
+            if (bgEllipseGlow) bgEllipseGlow.classList.remove('hidden-glow');
             chatContent.innerHTML = `
                 <div class="empty-state-hero">
                     <div class="empty-hero-logo" style="background: transparent; box-shadow: none; width: auto; height: auto;">
@@ -925,6 +933,9 @@
             `;
             return;
         }
+
+        // Agar xabarlar bo'lsa orqafondagi glow yo'qoladi va qora bo'ladi
+        if (bgEllipseGlow) bgEllipseGlow.classList.add('hidden-glow');
 
         currentChat.messages.forEach(msg => {
             if (msg.role === 'user') {
@@ -1012,6 +1023,8 @@
 
         // Auto-title on first message
         if (currentChat.messages.length === 0) {
+            chatContent.innerHTML = '';
+            if (bgEllipseGlow) bgEllipseGlow.classList.add('hidden-glow');
             let autoTitle = text.slice(0, 26);
             if (text.length > 26) autoTitle += '...';
             if (!autoTitle) autoTitle = "Rasm tahlili";
