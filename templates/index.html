@@ -673,13 +673,12 @@
                 height: calc(100vh - 20px);
                 z-index: 60;
                 box-shadow: 0 0 50px rgba(0,0,0,0.9);
-                transform: translateX(0);
+                transform: translateX(-330px);
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .sidebar.collapsed {
-                transform: translateX(-330px);
-                margin-left: 10px;
+            .sidebar.mobile-open {
+                transform: translateX(0);
             }
 
             /* 16px side padding on mobile */
@@ -752,7 +751,7 @@
 </div>
 
 <!-- ─── SIDEBAR (290px • #0F0F0F • border #222222) ─────── -->
-<aside class="sidebar collapsed" id="sidebar">
+<aside class="sidebar" id="sidebar">
     <!-- Brand Header -->
     <div class="sidebar-brand">
         <div class="brand-icon-wrap">
@@ -1296,15 +1295,19 @@
 
     // ─── SIDEBAR TOGGLE ─────────────────────────────────────
     function toggleSidebar() {
-        sidebar.classList.toggle('collapsed');
-        if (sidebarBackdrop) {
-            sidebarBackdrop.classList.toggle('active', !sidebar.classList.contains('collapsed'));
+        if (window.innerWidth <= 860) {
+            sidebar.classList.toggle('mobile-open');
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.toggle('active', sidebar.classList.contains('mobile-open'));
+            }
+        } else {
+            sidebar.classList.toggle('collapsed');
         }
     }
 
     function closeMobileSidebar() {
         if (window.innerWidth <= 860) {
-            sidebar.classList.add('collapsed');
+            sidebar.classList.remove('mobile-open');
             if (sidebarBackdrop) {
                 sidebarBackdrop.classList.remove('active');
             }
