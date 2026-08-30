@@ -609,49 +609,150 @@
             border: 1px solid #333333;
         }
 
-        /* Mobile Sidebar */
-        .mobile-sidebar-toggle {
+        /* Mobile Top Navigation Bar */
+        .mobile-top-bar {
             display: none;
+            height: 52px;
+            width: 100%;
+            background-color: #000000;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 0 16px;
+            align-items: center;
+            justify-content: space-between;
             position: absolute;
-            top: 14px;
-            left: 14px;
-            z-index: 40;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 30;
+        }
+
+        .mobile-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .mobile-icon-btn {
             background: #0F0F0F;
             border: 1px solid #222222;
             padding: 8px;
             border-radius: 10px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Sidebar Backdrop Overlay */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 55;
+            backdrop-filter: blur(3px);
+        }
+
+        .sidebar-backdrop.active {
+            display: block;
+        }
+
+        /* Mobile Responsive Breakpoint (16px left and right padding) */
         @media (max-width: 860px) {
-            .mobile-sidebar-toggle { display: block; }
+            .mobile-top-bar { display: flex; }
+
             .sidebar {
                 position: fixed;
                 top: 0;
                 bottom: 0;
                 left: 0;
-                margin: 8px;
-                height: calc(100vh - 16px);
+                margin: 10px;
+                height: calc(100vh - 20px);
+                z-index: 60;
+                box-shadow: 0 0 50px rgba(0,0,0,0.9);
+                transform: translateX(0);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
-            .sidebar.collapsed { margin-left: -320px; }
-            .user-message-wrapper { max-width: 85%; }
-            .messages-viewport { padding: 50px 14px 140px 14px; }
+
+            .sidebar.collapsed {
+                transform: translateX(-330px);
+                margin-left: 10px;
+            }
+
+            /* 16px side padding on mobile */
+            .messages-viewport {
+                padding: 64px 16px 150px 16px;
+            }
+
+            .centered-chat-content {
+                padding: 10px 0 150px 0;
+                gap: 16px;
+            }
+
+            /* 16px side padding on input dock */
+            .input-dock {
+                padding: 10px 16px 14px 16px;
+            }
+
+            .user-message-wrapper {
+                max-width: 88%;
+            }
+
+            .user-bubble {
+                font-size: 14px;
+                padding: 11px 16px;
+            }
+
+            .ai-bubble {
+                font-size: 14px;
+                padding: 18px 18px;
+            }
+
+            .empty-state-hero {
+                padding: 20px 16px;
+            }
+
+            .empty-hero-title {
+                font-size: 22px;
+            }
+
+            .empty-hero-subtitle {
+                font-size: 13px;
+                line-height: 1.6;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- Mobile Sidebar Toggle -->
-<button class="mobile-sidebar-toggle" onclick="toggleSidebar()" title="Menyu">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-</button>
+<!-- Mobile Sidebar Backdrop Overlay -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+<!-- Mobile Top Navigation Bar -->
+<div class="mobile-top-bar">
+    <button class="mobile-icon-btn" onclick="toggleSidebar()" title="Menyu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    <div class="mobile-brand">
+        <img src="/icon/logo.png" style="width: 24px; height: 24px; object-fit: contain;" alt="Logo">
+        <span>Inspektor AI</span>
+    </div>
+    <button class="mobile-icon-btn" onclick="createNewChat()" title="Yangi chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+            <path d="M12 5v14M5 12h14"/>
+        </svg>
+    </button>
+</div>
 
 <!-- ─── SIDEBAR (290px • #0F0F0F • border #222222) ─────── -->
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar collapsed" id="sidebar">
     <!-- Brand Header -->
     <div class="sidebar-brand">
         <div class="brand-icon-wrap">
@@ -776,6 +877,7 @@
 
     // DOM References
     const sidebar = document.getElementById('sidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
     const bgEllipseGlow = document.getElementById('bgEllipseGlow');
     const chatListContainer = document.getElementById('chatListContainer');
     const messagesViewport = document.getElementById('messagesViewport');
@@ -839,6 +941,7 @@
         saveChatsToStorage();
         renderChatList();
         renderActiveChatMessages();
+        closeMobileSidebar();
 
         if (autoFocus) {
             chatInput.focus();
@@ -851,6 +954,7 @@
         renderChatList();
         renderActiveChatMessages();
         removeImage();
+        closeMobileSidebar();
     }
 
     function deleteChat(chatId, e) {
@@ -1193,6 +1297,18 @@
     // ─── SIDEBAR TOGGLE ─────────────────────────────────────
     function toggleSidebar() {
         sidebar.classList.toggle('collapsed');
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.toggle('active', !sidebar.classList.contains('collapsed'));
+        }
+    }
+
+    function closeMobileSidebar() {
+        if (window.innerWidth <= 860) {
+            sidebar.classList.add('collapsed');
+            if (sidebarBackdrop) {
+                sidebarBackdrop.classList.remove('active');
+            }
+        }
     }
 
     // ─── UTILS ──────────────────────────────────────────────
