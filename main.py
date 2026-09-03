@@ -4,22 +4,31 @@ FastAPI + RAG Search Engine + Google Gemini API (Tezkor va Limitlarsiz)
 """
 import os
 import base64
+import uuid
 from pathlib import Path
+from typing import Optional, Dict, Any
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, File, UploadFile, Form
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, File, UploadFile, Form, Response
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import google.generativeai as genai
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
 from rules_engine import RulesKnowledgeBase
+import database as db
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 genai.configure(api_key=GEMINI_API_KEY)
+
+COOKIE_SESSION = "inspektor_session"
+COOKIE_GUEST = "inspektor_guest"
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -99,6 +108,32 @@ def generate_ai_response(user_query: str, image_part=None) -> str:
     return "Javob hosil qilishda muammo yuz berdi."
 
 
+# ─── Auth & Session Yordamchilari ─────────────────────────────────
+def get_current_user_and_guest(request: Request) -> tuple:
+    """Sessiya yoki mehmon holatini aniqlash"""
+    session_token = request.cookies.get(COOKIE_SESSION)
+    user = db.get_user_by_session(session_token)
+    
+    guest_id = request.cookies.get(COOKIE_GUEST)
+    client_ip = request.client.host if request.client else ""
+    guest = db.get_or_create_guest(guest_id, ip_address=client_ip)
+    
+    return user, guest
+
+def verify_google_token(token_str: str) -> Optional[dict]:
+    """Google ID tokenni tekshirish"""
+    try:
+        client_id = GOOGLE_CLIENT_ID if GOOGLE_CLIENT_ID else None
+        id_info = id_token.verify_oauth2_token(
+            token_str,
+            google_requests.Request(),
+            client_id
+        )
+        return id_info
+    except Exception as e:
+        print(f"[Google Auth Error]: {e}")
+        return None
+
 # ─── FastAPI ilovasi ──────────────────────────────────────────────
 app = FastAPI(title="Inspektor AI — YHQ Maslahatchi")
 
@@ -110,8 +145,12 @@ class ChatRequest(BaseModel):
     message: str
     session_id: str = "default"
 
-class ChatResponse(BaseModel):
-    reply: str
+class GoogleAuthRequest(BaseModel):
+    credential: str
+
+class DemoLoginRequest(BaseModel):
+    name: Optional[str] = "Atabayev Anvar"
+    email: Optional[str] = "atabayev@gmail.com"
 
 
 # ─── Endpointlar ──────────────────────────────────────────────────
@@ -122,32 +161,149 @@ async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.post("/api/chat", response_model=ChatResponse)
-async def chat(req: ChatRequest):
-    """Faqat matnli savol"""
+# ─── Autentifikatsiya Endpointlari ────────────────────────────────
+
+@app.get("/api/auth/me")
+async def get_me(request: Request):
+    """Joriy foydalanuvchi yoki mehmon statusini olish"""
+    user, guest = get_current_user_and_guest(request)
+    can_ask = db.can_guest_ask(guest["guest_id"])
+    
+    res = JSONResponse({
+        "authenticated": user is not None,
+        "user": user,
+        "guest_id": guest["guest_id"],
+        "questions_left": 9999 if user else (1 if can_ask else 0),
+        "google_client_id": GOOGLE_CLIENT_ID
+    })
+    # Mehmon cookie si doimo saqlanishi kerak
+    if not user:
+        res.set_cookie(COOKIE_GUEST, guest["guest_id"], max_age=30*86400, httponly=True, samesite="lax")
+    return res
+
+
+@app.post("/api/auth/google")
+async def auth_google(payload: GoogleAuthRequest, response: Response):
+    """Google orqali kirish/ro'yxatdan o'tish"""
+    info = verify_google_token(payload.credential)
+    if not info:
+        return JSONResponse(status_code=400, content={"error": "Google tokeni tasdiqlanmadi"})
+        
+    google_id = str(info.get("sub", ""))
+    email = str(info.get("email", ""))
+    name = str(info.get("name", "Foydalanuvchi"))
+    picture = str(info.get("picture", ""))
+    
+    user = db.upsert_google_user(google_id, email, name, picture)
+    session_token = db.create_user_session(user["id"])
+    
+    res = JSONResponse(content={"status": "ok", "user": user})
+    res.set_cookie(
+        key=COOKIE_SESSION,
+        value=session_token,
+        max_age=30 * 86400,
+        httponly=True,
+        samesite="lax"
+    )
+    return res
+
+
+@app.post("/api/auth/demo-login")
+async def auth_demo(payload: DemoLoginRequest = DemoLoginRequest()):
+    """Google Client ID o'rnatilmagan bo'lsa darhol sinash uchun qulay demo kirish"""
+    google_id = f"demo_{uuid.uuid4().hex[:8]}"
+    avatar = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231133A3'/><circle cx='50' cy='40' r='20' fill='%23ffffff'/><circle cx='50' cy='95' r='35' fill='%23ffffff'/></svg>"
+    user = db.upsert_google_user(google_id, payload.email or "user@gmail.com", payload.name or "Foydalanuvchi", avatar)
+    session_token = db.create_user_session(user["id"])
+    
+    res = JSONResponse(content={"status": "ok", "user": user})
+    res.set_cookie(
+        key=COOKIE_SESSION,
+        value=session_token,
+        max_age=30 * 86400,
+        httponly=True,
+        samesite="lax"
+    )
+    return res
+
+
+@app.post("/api/auth/logout")
+async def logout(request: Request):
+    """Tizimdan chiqish"""
+    session_token = request.cookies.get(COOKIE_SESSION)
+    if session_token:
+        db.delete_user_session(session_token)
+    res = JSONResponse(content={"status": "ok"})
+    res.delete_cookie(key=COOKIE_SESSION)
+    return res
+
+
+# ─── Chat Endpointlari (1 ta savol mehmon limiti bilan) ───────────
+
+@app.post("/api/chat")
+async def chat(req: ChatRequest, request: Request):
+    """Matnli savol (Mehmonlar uchun 1 ta savol limiti bilan)"""
+    user, guest = get_current_user_and_guest(request)
+    
+    # Mehmon limitini tekshirish
+    if not user:
+        if not db.can_guest_ask(guest["guest_id"]):
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": "LIMIT_REACHED",
+                    "reply": "⚠️ Mehmon sifatida siz 1 ta bepul savol berish huquqidan foydalandingiz. Suhbatni cheklovlarsiz davom ettirish uchun iltimos, ro'yxatdan o'ting.",
+                    "require_auth": True
+                }
+            )
+            
     user_message = req.message.strip()
     if not user_message:
-        return ChatResponse(reply="Iltimos, savol yozing.")
+        return JSONResponse(content={"reply": "Iltimos, savol yozing."})
 
     try:
         reply = generate_ai_response(user_message)
-        return ChatResponse(reply=reply)
+        
+        # Mehmon bo'lsa, savol sonini oshiramiz
+        if not user:
+            db.increment_guest_count(guest["guest_id"])
+            
+        res = JSONResponse(content={"reply": reply, "status": "OK"})
+        if not user:
+            res.set_cookie(COOKIE_GUEST, guest["guest_id"], max_age=30*86400, httponly=True, samesite="lax")
+        return res
+
     except Exception as e:
         err_msg = str(e)
         if "429" in err_msg or "ResourceExhausted" in err_msg:
-            return ChatResponse(
-                reply="⚠️ Google AI bepul tarifi daqiqalik limiti to'ldi. Iltimos, 15-20 soniya kuting va qaytadan yuboring."
+            return JSONResponse(
+                content={"reply": "⚠️ Google AI bepul tarifi daqiqalik limiti to'ldi. Iltimos, 15-20 soniya kuting va qaytadan yuboring."}
             )
-        return ChatResponse(reply=f"Xatolik: {type(e).__name__} - {str(e)}")
+        return JSONResponse(content={"reply": f"Xatolik: {type(e).__name__} - {str(e)}"})
 
 
 @app.post("/api/chat-image")
 async def chat_with_image(
+    request: Request,
     message: str = Form(...),
     session_id: str = Form("default"),
     image: UploadFile = File(...)
 ):
-    """Rasm + Matnli savol"""
+    """Rasm + Matnli savol (Mehmonlar uchun 1 ta savol limiti bilan)"""
+    user, guest = get_current_user_and_guest(request)
+    
+    # Mehmon limitini tekshirish
+    if not user:
+        if not db.can_guest_ask(guest["guest_id"]):
+            return JSONResponse(
+                status_code=403,
+                content={
+                    "status": "LIMIT_REACHED",
+                    "reply": "⚠️ Mehmon sifatida siz 1 ta bepul savol berish huquqidan foydalandingiz. Suhbatni cheklovlarsiz davom ettirish uchun iltimos, ro'yxatdan o'ting.",
+                    "require_auth": True
+                }
+            )
+
     user_message = message.strip()
     if not user_message:
         user_message = "Ushbu yo'l rasmini YHQ qoidalari bo'yicha tahlil qiling."
@@ -164,13 +320,20 @@ async def chat_with_image(
         }
 
         reply = generate_ai_response(user_message, image_part=image_part)
-        return {"reply": reply}
+        
+        if not user:
+            db.increment_guest_count(guest["guest_id"])
+            
+        res = JSONResponse(content={"reply": reply, "status": "OK"})
+        if not user:
+            res.set_cookie(COOKIE_GUEST, guest["guest_id"], max_age=30*86400, httponly=True, samesite="lax")
+        return res
 
     except Exception as e:
         err_msg = str(e)
         if "429" in err_msg or "ResourceExhausted" in err_msg:
-            return {"reply": "⚠️ Rasm tahlili limiti biroz to'ldi. Iltimos, 15-20 soniyadan so'ng qayta urinib ko'ring."}
-        return {"reply": f"Rasm tahlilida xatolik: {type(e).__name__} - {str(e)}"}
+            return JSONResponse(content={"reply": "⚠️ Rasm tahlili limiti biroz to'ldi. Iltimos, 15-20 soniyadan so'ng qayta urinib ko'ring."})
+        return JSONResponse(content={"reply": f"Rasm tahlilida xatolik: {type(e).__name__} - {str(e)}"})
 
 
 @app.post("/api/clear")
@@ -184,3 +347,4 @@ if __name__ == "__main__":
     print("\n[*] Avto AI -- YHQ Maslahatchi ishga tushdi!")
     print("[*] Brauzerda oching: http://localhost:8000\n")
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
