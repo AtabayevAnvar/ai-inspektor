@@ -798,6 +798,22 @@
                 line-height: 1.6;
             }
         }
+
+        /* Specific fix for Yandex Browser Mobile's tall fixed bottom bar (~86px) */
+        @media (max-width: 860px) {
+            .is-yabrowser .input-dock {
+                bottom: 86px !important;
+                padding-bottom: 6px !important;
+            }
+
+            .is-yabrowser.keyboard-open .input-dock {
+                bottom: 0px !important;
+            }
+
+            .is-yabrowser .centered-chat-content {
+                padding-bottom: calc(250px + env(safe-area-inset-bottom, 16px)) !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -964,7 +980,32 @@
     const imageFileInput = document.getElementById('imageFileInput');
     const imagePreviewDock = document.getElementById('imagePreviewDock');
     const imageThumb = document.getElementById('imageThumb');
-    const imageInfo = document.getElementById('imageInfo');
+    // ─── BROWSER & KEYBOARD ADAPTATION (YANDEX vs CHROME) ───
+    function initBrowserAdaptation() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        // Check if Yandex Browser on mobile
+        const isYandex = /YaBrowser|YandexSearch/i.test(ua);
+        if (isYandex) {
+            document.documentElement.classList.add('is-yabrowser');
+        }
+
+        // Handle visualViewport for virtual keyboard on mobile
+        if (window.visualViewport) {
+            const initialHeight = window.innerHeight;
+            function onViewportChange() {
+                const currentHeight = window.visualViewport.height;
+                const isKeyboard = (initialHeight - currentHeight) > 140;
+                if (isKeyboard) {
+                    document.documentElement.classList.add('keyboard-open');
+                } else {
+                    document.documentElement.classList.remove('keyboard-open');
+                }
+            }
+            window.visualViewport.addEventListener('resize', onViewportChange);
+            window.visualViewport.addEventListener('scroll', onViewportChange);
+        }
+    }
+    initBrowserAdaptation();
 
     // ─── INITIALIZATION ─────────────────────────────────────
     function init() {
