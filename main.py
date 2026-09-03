@@ -149,6 +149,19 @@ def verify_google_token(token_str: str) -> Optional[dict]:
 # ─── FastAPI ilovasi ──────────────────────────────────────────────
 app = FastAPI(title="Inspektor AI — YHQ Maslahatchi")
 
+# ─── Vercel Serverless Routing Fix ────────────────────────────────
+@app.middleware("http")
+async def vercel_route_fix(request: Request, call_next):
+    matched_path = request.headers.get("x-matched-path")
+    if matched_path:
+        request.scope["path"] = matched_path
+    elif request.scope.get("path") in ["/api/index.py", "/api/index", "/api/"]:
+        request.scope["path"] = "/"
+    elif request.scope.get("path", "").startswith("/api/index.py"):
+        request.scope["path"] = request.scope.get("path")[len("/api/index.py"):] or "/"
+    response = await call_next(request)
+    return response
+
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 app.mount("/icon", StaticFiles(directory=str(BASE_DIR / "icon")), name="icon")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
@@ -170,6 +183,18 @@ class DemoLoginRequest(BaseModel):
 
 
 # ─── Endpointlar ──────────────────────────────────────────────────
+
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "detail": "Not Found",
+            "received_path": request.url.path,
+            "scope_path": request.scope.get("path"),
+            "scope_root_path": request.scope.get("root_path")
+        }
+    )
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
