@@ -10,7 +10,7 @@ from typing import Optional, Dict, Any
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, File, UploadFile, Form, Response
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
@@ -163,6 +163,12 @@ class DemoLoginRequest(BaseModel):
 async def home(request: Request):
     """Asosiy sahifa"""
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    """Brauzer tabi uchun favicon"""
+    return FileResponse(str(BASE_DIR / "icon" / "logo.png"))
 
 
 # ─── Autentifikatsiya Endpointlari ────────────────────────────────
