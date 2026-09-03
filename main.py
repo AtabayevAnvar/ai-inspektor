@@ -145,6 +145,10 @@ class ChatRequest(BaseModel):
     message: str
     session_id: str = "default"
 
+class SaveChatRequest(BaseModel):
+    chat_id: str
+    title: str
+
 class GoogleAuthRequest(BaseModel):
     credential: str
 
@@ -238,6 +242,53 @@ async def logout(request: Request):
     return res
 
 
+# ─── Chat Tarixi Endpointlari (Har bir foydalanuvchi hisobiga) ───
+
+@app.get("/api/chats")
+async def list_chats(request: Request):
+    """Foydalanuvchining barcha chatlari ro'yxatini olish"""
+    user, guest = get_current_user_and_guest(request)
+    if not user:
+        return JSONResponse({"chats": []})
+    chats = db.get_user_chats(user["id"])
+    return JSONResponse({"chats": chats})
+
+
+@app.get("/api/chats/{chat_id}/messages")
+async def get_messages(chat_id: str, request: Request):
+    """Chatning barcha xabarlarini olish"""
+    user, guest = get_current_user_and_guest(request)
+    messages = db.get_chat_messages(chat_id)
+    return JSONResponse({"messages": messages})
+
+
+@app.post("/api/chats")
+async def save_chat_title(req: SaveChatRequest, request: Request):
+    """Chat nomini bazaga saqlash"""
+    user, guest = get_current_user_and_guest(request)
+    if user:
+        db.save_chat(req.chat_id, user["id"], req.title)
+    return JSONResponse({"status": "ok"})
+
+
+@app.delete("/api/chats/{chat_id}")
+async def delete_chat_endpoint(chat_id: str, request: Request):
+    """Chatni o'chirish"""
+    user, guest = get_current_user_and_guest(request)
+    if user:
+        db.delete_user_chat(chat_id, user["id"])
+    return JSONResponse({"status": "ok"})
+
+
+@app.post("/api/clear")
+async def clear_history(request: Request):
+    """Barcha chatlarni tozalash"""
+    user, guest = get_current_user_and_guest(request)
+    if user:
+        db.clear_all_user_chats(user["id"])
+    return JSONResponse({"status": "ok"})
+
+
 # ─── Chat Endpointlari (1 ta savol mehmon limiti bilan) ───────────
 
 @app.post("/api/chat")
@@ -264,8 +315,13 @@ async def chat(req: ChatRequest, request: Request):
     try:
         reply = generate_ai_response(user_message)
         
-        # Mehmon bo'lsa, savol sonini oshiramiz
-        if not user:
+        # Agar foydalanuvchi tizimga kirgan bo'lsa, xabarlarni o'z hisobiga saqlaymiz
+        if user:
+            chat_title = user_message[:26] + ("..." if len(user_message) > 26 else "")
+            db.save_chat(req.session_id, user["id"], chat_title)
+            db.save_message(req.session_id, "user", user_message)
+            db.save_message(req.session_id, "ai", reply)
+        else:
             db.increment_guest_count(guest["guest_id"])
             
         res = JSONResponse(content={"reply": reply, "status": "OK"})
@@ -321,7 +377,12 @@ async def chat_with_image(
 
         reply = generate_ai_response(user_message, image_part=image_part)
         
-        if not user:
+        if user:
+            chat_title = user_message[:26] + ("..." if len(user_message) > 26 else "")
+            db.save_chat(session_id, user["id"], chat_title or "Rasm tahlili")
+            db.save_message(session_id, "user", user_message)
+            db.save_message(session_id, "ai", reply)
+        else:
             db.increment_guest_count(guest["guest_id"])
             
         res = JSONResponse(content={"reply": reply, "status": "OK"})
@@ -334,11 +395,6 @@ async def chat_with_image(
         if "429" in err_msg or "ResourceExhausted" in err_msg:
             return JSONResponse(content={"reply": "⚠️ Rasm tahlili limiti biroz to'ldi. Iltimos, 15-20 soniyadan so'ng qayta urinib ko'ring."})
         return JSONResponse(content={"reply": f"Rasm tahlilida xatolik: {type(e).__name__} - {str(e)}"})
-
-
-@app.post("/api/clear")
-async def clear_history():
-    return {"status": "ok"}
 
 
 # ─── Serverni ishga tushirish ─────────────────────────────────────

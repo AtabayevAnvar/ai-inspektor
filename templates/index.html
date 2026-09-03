@@ -1272,6 +1272,7 @@
                 guestQuestionsLeft = 9999;
                 updateProfileUI();
                 closeAuthModal();
+                await loadChats();
             } else {
                 alert("Google orqali kirishda xatolik yuz berdi: " + (data.error || ""));
             }
@@ -1299,6 +1300,7 @@
                     guestQuestionsLeft = 9999;
                     updateProfileUI();
                     closeAuthModal();
+                    await loadChats();
                 }
             } catch (e) {
                 alert("Kirishda xatolik!");
@@ -1313,6 +1315,7 @@
             await fetch('/api/auth/logout', { method: 'POST' });
             currentUser = null;
             await checkAuthStatus();
+            await loadChats();
         } catch (err) {
             console.error(err);
         }
@@ -1344,8 +1347,47 @@
     initBrowserAdaptation();
 
     // ─── INITIALIZATION ─────────────────────────────────────
-    function init() {
-        checkAuthStatus();
+    // ─── INITIALIZATION ─────────────────────────────────────
+    async function init() {
+        await checkAuthStatus();
+        await loadChats();
+
+        if (chatInput) {
+            chatInput.addEventListener('focus', () => {
+                if (!currentUser && guestQuestionsLeft <= 0) {
+                    chatInput.blur();
+                    openAuthModal();
+                }
+            });
+        }
+    }
+
+    // ─── STORAGE & CLOUD CHAT SYNC ──────────────────────────
+    async function loadChats() {
+        if (currentUser) {
+            try {
+                const res = await fetch('/api/chats');
+                const data = await res.json();
+                if (data.chats && data.chats.length > 0) {
+                    chats = data.chats.map(c => ({
+                        id: c.id,
+                        title: c.title || "Yangi chat",
+                        createdAt: c.created_at,
+                        messages: []
+                    }));
+                    if (!activeChatId || !chats.find(c => c.id === activeChatId)) {
+                        activeChatId = chats[0].id;
+                    }
+                    await loadChatMessages(activeChatId);
+                    renderChatList();
+                    renderActiveChatMessages();
+                    return;
+                }
+            } catch (err) {
+                console.warn("Cloud chat yuklash xatosi:", err);
+            }
+        }
+
         loadChatsFromStorage();
         if (chats.length === 0) {
             createNewChat(false);
@@ -1359,18 +1401,28 @@
             }
         }
         renderChatList();
+    }
 
-        if (chatInput) {
-            chatInput.addEventListener('focus', () => {
-                if (!currentUser && guestQuestionsLeft <= 0) {
-                    chatInput.blur();
-                    openAuthModal();
+    async function loadChatMessages(chatId) {
+        const chat = chats.find(c => c.id === chatId);
+        if (!chat) return;
+        if (currentUser) {
+            try {
+                const res = await fetch(`/api/chats/${chatId}/messages`);
+                const data = await res.json();
+                if (data.messages) {
+                    chat.messages = data.messages.map(m => ({
+                        role: m.role,
+                        text: m.text,
+                        imageUrl: m.image_url || null
+                    }));
                 }
-            });
+            } catch (err) {
+                console.warn("Xabarlarni yuklash xatosi:", err);
+            }
         }
     }
 
-    // ─── STORAGE ────────────────────────────────────────────
     function loadChatsFromStorage() {
         try {
             const data = localStorage.getItem(STORAGE_CHATS_KEY);
@@ -1411,21 +1463,32 @@
         }
     }
 
-    function switchActiveChat(chatId) {
+    async function switchActiveChat(chatId) {
         activeChatId = chatId;
         saveChatsToStorage();
         renderChatList();
+        if (currentUser) {
+            await loadChatMessages(chatId);
+        }
         renderActiveChatMessages();
         removeImage();
         closeMobileSidebar();
     }
 
-    function deleteChat(chatId, e) {
+    async function deleteChat(chatId, e) {
         if (e) e.stopPropagation();
+        if (currentUser) {
+            try {
+                await fetch(`/api/chats/${chatId}`, { method: 'DELETE' });
+            } catch (err) {
+                console.warn(err);
+            }
+        }
         chats = chats.filter(c => c.id !== chatId);
         if (activeChatId === chatId) {
             if (chats.length > 0) {
                 activeChatId = chats[0].id;
+                if (currentUser) await loadChatMessages(activeChatId);
             } else {
                 createNewChat(false);
                 return;
@@ -1436,9 +1499,14 @@
         renderActiveChatMessages();
     }
 
-    function clearAllChats(e) {
+    async function clearAllChats(e) {
         if (e) e.stopPropagation();
         if (confirm("Barcha suhbatlar tarixini o'chirib yubormoqchimisiz?")) {
+            if (currentUser) {
+                try {
+                    await fetch('/api/clear', { method: 'POST' });
+                } catch (err) {}
+            }
             chats = [];
             createNewChat();
         }
