@@ -1,4 +1,4 @@
-﻿"""
+"""
 Avto AI — Database Module (Supabase Cloud PostgreSQL + SQLite Fallback)
 Foydalanuvchilar, Google autentifikatsiyasi, sessiyalar, mehmon limiti va chatlar tarixi
 """
@@ -23,8 +23,12 @@ if SUPABASE_URL and SUPABASE_KEY:
     except Exception as e:
         print(f"[Database] Supabase ulanish xatosi: {e}")
 
-# ─── SQLite Fallback ─────────────────────────────────────────────────
-DB_PATH = Path(__file__).resolve().parent / "avto_ai.db"
+# ─── SQLite Fallback (Vercel Serverless-ga moslashtirilgan) ─────────
+import tempfile
+if os.environ.get("VERCEL"):
+    DB_PATH = Path(tempfile.gettempdir()) / "avto_ai.db"
+else:
+    DB_PATH = Path(__file__).resolve().parent / "avto_ai.db"
 
 def get_sqlite_conn() -> sqlite3.Connection:
     conn = sqlite3.connect(str(DB_PATH))
@@ -83,7 +87,10 @@ def init_sqlite_db():
         """)
         conn.commit()
 
-init_sqlite_db()
+try:
+    init_sqlite_db()
+except Exception as e:
+    print(f"[SQLite init warning]: {e}")
 
 # ─── Foydalanuvchi Amallari ──────────────────────────────────────────
 

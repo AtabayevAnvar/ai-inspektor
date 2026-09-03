@@ -23,9 +23,13 @@ import database as db
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
-genai.configure(api_key=GEMINI_API_KEY)
+if GEMINI_API_KEY:
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+    except Exception as e:
+        print(f"[Gemini Config Error]: {e}")
 
 COOKIE_SESSION = "inspektor_session"
 COOKIE_GUEST = "inspektor_guest"
@@ -33,7 +37,15 @@ COOKIE_GUEST = "inspektor_guest"
 BASE_DIR = Path(__file__).resolve().parent
 
 # ─── Bilimlar bazasini yuklash ────────────────────────────────────
-RULES_KB = RulesKnowledgeBase(str(BASE_DIR / "qoidalar.txt"))
+RULES_KB = None
+rules_file = BASE_DIR / "qoidalar.txt"
+if rules_file.exists():
+    try:
+        RULES_KB = RulesKnowledgeBase(str(rules_file))
+    except Exception as e:
+        print(f"[RulesKB Warning]: {e}")
+else:
+    print("[RulesKB Warning]: qoidalar.txt topilmadi, umumiy rejimda ishlaydi.")
 
 # ─── Modellarni sinash tartibi ────────────────────────────────────
 CANDIDATE_MODELS = [
@@ -77,7 +89,7 @@ Foydalanuvchi xabari: {user_query}
 def generate_ai_response(user_query: str, image_part=None) -> str:
     """RAG + Gemini orqali tezkor va kvotasiz javob olish"""
     # 1. Savolga mos bandlarni qidirish
-    relevant_rules = RULES_KB.search(user_query, top_k=5)
+    relevant_rules = RULES_KB.search(user_query, top_k=5) if RULES_KB else ""
     prompt_text = build_prompt(user_query, relevant_rules)
 
     contents = []

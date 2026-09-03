@@ -1,0 +1,26 @@
+﻿{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": [
+          "qoidalar.txt",
+          "templates/**",
+          "icon/**",
+          "static/**",
+          "main.py",
+          "database.py",
+          "rules_engine.py"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.py"
+    }
+  ]
+}
