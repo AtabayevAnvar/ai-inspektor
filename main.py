@@ -152,9 +152,10 @@ app = FastAPI(title="Inspektor AI — YHQ Maslahatchi")
 # ─── Vercel Serverless Routing Fix ────────────────────────────────
 @app.middleware("http")
 async def vercel_route_fix(request: Request, call_next):
-    matched_path = request.headers.get("x-matched-path")
-    if matched_path:
-        request.scope["path"] = matched_path
+    raw_path = request.query_params.get("__path")
+    if raw_path is not None:
+        clean_path = "/" + raw_path.lstrip("/")
+        request.scope["path"] = clean_path
     elif request.scope.get("path") in ["/api/index.py", "/api/index", "/api/"]:
         request.scope["path"] = "/"
     elif request.scope.get("path", "").startswith("/api/index.py"):
@@ -184,28 +185,9 @@ class DemoLoginRequest(BaseModel):
 
 # ─── Endpointlar ──────────────────────────────────────────────────
 
-@app.exception_handler(404)
-async def custom_404_handler(request: Request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={
-            "detail": "Not Found",
-            "received_path": request.url.path,
-            "scope_path": request.scope.get("path"),
-            "scope_root_path": request.scope.get("root_path")
-        }
-    )
-
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Asosiy sahifa"""
-    if request.query_params.get("debug") == "1":
-        return JSONResponse({
-            "url": str(request.url),
-            "scope_path": request.scope.get("path"),
-            "scope_raw_path": request.scope.get("raw_path", b"").decode(errors="ignore"),
-            "headers": dict(request.headers)
-        })
     return templates.TemplateResponse("index.html", {"request": request})
 
 
