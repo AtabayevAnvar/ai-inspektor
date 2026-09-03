@@ -271,6 +271,8 @@
             overflow-x: hidden;
             width: 100%;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
         }
 
         .centered-chat-content {
@@ -717,7 +719,7 @@
             }
 
             .centered-chat-content {
-                padding: calc(68px + env(safe-area-inset-top, 0px)) 16px calc(95px + env(safe-area-inset-bottom, 12px)) 16px;
+                padding: calc(70px + env(safe-area-inset-top, 0px)) 16px calc(170px + env(safe-area-inset-bottom, 16px)) 16px;
                 gap: 16px;
             }
 
@@ -1198,7 +1200,8 @@
                     setTimeout(step, 16);
                 } else {
                     bubble.innerHTML = marked.parse(fullText);
-                    scrollChatToBottom();
+                    scrollChatToBottom(true);
+                    setTimeout(() => scrollChatToBottom(true), 120);
                     resolve();
                 }
             }
@@ -1392,14 +1395,17 @@
     // ─── UTILS ──────────────────────────────────────────────
     function scrollChatToBottom(smooth = false) {
         if (!messagesViewport) return;
-        if (smooth) {
-            messagesViewport.scrollTo({
-                top: messagesViewport.scrollHeight + 1000,
-                behavior: 'smooth'
-            });
-        } else {
-            messagesViewport.scrollTop = messagesViewport.scrollHeight + 1000;
-        }
+        requestAnimationFrame(() => {
+            const target = messagesViewport.scrollHeight + 2000;
+            if (smooth) {
+                messagesViewport.scrollTo({
+                    top: target,
+                    behavior: 'smooth'
+                });
+            } else {
+                messagesViewport.scrollTop = target;
+            }
+        });
     }
 
     function handleInputKeyDown(e) {
