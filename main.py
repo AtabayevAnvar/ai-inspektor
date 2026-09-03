@@ -23,7 +23,11 @@ import database as db
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY", "")
+GEMINI_API_KEY = (
+    os.getenv("GEMINI_API_KEY")
+    or os.getenv("VITE_GEMINI_API_KEY")
+    or os.getenv("GOOGLE_API_KEY", "")
+)
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 if GEMINI_API_KEY:
     try:
