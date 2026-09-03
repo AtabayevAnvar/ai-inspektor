@@ -101,6 +101,7 @@ class RulesKnowledgeBase:
         else:
             selected = [item[1] for item in scored[:top_k]]
 
+        result_texts = [f"[{s['chapter']}]\n{s['text']}" for s in selected]
         combined = "\n\n---\n\n".join(result_texts)
         if len(combined) > 4000:
             combined = combined[:4000] + "\n... (qolgan qoidalar qisqartirildi)"
