@@ -199,6 +199,13 @@ async def custom_404_handler(request: Request, exc):
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Asosiy sahifa"""
+    if request.query_params.get("debug") == "1":
+        return JSONResponse({
+            "url": str(request.url),
+            "scope_path": request.scope.get("path"),
+            "scope_raw_path": request.scope.get("raw_path", b"").decode(errors="ignore"),
+            "headers": dict(request.headers)
+        })
     return templates.TemplateResponse("index.html", {"request": request})
 
 
