@@ -52,11 +52,11 @@ else:
     print("[RulesKB Warning]: qoidalar.txt topilmadi, umumiy rejimda ishlaydi.")
 
 # ─── Modellarni sinash tartibi ────────────────────────────────────
+# ─── Modellarni sinash tartibi (Eng tezkor modellar birinchi) ───
 CANDIDATE_MODELS = [
-    "gemini-3.5-flash",
     "gemini-3.5-flash-lite",
-    "gemini-3.6-flash",
-    "gemini-3.7-flash"
+    "gemini-3.5-flash",
+    "gemini-3.6-flash"
 ]
 
 def build_prompt(user_query: str, relevant_rules: str) -> str:
@@ -91,9 +91,9 @@ Foydalanuvchi xabari: {user_query}
 """
 
 def generate_ai_response(user_query: str, image_part=None) -> str:
-    """RAG + Gemini orqali tezkor va kvotasiz javob olish"""
-    # 1. Savolga mos bandlarni qidirish
-    relevant_rules = RULES_KB.search(user_query, top_k=5) if RULES_KB else ""
+    """RAG + Gemini orqali tezkor javob olish"""
+    # 1. Savolga mos bandlarni qidirish (eng muhim 3 ta band)
+    relevant_rules = RULES_KB.search(user_query, top_k=3) if RULES_KB else ""
     prompt_text = build_prompt(user_query, relevant_rules)
 
     contents = []
@@ -108,7 +108,7 @@ def generate_ai_response(user_query: str, image_part=None) -> str:
                 model_name=model_name,
                 generation_config=genai.types.GenerationConfig(
                     temperature=0.3,
-                    max_output_tokens=8192,
+                    max_output_tokens=1500,
                 )
             )
             res = m.generate_content(contents)
@@ -126,15 +126,17 @@ def generate_ai_response(user_query: str, image_part=None) -> str:
 
 # ─── Auth & Session Yordamchilari ─────────────────────────────────
 def get_current_user_and_guest(request: Request) -> tuple:
-    """Sessiya yoki mehmon holatini aniqlash"""
+    """Sessiya yoki mehmon holatini aniqlash (optimizatsiya qilingan)"""
     session_token = request.cookies.get(COOKIE_SESSION)
     user = db.get_user_by_session(session_token)
+    if user:
+        return user, {"guest_id": "", "question_count": 0}
     
     guest_id = request.cookies.get(COOKIE_GUEST)
     client_ip = request.client.host if request.client else ""
     guest = db.get_or_create_guest(guest_id, ip_address=client_ip)
     
-    return user, guest
+    return None, guest
 
 def verify_google_token(token_str: str) -> Optional[dict]:
     """Google ID tokenni tekshirish"""
