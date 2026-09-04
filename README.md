@@ -56,9 +56,6 @@ GEMINI_API_KEY=your_actual_gemini_api_key
 python main.py
 ```
 
-Brauzeringizda oching:
-👉 **http://localhost:8000**
-
 ---
 
 ## 📁 Loyiha Tuzilishi
