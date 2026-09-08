@@ -361,3 +361,27 @@ def clear_all_user_chats(user_id: Any):
             cursor.execute("DELETE FROM messages WHERE chat_id = ?", (cid,))
         cursor.execute("DELETE FROM chats WHERE user_id = ?", (user_id,))
         conn.commit()
+
+def migrate_guest_chats(user_id: Any, guest_chats: List[Dict[str, Any]]):
+    """Mehmon paytida yozilgan chatlar va xabarlarni foydalanuvchi hisobiga ko'chirish"""
+    if not guest_chats:
+        return
+    for chat in guest_chats:
+        chat_id = chat.get("id")
+        title = chat.get("title") or "Yangi chat"
+        messages = chat.get("messages") or []
+        if not chat_id or not messages:
+            continue
+        try:
+            save_chat(chat_id, user_id, title)
+            existing_msgs = get_chat_messages(chat_id)
+            if not existing_msgs:
+                for msg in messages:
+                    role = msg.get("role", "user")
+                    text = msg.get("text", "")
+                    img = msg.get("imageUrl", "")
+                    if text or img:
+                        save_message(chat_id, role, text, img)
+        except Exception as e:
+            print(f"[migrate_guest_chats error]: {e}")
+

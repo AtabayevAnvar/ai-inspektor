@@ -1266,7 +1266,8 @@
                                         sub: profile.sub,
                                         email: profile.email,
                                         name: profile.name,
-                                        picture: profile.picture
+                                        picture: profile.picture,
+                                        local_chats: chats
                                     })
                                 });
                                 const data = await res.json();
@@ -1304,7 +1305,10 @@
             const res = await fetch('/api/auth/google', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ credential: response.credential })
+                body: JSON.stringify({ 
+                    credential: response.credential,
+                    local_chats: chats
+                })
             });
             const data = await res.json();
             if (data.status === 'ok') {
@@ -1408,16 +1412,25 @@
                 const res = await fetch('/api/chats');
                 const data = await res.json();
                 if (data.chats && data.chats.length > 0) {
-                    chats = data.chats.map(c => ({
-                        id: c.id,
-                        title: c.title || "Yangi chat",
-                        createdAt: c.created_at,
-                        messages: []
-                    }));
-                    if (!activeChatId || !chats.find(c => c.id === activeChatId)) {
+                    const currentActive = activeChatId;
+                    const oldChats = chats;
+                    chats = data.chats.map(c => {
+                        const localMatch = oldChats.find(lc => lc.id === c.id);
+                        return {
+                            id: c.id,
+                            title: c.title || "Yangi chat",
+                            createdAt: c.created_at,
+                            messages: (localMatch && localMatch.messages && localMatch.messages.length > 0) ? localMatch.messages : []
+                        };
+                    });
+                    if (currentActive && chats.find(c => c.id === currentActive)) {
+                        activeChatId = currentActive;
+                    } else if (chats.length > 0) {
                         activeChatId = chats[0].id;
                     }
-                    await loadChatMessages(activeChatId);
+                    if (activeChatId) {
+                        await loadChatMessages(activeChatId);
+                    }
                     renderChatList();
                     renderActiveChatMessages();
                     return;

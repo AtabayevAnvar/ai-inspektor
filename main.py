@@ -6,7 +6,7 @@ import os
 import base64
 import uuid
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, File, UploadFile, Form, Response
@@ -183,10 +183,12 @@ class SaveChatRequest(BaseModel):
 
 class GoogleAuthRequest(BaseModel):
     credential: str
+    local_chats: Optional[List[Dict[str, Any]]] = None
 
 class DemoLoginRequest(BaseModel):
     name: Optional[str] = "Atabayev Anvar"
     email: Optional[str] = "atabayev@gmail.com"
+    local_chats: Optional[List[Dict[str, Any]]] = None
 
 
 # ─── Endpointlar ──────────────────────────────────────────────────
@@ -237,6 +239,8 @@ async def auth_google(payload: GoogleAuthRequest, response: Response):
     picture = str(info.get("picture", ""))
     
     user = db.upsert_google_user(google_id, email, name, picture)
+    if payload.local_chats:
+        db.migrate_guest_chats(user["id"], payload.local_chats)
     session_token = db.create_user_session(user["id"])
     
     res = JSONResponse(content={"status": "ok", "user": user})
@@ -255,6 +259,7 @@ class GoogleOAuthProfile(BaseModel):
     email: str
     name: Optional[str] = "Foydalanuvchi"
     picture: Optional[str] = ""
+    local_chats: Optional[List[Dict[str, Any]]] = None
 
 @app.post("/api/auth/google-oauth")
 async def auth_google_oauth(payload: GoogleOAuthProfile):
@@ -262,6 +267,8 @@ async def auth_google_oauth(payload: GoogleOAuthProfile):
     if not payload.sub or not payload.email:
         return JSONResponse(status_code=400, content={"error": "Foydalanuvchi ma'lumotlari to'liq emas"})
     user = db.upsert_google_user(payload.sub, payload.email, payload.name, payload.picture or "")
+    if payload.local_chats:
+        db.migrate_guest_chats(user["id"], payload.local_chats)
     session_token = db.create_user_session(user["id"])
     res = JSONResponse(content={"status": "ok", "user": user})
     res.set_cookie(
@@ -280,6 +287,8 @@ async def auth_demo(payload: DemoLoginRequest = DemoLoginRequest()):
     google_id = f"demo_{uuid.uuid4().hex[:8]}"
     avatar = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231133A3'/><circle cx='50' cy='40' r='20' fill='%23ffffff'/><circle cx='50' cy='95' r='35' fill='%23ffffff'/></svg>"
     user = db.upsert_google_user(google_id, payload.email or "user@gmail.com", payload.name or "Foydalanuvchi", avatar)
+    if payload.local_chats:
+        db.migrate_guest_chats(user["id"], payload.local_chats)
     session_token = db.create_user_session(user["id"])
     
     res = JSONResponse(content={"status": "ok", "user": user})
