@@ -59,25 +59,27 @@ CANDIDATE_MODELS = [
     "gemini-3.6-flash"
 ]
 
-def build_prompt(user_query: str, relevant_rules: str) -> str:
-    return f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha aqlli maslahatchi "Inspektor AI"san.
+def build_prompt(user_query: str, relevant_rules: str, is_first_message: bool = False) -> str:
+    return f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha aqlli va professional maslahatchisan.
 
 MUHIM QOIDALAR VA XULQ-ATVOR:
 1. QAT'IY TALAB: BARCHA JAVOBLARNI FAQAT VA FAQAT O'ZBEKCHA LOTIN ALIFBOSIDA BERISH SHART! 
    - Qoidalar matni kirillda bo'lsa ham, ularni to'liq o'zbek lotin alifbosiga o'girib javob ber. Kirill harflaridan mutlaqo foydalanma!
 
-2. AGAR FOYDALANUVCHI ODDIY SALOM BERSA (masalan: "salom", "assalomu alaykum", "qalesiz", "privet", "hayrli kun" va h.k.):
-   - MUTLAQO QOIDALAR YOKI BANDLARNI TUSHUNTIRIB KETMA!
-   - Shunchaki samimiy salomlash, o'zingni qisqa tanishtir va savoli bormi deb so'ra.
-   - Masalan: "Assalomu alaykum! Men Inspektor AI — Yo'l harakati qoidalari bo'yicha maslahatchiman. Sizga yo'l qoidalari yoki haydovchilik vaziyatlari bo'yicha qanday yordam bera olaman?"
+2. QAT'IY TAQIQLANADI — HAR BIR XABARDA O'ZINGNI QAYTA-QAYTA TANISHTIRMA:
+   - Hech qachon "Assalomu alaykum! Men Inspektor AI..." deb har bir savolda takrorlama!
+   - Agar foydalanuvchi faqat salom bersa ("salom", "assalomu alaykum"), shundagina qisqa va samimiy salomlash.
+   - AGAR FOYDALANUVCHI ANIQ YO'L QOIDASI, BELGI YOKI VAZIYAT HAQIDA SAVOL BERSA:
+     Salomlashish va o'zingni tanishtirishni mutlaqo chetlab o't! Ortiqcha kirish so'zlarsiz, to'g'ridan-to'g'ri masalaning javobiga o't!
+     Masalan: "Quvib o'tish nima?" deb so'ralsa, "Assalomu alaykum..." deb o'tirma, to'g'ridan-to'g'ri:
+     "O'zbekiston Respublikasi Yo'l harakati qoidalariga ko'ra, quvib o'tish — ..." deb boshla.
 
-3. AGAR MINNATDORCHILIK BILDIRILSA (masalan: "rahmat", "tushunarli", "zo'r"):
-   - Qisqa javob ber (masalan: "Arzimaydi! Yana biror savolingiz yoki tahlil kerak bo'lgan vaziyat bo'lsa, bemalol yozing.").
+3. SAVOLLARGA JAVOB BERISH TARTIBI:
+   - Qaysi band yoki bobga asoslanganingni aniq ko'rsat (masalan: "YHQning 78-bandiga asosan...").
+   - Bandma-band, tartibli, lo'nda va aniq qilib tushuntir.
 
-4. AGAR FOYDALANUVCHI ANIQ YO'L QOIDASI, VAZIYAT HAQIDA SAVOL BERSA YOKI RASM YUBORSA:
-   - Quyidagi YHQ bandlariga tayangan holda aniq, tushunarli tahlil ber.
-   - Qaysi bandga asoslanganingni ko'rsat (masalan: "YHQning 78-bandiga ko'ra...").
-   - Bandma-band, tartibli va tushunarli qilib ber.
+4. AGAR MINNATDORCHILIK BILDIRILSA (masalan: "rahmat", "tushunarli", "zo'r"):
+   - Qisqa javob ber (masalan: "Arzimaydi! Yana biror savolingiz bo'lsa, bemalol so'rang.").
 
 5. JAVOBNI HECH QACHON YARIMTA QILIB TO'XTATIB QO'YMA:
    - Javobni mantiqan to'liq va tugallangan holda ber. Barcha ro'yxat va fikrlarni to'liq oxiriga yetkaz.
@@ -90,11 +92,11 @@ TEGISHLI YHQ QOIDALARI:
 Foydalanuvchi xabari: {user_query}
 """
 
-def generate_ai_response(user_query: str, image_part=None) -> str:
+def generate_ai_response(user_query: str, image_part=None, is_first_message: bool = False) -> str:
     """RAG + Gemini orqali tezkor javob olish"""
     # 1. Savolga mos bandlarni qidirish (eng muhim 3 ta band)
     relevant_rules = RULES_KB.search(user_query, top_k=3) if RULES_KB else ""
-    prompt_text = build_prompt(user_query, relevant_rules)
+    prompt_text = build_prompt(user_query, relevant_rules, is_first_message=is_first_message)
 
     contents = []
     if image_part:
@@ -384,7 +386,8 @@ async def chat(req: ChatRequest, request: Request):
         return JSONResponse(content={"reply": "Iltimos, savol yozing."})
 
     try:
-        reply = generate_ai_response(user_message)
+        history = db.get_chat_messages(req.session_id)
+        reply = generate_ai_response(user_message, is_first_message=(len(history) == 0))
         
         # Agar foydalanuvchi tizimga kirgan bo'lsa, xabarlarni o'z hisobiga saqlaymiz
         if user:
@@ -446,7 +449,8 @@ async def chat_with_image(
             }
         }
 
-        reply = generate_ai_response(user_message, image_part=image_part)
+        history = db.get_chat_messages(session_id)
+        reply = generate_ai_response(user_message, image_part=image_part, is_first_message=(len(history) == 0))
         
         if user:
             chat_title = user_message[:26] + ("..." if len(user_message) > 26 else "")
