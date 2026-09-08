@@ -18,7 +18,7 @@ import google.generativeai as genai
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
-from rules_engine import RulesKnowledgeBase
+from rules_engine import RulesKnowledgeBase, cyrillic_to_latin
 import database as db
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
@@ -64,7 +64,8 @@ def build_prompt(user_query: str, relevant_rules: str, is_first_message: bool = 
 
 MUHIM QOIDALAR VA XULQ-ATVOR:
 1. QAT'IY TALAB: BARCHA JAVOBLARNI FAQAT VA FAQAT O'ZBEKCHA LOTIN ALIFBOSIDA BERISH SHART! 
-   - Qoidalar matni kirillda bo'lsa ham, ularni to'liq o'zbek lotin alifbosiga o'girib javob ber. Kirill harflaridan mutlaqo foydalanma!
+   - Qoidalar bazasi to'liq o'zbek lotin alifbosida keltirilgan. Javoblaringizda birorta ham kirill harfi (а, б, в, г, д...) qatnashmasligi shart!
+   - Har qanday holatda ham faqat va faqat O'zbek lotin alifbosi harflaridan foydalanib javob yoz.
 
 2. QAT'IY TAQIQLANADI — HAR BIR XABARDA O'ZINGNI QAYTA-QAYTA TANISHTIRMA:
    - Hech qachon "Assalomu alaykum! Men Inspektor AI..." deb har bir savolda takrorlama!
@@ -115,7 +116,8 @@ def generate_ai_response(user_query: str, image_part=None, is_first_message: boo
             )
             res = m.generate_content(contents)
             if res and res.text:
-                return res.text
+                # Kafolatlangan 100% lotin alifbosi filtri
+                return cyrillic_to_latin(res.text)
         except Exception as e:
             print(f"[Model fallback] {model_name} error: {e}")
             last_error = e
