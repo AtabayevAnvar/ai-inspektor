@@ -1316,6 +1316,11 @@
         try {
             await fetch('/api/auth/logout', { method: 'POST' });
             currentUser = null;
+            chats = [];
+            activeChatId = null;
+            localStorage.removeItem(STORAGE_CHATS_KEY);
+            localStorage.removeItem(STORAGE_ACTIVE_KEY);
+            updateProfileUI();
             await checkAuthStatus();
             await loadChats();
         } catch (err) {
@@ -1459,6 +1464,15 @@
         renderChatList();
         renderActiveChatMessages();
         closeMobileSidebar();
+
+        if (currentUser) {
+            // Yangi chatni darhol foydalanuvchining bulutdagi hisobiga saqlash
+            fetch('/api/chats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: newId, title: 'Yangi chat' })
+            }).catch(console.warn);
+        }
 
         if (autoFocus) {
             chatInput.focus();
