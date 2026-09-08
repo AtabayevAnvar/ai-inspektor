@@ -1185,6 +1185,7 @@
     // ─── AUTH & MODAL FUNKSIYALARI ──────────────────────────
     function openAuthModal() {
         if (authModal) authModal.classList.add('active');
+        initGoogleSignInClient();
     }
 
     function closeAuthModal() {
@@ -1239,25 +1240,37 @@
     }
 
     function initGoogleSignInClient() {
-        if (googleClientId && window.google && window.google.accounts) {
-            try {
-                google.accounts.id.initialize({
-                    client_id: googleClientId,
-                    callback: handleGoogleCredentialResponse,
-                    auto_select: false
-                });
+        if (!googleClientId) return;
+        if (!window.google || !window.google.accounts) {
+            setTimeout(initGoogleSignInClient, 300);
+            return;
+        }
 
-                if (googleSignInBtnContainer) {
-                    googleSignInBtnContainer.innerHTML = '';
-                    google.accounts.id.renderButton(
-                        googleSignInBtnContainer,
-                        { theme: "outline", size: "large", width: 330, shape: "pill", text: "continue_with" }
-                    );
-                }
-                if (customGoogleLoginBtn) customGoogleLoginBtn.style.display = 'none';
-            } catch (err) {
-                console.warn("Google Sign-In button render xatosi:", err);
+        try {
+            google.accounts.id.initialize({
+                client_id: googleClientId,
+                callback: handleGoogleCredentialResponse,
+                auto_select: false
+            });
+
+            if (googleSignInBtnContainer) {
+                googleSignInBtnContainer.innerHTML = '';
+                google.accounts.id.renderButton(
+                    googleSignInBtnContainer,
+                    { 
+                        type: "standard",
+                        theme: "outline", 
+                        size: "large", 
+                        width: 320, 
+                        shape: "pill", 
+                        text: "continue_with",
+                        logo_alignment: "left"
+                    }
+                );
             }
+            if (customGoogleLoginBtn) customGoogleLoginBtn.style.display = 'none';
+        } catch (err) {
+            console.warn("Google Sign-In button render xatosi:", err);
         }
     }
 

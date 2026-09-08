@@ -28,7 +28,7 @@ GEMINI_API_KEY = (
     or os.getenv("VITE_GEMINI_API_KEY")
     or os.getenv("GOOGLE_API_KEY", "")
 )
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID") or os.getenv("VITE_GOOGLE_CLIENT_ID", "")
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
