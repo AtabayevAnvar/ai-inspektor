@@ -250,6 +250,30 @@ async def auth_google(payload: GoogleAuthRequest, response: Response):
     return res
 
 
+class GoogleOAuthProfile(BaseModel):
+    sub: str
+    email: str
+    name: Optional[str] = "Foydalanuvchi"
+    picture: Optional[str] = ""
+
+@app.post("/api/auth/google-oauth")
+async def auth_google_oauth(payload: GoogleOAuthProfile):
+    """Google OAuth2 orqali kelgan foydalanuvchini ro'yxatdan o'tkazish/kirish"""
+    if not payload.sub or not payload.email:
+        return JSONResponse(status_code=400, content={"error": "Foydalanuvchi ma'lumotlari to'liq emas"})
+    user = db.upsert_google_user(payload.sub, payload.email, payload.name, payload.picture or "")
+    session_token = db.create_user_session(user["id"])
+    res = JSONResponse(content={"status": "ok", "user": user})
+    res.set_cookie(
+        key=COOKIE_SESSION,
+        value=session_token,
+        max_age=30 * 86400,
+        httponly=True,
+        samesite="lax"
+    )
+    return res
+
+
 @app.post("/api/auth/demo-login")
 async def auth_demo(payload: DemoLoginRequest = DemoLoginRequest()):
     """Google Client ID o'rnatilmagan bo'lsa darhol sinash uchun qulay demo kirish"""
