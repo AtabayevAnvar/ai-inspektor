@@ -1,0 +1,406 @@
+{
+  "fines": [
+    {
+      "id": 1,
+      "violation": "Haydovchilarning tormoz tizimida, rul boshqaruvida yoki ulovchi qurilmada nosozligi bo‘lgan yoxud tegishli ruxsatnomasiz qayta jihozlangan transport vositalarini boshqarishi",
+      "article": "125-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 2,
+      "violation": "Haydovchilarning belgilangan tartibda ro‘yxatdan o‘tkazilmagan yoki majburiy texnik ko‘rikdan o‘tkazilmagan yoxud foydalanish man etiladigan darajada nosozligi bo‘lgan yoki qonun hujjatlarida belgilangan tartibda favqulodda vaziyatda oynani sindirish uchun foydalaniladigan bolg‘acha bilan jihozlanmagan, o‘t o‘chirgich, tibbiyot qutichasi, avariya holatida to‘xtaganligini bildiruvchi belgi va nur qaytargichli kamzul bilan butlanmagan, xuddi shuningdek ishlayotganida tashqariga chiqarayotgan ifloslantiruvchi moddalarning miqdori, shuningdek shovqin darajasi belgilangan normalardan ortiq bo‘lgan transport vositalarini boshqarishi",
+      "article": "125-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 3,
+      "violation": "Haydovchilarning tormoz tizimida, rul boshqaruvida yoki ulovchi qurilmada nosozligi bo‘lgan yoxud tegishli ruxsatnomasiz qayta jihozlangan transport vositalarini boshqarishi",
+      "article": "125-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 4,
+      "violation": "Haydovchilarning shaharlararo va xalqaro yo‘lovchi tashishni amalga oshiradigan avtobuslarni nazorat asboblarisiz (taxograflarsiz) yoki taxograflarni o‘chirgan holda boshqarishi",
+      "article": "125-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 5,
+      "violation": "Foydalanish belgilangan tartibda man etilgan transport vositalarini, xuddi shuningdek davlat raqam belgisi o‘zboshimchalik bilan echib olingan transport vositalarini boshqarish",
+      "article": "125-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 6,
+      "violation": "Haydovchilarning tormoz tizimida, rul boshqaruvida yoki ulovchi qurilmada nosozligi bo‘lgan yoxud tegishli ruxsatnomasiz qayta jihozlangan transport vositalarini boshqarishi",
+      "article": "125-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 7,
+      "violation": "Korxonalar, muassasalar va tashkilotlarga qarashli transport vositalarini ishdan tashqari vaqtda ulardan foydalanish shartlariga muvofiq keladigan tarzda maxsus jihozlanmagan joyda saqlash (fuqaro uchun)",
+      "article": "125-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 8,
+      "violation": "Yuk tashish qoidalarini, xuddi shuningdek shatakka olish qoidalarini buzish",
+      "article": "125-1-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 9,
+      "violation": "Tegishli ruxsatnomasiz og‘ir vaznli, yirik gabaritli, xavfli yuklarni tashish va yuk bilan yoki yuksiz holdagi gabarit o‘lchamlari belgilangan normalardan ortiq bo‘lgan transport vositalarida yo‘lga chiqish, xuddi shuningdek ruxsatnomada ko‘rsatilgan harakat yo‘nalishidan chetga chiqish (fuqarolar uchun ko'rsatilgan miqdorda jarima yoki transport vositasini boshqarish huquqidan olti oygacha muddatga mahrum etish)",
+      "article": "125-1-modda",
+      "bhm": 10.0
+    },
+    {
+      "id": 10,
+      "violation": "Texnik reglamentga muvofiq bo‘lmagan ko‘zgusimon va (yoki) tusi o‘zgartirilgan (qoraytirilgan) oynali transport vositalaridan, xuddi shuningdek haydovchining o‘rnidan tevarak-atrofni ko‘rishni cheklaydigan qo‘shimcha narsalar o‘rnatilgan yoki qoplamalar surtilgan transport vositalaridan foydalanish, bundan oynalar tusini o'zgartirish (qoraytirish) uchun tegishli ruxsatnoma berilgan transport vositalari mustasno (ilk qoidabuzarlik uchun)",
+      "article": "126-modda",
+      "bhm": 25.0
+    },
+    {
+      "id": 11,
+      "violation": "Texnik reglamentga muvofiq bo‘lmagan ko‘zgusimon va (yoki) tusi o‘zgartirilgan (qoraytirilgan) oynali transport vositalaridan, xuddi shuningdek haydovchining o‘rnidan tevarak-atrofni ko‘rishni cheklaydigan qo‘shimcha narsalar o‘rnatilgan yoki qoplamalar surtilgan transport vositalaridan foydalanish, bundan oynalar tusini o'zgartirish (qoraytirish) uchun tegishli ruxsatnoma berilgan transport vositalari mustasno (jazo qo'llanilgandan so'ng, 1 yil davomida takroriy qoidabuzarlik amalga oshirilsa)",
+      "article": "126-modda",
+      "bhm": 40.0
+    },
+    {
+      "id": 12,
+      "violation": "Tovush signalini sababsiz berish, transport vositalariga uni ishlab chiqargan korxona nazarda tutmagan tovush chiqaruvchi va yorituvchi qurilmalarni o‘rnatish, xuddi shuningdek ularni o‘zgartirib o‘rnatish",
+      "article": "127-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 13,
+      "violation": "Tegishli ruxsat olmay turib transport vositalariga tovush chiqaruvchi va yorituvchi maxsus qurilmalarni o‘rnatish, xuddi shuningdek davlat raqam belgilarini ko‘rish imkoniyatini cheklaydigan, ularni anglashga to‘sqinlik qiladigan turli ashyolar o‘rnatish va qoplama surtish (FUQAROLAR UCHUN - ana shu qurilmalarni musodara qilib, fuqarolarga bazaviy hisoblash miqdorining bir baravaridan uch baravarigacha)",
+      "article": "127-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 14,
+      "violation": "Tegishli ruxsat olmay turib transport vositalariga tovush chiqaruvchi va yorituvchi maxsus qurilmalarni o‘rnatish, xuddi shuningdek davlat raqam belgilarini ko‘rish imkoniyatini cheklaydigan, ularni anglashga to‘sqinlik qiladigan turli ashyolar o‘rnatish va qoplama surtish (MANSABDOR SHAXSLAR UCHUN - ana shu qurilmalarni musodara qilib, bazaviy hisoblash miqdorining uch baravaridan besh baravarigacha)",
+      "article": "127-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 15,
+      "violation": "ILK QOIDABUZARLIK UCHUN. Haydovchilarning transport vositalarini piyodalar yo‘lkalaridan yurgizishi, yo‘l belgilari yoki yo‘lning qatnov qismidagi chiziqlar bilan belgilab qo‘yilgan talablarga rioya etmasligi (ushbu Kodeksning 128-3, 128-4-moddasining birinchi qismida, 128-5, 128-6 va 130-moddalarida nazarda tutilgan hollar bundan mustasno), odam tashish, transport vositalarini quvib o‘tish, yo‘nalishli transport vositalari to‘xtaydigan bekatlardan yoki piyodalar o‘tish joylaridan yurish, tashqi yoritish asboblaridan foydalanish qoidalarini buzishi, xuddi shuningdek yo‘lovchilarga loyqa sachratishi",
+      "article": "128-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 16,
+      "violation": "1 YIL DAVOMIDA TAKRORIY QOIDABUZARLIK UCHUN. Haydovchilarning transport vositalarini piyodalar yo'lkalaridan yurgizishi, yo'l belgilari yoki yo'lning qatnov qismidagi chiziqlar bilan belgilab qo'yib qo'yilgan talablarga rioya etmasligi (ushbu Kodeksning 128-3, 128-4-moddasining birinchi qismida, 128-5, 128-6 va 130-moddalarida nazarda tutilgan hollar bundan mustasno), odam tashish, transport vositalarini quvib o'tish, yo'nalishli transport vositalari to'xtaydigan bekatlardan yoki piyodalar o'tish joylaridan yurish, tashqi yoritish asboblaridan foydalanish qoidalarini buzishi, xuddi shuningdek yo'lovchilarga loyqa sachratishi",
+      "article": "128-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 17,
+      "violation": "Transport vositasini boshqarish vaqtida haydovchilarning telefondan foydalanishi (bundan telefondan quloqchin va boshqa qoʻlni ishlatmagan holda muloqot olib borish mumkin boʻlgan vositalar orqali foydalanish mustasno)",
+      "article": "128-1-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 19,
+      "violation": "Transport vositasini boshqarish paytida monitordan (displeydan) tele-, videodasturlarni tomosha qilish uchun foydalanish",
+      "article": "128-2-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 20,
+      "violation": "Transport vositasi salonining old qismiga o‘zboshimchalik bilan monitor (displey) o‘rnatish",
+      "article": "128-2-modda",
+      "bhm": 2.0
+    },
+    {
+      "id": 21,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ko‘p bo‘lmagan kattalikda oshirib yuborishi",
+      "article": "128-3-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 22,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ortiq, lekin 40 kilometrdan ko‘p bo‘lmagan kattalikda oshirib yuborishi yoki transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ko‘p bo‘lmagan kattalikda xuddi shunday huquqbuzarlik uchun ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi",
+      "article": "128-3-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 23,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 40 kilometrdan ortiq kattalikda oshirib yuborishi",
+      "article": "128-3-modda",
+      "bhm": 9.0
+    },
+    {
+      "id": 24,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ortiq, lekin 40 kilometrdan ko‘p bo‘lmagan kattalikda xuddi shunday huquqbuzarlik uchun ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi yoxud transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ko‘p bo‘lmagan kattalikda xuddi shunday huquqbuzarlik uchun ikki marta ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi (jarima yoki transport vositasini boshqarish huquqidan bir yil muddatga mahrum etish)",
+      "article": "128-3-modda",
+      "bhm": 15.0
+    },
+    {
+      "id": 25,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 40 kilometrdan ortiq kattalikda xuddi shunday huquqbuzarlik uchun ma’tuzilgan hamda ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi yoki transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ortiq, lekin 40 kilometrdan ko‘p bo‘lmagan kattalikda xuddi shunday huquqbuzarlik uchun ikki marta ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi yoxud transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan ko‘p bo‘lmagan kattalikda xuddi shunday huquqbuzarlik uchun uch marta ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror oshirib yuborishi (jarima va transport vositasini boshqarish huquqidan ikki yil muddatga mahrum qilish)",
+      "article": "128-3-modda",
+      "bhm": 25.0
+    },
+    {
+      "id": 26,
+      "violation": "Svetoforning taqiqlovchi signalida yoki yo'l harakatini tartibga soluvchining taqiqlovchi ishorasida yo'lning qatnov qismidagi yo'l chizirlari yoki yo'l belgilari bilan belgilangan to'xtash chizig'ini bosib kirish",
+      "article": "128-4-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 27,
+      "violation": "Transport vositalari haydovchilarining svetoforning taqiqlovchi signaliga yoki yo‘l harakatini tartibga soluvchining taqiqlovchi ishorasiga bo‘ysunmasdan o‘tishi",
+      "article": "128-4-modda",
+      "bhm": 2.0
+    },
+    {
+      "id": 28,
+      "violation": "Transport vositalari haydovchilarining svetoforning taqiqlovchi signaliga yoki yo‘l harakatini tartibga soluvchining taqiqlovchi ishorasiga bo‘ysunmasdan o‘tishi (ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etilgan bo‘lsa)",
+      "article": "128-4-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 29,
+      "violation": "Transport vositalari haydovchilarining svetoforning taqiqlovchi signaliga yoki yo‘l harakatini tartibga soluvchining taqiqlovchi ishorasiga bo‘ysunmasdan o‘tishi (huquqbuzarlik ikki marta ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etilgan bo‘lsa) - transport vositasini boshqarish huquqidan bir yil muddatga mahrum etish",
+      "article": "128-4-modda",
+      "bhm": 0.0
+    },
+    {
+      "id": 30,
+      "violation": "Transport vositalari haydovchilarining to‘sqinliksiz harakat qilish huquqidan foydalanadigan transport vositalarning o‘tib ketishiga xalaqit berishi",
+      "article": "128-5-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 31,
+      "violation": "Transport vositalari haydovchilarining yo‘lning qarama-qarshi harakatlanish uchun mo‘ljallangan tomoniga yoki bo‘lagiga yo‘l harakati qoidalarini buzgan holda chiqishi, xuddi shuningdek avariya holati yuzaga kelishiga sabab bo‘lgan, ya’ni yo‘l harakatining boshqa qatnashchilarini tezlikni, harakat yo‘nalishini keskin o‘zgartirishga yoki o‘z xavfsizligini yoxud boshqa fuqarolarning xavfsizligini ta’minlash uchun o‘zga choralarni ko‘rishga majbur qiluvchi huquqbuzarlikni sodir etishi",
+      "article": "128-5-modda",
+      "bhm": 10.0
+    },
+    {
+      "id": 32,
+      "violation": "Ushbu moddaning birinchi (30-band) yoki ikkinchi qismlarida (31-band) nazarda tutilgan huquqbuzarliklarni ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etish (jarima yoki transport vositasini boshqarish huquqidan bir yil muddatga mahrum etish)",
+      "article": "128-5-modda",
+      "bhm": 25.0
+    },
+    {
+      "id": 33,
+      "violation": "Transport vositalari haydovchilarining to‘xtash yoki to‘xtab turish qoidalarini buzishi",
+      "article": "128-6-modda",
+      "bhm": 2.0
+    },
+    {
+      "id": 37,
+      "violation": "Mototsikllar va boshqa transport vositalari haydovchilarining yo‘llarda yo‘l harakati xavfsizligiga tahdid soluvchi yoki avariya holatini keltirib chiqaruvchi guruh bo‘lib harakat qilishda qatnashishi",
+      "article": "129-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 38,
+      "violation": "Mototsikllar va boshqa transport vositalari haydovchilarining yo‘llarda yo‘l harakati xavfsizligiga tahdid soluvchi yoki avariya holatini keltirib chiqaruvchi guruh bo‘lib harakat qilishda qatnashishi (xuddi shunday huquqbuzarlik ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etilgan bo‘lsa) - jarima yoki transport vositasini boshqarish huquqidan olti oydan bir yilgacha muddatga mahrum etish",
+      "article": "129-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 39,
+      "violation": "Transport vositalari haydovchilarining temir yo‘lning o‘tish joylaridan o‘tish qoidalarini buzishi",
+      "article": "130-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 40,
+      "violation": "Transport vositalari haydovchilarining temir yo‘lning o‘tish joylaridan o‘tish qoidalarini buzishi (xuddi shunday huquqbuzarlik ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etilgan bo‘lsa) - jarima yoki transport vositasini boshqarish huquqidan olti oydan bir yilgacha muddatga mahrum etish",
+      "article": "130-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 41,
+      "violation": "Haydovchilarning transport vositalarini alkogolli ichimlikdan, giyohvand modda ta’siridan yoki o‘zgacha tarzda mast holda boshqarishi (transport vositasini boshqarish huquqidan bir yilu olti oydan uch yilgacha muddatga mahrum qilib, jarima solish)",
+      "article": "131-modda",
+      "bhm": 25.0
+    },
+    {
+      "id": 42,
+      "violation": "Haydovchilarning transport vositalarini alkogolli ichimlikdan, giyohvand modda ta’siridan yoki o‘zgacha tarzda mast holda boshqarishi (huquqbuzarlik transport vositalarini boshqarish huquqi bo‘lmagan shaxs tomonidan sodir etilgan bo‘lsa) - jarima yoki o‘n besh sutka muddatga ma’muriy qamoqqa olish",
+      "article": "131-modda",
+      "bhm": 40.0
+    },
+    {
+      "id": 43,
+      "violation": "Alkogolli ichimlikdan, giyohvand modda ta’siridan yoki o‘zgacha tarzda mast shaxsga transport vositasini boshqarishni topshirish (transport vositasini boshqarish huquqidan ikki yildan uch yilgacha muddatga mahrum qilib, jarima solish)",
+      "article": "131-modda",
+      "bhm": 25.0
+    },
+    {
+      "id": 44,
+      "violation": "Transport vositalari haydovchilarining yo‘l harakati qoidalarini buzishi jabrlanuvchiga yengil tan jarohati yoki ancha miqdorda moddiy zarar yetkazilishiga olib kelsa (eng kam ish haqining besh baravaridan yetti baravarigacha miqdorda jarima solishga yoki transport vositalarini boshqarish huquqidan bir yildan uch yilgacha muddatga mahrum etish). Ancha miqdordagi moddiy zarar deganda, eng bazaviy hisoblash miqdorining besh baravari miqdoridan oshib ketgan zarar tushuniladi.",
+      "article": "133-modda",
+      "bhm": 7.0
+    },
+    {
+      "id": 45,
+      "violation": "Transport vositalari haydovchilarining yo‘l harakati qoidalarini buzishi transport vositalari, yo‘l harakatini tartibga soluvchi vositalar yoki boshqa mol-mulk shikastlanishiga olib kelsa, lekin ancha miqdorda moddiy zarar yetkazmasa (bazaviy hisoblash miqdorining ikki baravaridan to'rt baravarigacha miqdorda jarima solishga yoki transport vositasini boshqarish huquqidan olti oydan bir yilgacha muddatga mahrum etish)",
+      "article": "134-modda",
+      "bhm": 4.0
+    },
+    {
+      "id": 48,
+      "violation": "Transport vositalari egalarining fuqarolik javobgarligini majburiy sug‘urta qilish bo‘yicha sug‘urta polislarida nazarda tutilmagan foydalanish davrida transport vositalarini boshqarish, xuddi shuningdek faqat mazkur sug‘urta polislarida ko‘rsatilgan haydovchilar ayni shu transport vositalarini boshqarishi to‘g‘risida mazkur sug‘urta polislarida nazarda tutilgan shartlarni buzgan holda transport vositalarini boshqarish",
+      "article": "135-1-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 50,
+      "violation": "FUQAROLAR UCHUN. Fuqarolik javobgarligini majburiy sug‘urta qilish bo‘yicha qonunda belgilangan majburiyatning transport vositalari egalari tomonidan bajarilmasligi, xuddi shuningdek, agar bunday majburiy sug‘urta qilinmaganligi oldindan ayon bo‘lsa, transport vositalarini boshqarish",
+      "article": "135-1-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 51,
+      "violation": "MANSABDOR SHAXSLAR UCHUN. Fuqarolik javobgarligini majburiy sug‘urta qilish bo‘yicha qonunda belgilangan majburiyatning transport vositalari egalari tomonidan bajarilmasligi, xuddi shuningdek, agar bunday majburiy sug‘urta qilinmaganligi oldindan ayon bo‘lsa, transport vositalarini boshqarish",
+      "article": "135-1-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 52,
+      "violation": "Transport vositalari haydovchilarining alkogolli ichimlikdan, giyovand modda ta’siridan yoki o‘zgacha tarzda mastligi yoki mast emasligini belgilangan tartibda aniqlash uchun tekshiruvdan o‘tishdan bo‘yin tovlashi (transport vositasini boshqarish huquqidan bir yilu olti oydan uch yilgacha muddatga mahrum qilish va jarima)",
+      "article": "136-modda",
+      "bhm": 15.0
+    },
+    {
+      "id": 53,
+      "violation": "Transport vositalari haydovchilarining alkogolli ichimlikdan, giyovand modda ta’siridan yoki o‘zgacha tarzda mastligi yoki mast emasligini belgilangan tartibda aniqlash uchun tekshiruvdan o‘tishdan bo‘yin tovlashi (transport vositalarini boshqarish huquqi bo‘lmagan shaxs tomonidan sodir etilgan bo‘lsa) - jarima yoki yoki o‘n besh sutkagacha muddatga ma’muriy qamoqqa olish",
+      "article": "136-modda",
+      "bhm": 30.0
+    },
+    {
+      "id": 54,
+      "violation": "Transport vositalari haydovchilarining alkogolli ichimlikdan, giyovand modda ta’siridan yoki o‘zgacha tarzda mastligi yoki mast emasligini belgilangan tartibda aniqlash uchun tekshiruvdan o‘tishdan bo‘yin tovlashi (huquqbuzarlik moped, velosiped haydovchi, ulovli aravani boshqarib boruvchi shaxs tomonidan sodir etilishi)",
+      "article": "136-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 55,
+      "violation": "Yo‘l-transport hodisasi qatnashchilarining belgilangan qoidalarni buzgan holda hodisa yuz bergan joydan ketib qolishi (jarima yoki transport vositalarini boshqarish huquqidan ikki yil muddatga mahrum etishga yoxud o‘n besh sutkagacha muddatga ma’muriy qamoqqa olish)",
+      "article": "137-modda",
+      "bhm": 30.0
+    },
+    {
+      "id": 56,
+      "violation": "Piyodalarning yo‘l harakatini tartibga soluvchi signallarga bo‘ysunmasligi, ularning yo‘lning harakat qismini belgilanmagan joylardan kesib o‘tishi, piyodalar yo‘lning qatnov qismida, shu jumladan piyodalar o‘tish joyida harakatlanayotganda telefondan foydalanishi, kitoblarni yoki davriy nashrlarni o‘qishi, videomateriallarni tomosha qilishi hamda audiomateriallarni eshitishi, shuningdek e’tiborni chalg‘itadigan boshqa elektron vositalardan foydalanishi, shuningdek moped va velosiped haydovchilarining, ulovli aravani boshqarib boruvchi va yo‘ldan foydalanuvchi boshqa shaxslarning yo‘l harakatini tartibga soluvchi signallarga bo‘ysunmasligi, ustunlik beruvchi, taqiqlovchi yoki ko‘rsatma beruvchi yo‘l belgilari talablariga rioya etmasligi",
+      "article": "138-modda",
+      "bhm": 0.3
+    },
+    {
+      "id": 57,
+      "violation": "Haydovchilaga har xil xizmat ko‘rsatish maqsadida yo‘lning qatnov qismida fuqarolarning turishi, yo‘llarga ajratilgan mintaqa tegrasida mol boqish",
+      "article": "138-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 58,
+      "violation": "56-band yoki 57-bandda ko'rsatilgan shaxslarning yo'l harakati qoidalarini buzishi, avariya holatini vujudga keltirsa",
+      "article": "138-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 59,
+      "violation": "Transport vosita harakatlanayotgan vaqtda yo‘lovchi tomonidan tana qismlarini (qo‘ldan tashqari) salondan chiqarish",
+      "article": "138-modda",
+      "bhm": 1.0
+    },
+    {
+      "id": 60,
+      "violation": "Moped, velosiped haydovchining, ulovli aravani boshqarib boruvchi shaxsning alkogolli ichimlikdan, giyohvand modda ta’siridan yoki o‘zgacha tarzda mast bo‘lgan holda yo‘l harakati qoidalarini buzishi",
+      "article": "138-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 61,
+      "violation": "Belgilangan tartibda ro‘yxatdan o‘tkazilmagan yoki majburiy texnik ko‘rikdan o‘tkazilmagan transport vositalarini yo‘lga chiqarish, transport vositalarining texnik holati va ulardan foydanilishi uchun mas’ul bo‘lgan mansabdor shaxslarga jarima solish",
+      "article": "139-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 62,
+      "violation": "Nosozligi bo‘lgan yoki muayyan shartlar tufayli transport vositasidan foydalanish taqiqlangan yoki tegishli ruxsatnomasiz qayta jihozlangan transport vositalarini yo‘lga chiqarish, transport vositalarining texnik holati va ulardan foydalanilishi uchun mas’ul bo‘lgan mansabdor shaxslarga jarima",
+      "article": "139-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 63,
+      "violation": "Alkogolli ichimlikdan, giyovand modda ta’siridan yoki o‘zgacha tarzda mast bo‘lgan haydovchilarning yoki transport vositalarini boshqarish huquqi bo‘lmagan shaxslarning transport vositalarini boshqarishiga yo‘l qo‘yish, mansabdor shaxslarga jarima",
+      "article": "140-modda",
+      "bhm": 15.0
+    },
+    {
+      "id": 64,
+      "violation": "Haydovchilarning korxonalar, muassasalar va tashkilotlarga qarashli transport vositalaridan shaxsiy boylik orttirish maqsadida foydalanishi (bazaviy hisoblash miqdorining ikki baravaridan besh baravarigacha jarima)",
+      "article": "141-modda",
+      "bhm": 5.0
+    },
+    {
+      "id": 65,
+      "violation": "Havo, temir yo‘l, suv va avtomobil transportida yuklarning but saqlanishini ta’minlash qoidalarini buzish (mansabdor shaxslarga bazaviy hisoblash miqdorining besh baravaridan yetti baravarigacha miqdorda jarima)",
+      "article": "146-modda",
+      "bhm": 7.0
+    },
+    {
+      "id": 66,
+      "violation": "Yo‘llarga, temir yo‘ldan o‘tish joylariga, yo‘l harakatini tartibga solib turuvchi boshqa inshootlar yoki texnik vositalarga shikast yetkazish, shuningdek yo‘l harakatiga qasddan xalal berish, shu jumladan yo‘l qoplamasini ifloslantirish yo‘li bilan xalal berish",
+      "article": "147-modda",
+      "bhm": 10.0
+    },
+    {
+      "id": 67,
+      "violation": "Poyezdlarning vagonlari, avtotransport vositalari va shahar yo‘lovchilar transportidan axlat yoki boshqa narsalarni tashlab yuborish",
+      "article": "123-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 68,
+      "violation": "Haydovchilarning transport vositalarini piyodalar yoʻlkalaridan yurgizishi, yoʻl belgilari yoki yoʻlning qatnov qismidagi chiziqlar bilan belgilab qoʻyilgan talablarga rioya etmasligi (ushbu Kodeksning 128-3-moddasida, 128-4-moddasining birinchi qismida, 128-5, 128-6 va 130-moddalarida nazarda tutilgan hollar bundan mustasno), odam tashish, transport vositalarini quvib oʻtish, yoʻnalishli transport vositalari toʻxtaydigan bekatlardan yoki piyodalar oʻtish joylaridan yurish, tashqi yoritish asboblaridan foydalanish qoidalarini buzishi, xuddi shuningdek yoʻlovchilarga loyqa sachratishi. IKKI MARTA MAʼMURIY JAZO QOʻLLANILGANIDAN KEYIN BIR YIL DAVOMIDA TAKROR SODIR ETISH.",
+      "article": "128-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 69,
+      "violation": "Haydovchilarning transport vositalarini piyodalar yoʻlkalaridan yurgizishi, yoʻl belgilari yoki yoʻlning qatnov qismidagi chiziqlar bilan belgilab qoʻyilgan talablarga rioya etmasligi (ushbu Kodeksning 128-3-moddasida, 128-4-moddasining birinchi qismida, 128-5, 128-6 va 130-moddalarida nazarda tutilgan hollar bundan mustasno), odam tashish, transport vositalarini quvib oʻtish, yoʻnalishli transport vositalari toʻxtaydigan bekatlardan yoki piyodalar oʻtish joylaridan yurish, tashqi yoritish asboblaridan foydalanish qoidalarini buzishi, xuddi shuningdek yoʻlovchilarga loyqa sachratishi. HUQUQBUZARLIKNI UCH MARTA VA UNDAN ORTIQ MAʼMURIY JAZO QOʻLLANILGANIDAN KEYIN BIR YIL DAVOMIDA TAKROR SODIR ETISH. (Jarima yoki transport vositasini boshqarish huquqidan olti oy muddatga mahrum etish)",
+      "article": "128-modda",
+      "bhm": 4.0
+    },
+    {
+      "id": 70,
+      "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan koʻp boʻlmagan kattalikda oshirib yuborishi. Ushbu moddaning birinchi – beshinchi qismlarida nazarda tutilgan huquqbuzarliklar sodir etilganda, tezlikni oʻlchaydigan maxsus uskunalar va transport vositalari spidometrlari koʻrsatkichlaridagi yoʻl qoʻyilishi mumkin boʻlgan jami nuqsonlar hisobga olinib, tezlikni oʻlchaydigan maxsus uskunalar qayd etgan tezlikdan soatiga 5 kilometr ayirib tashlangan holda, maʼmuriy jazo chorasi qoʻllaniladi",
+      "article": "128-3-modda",
+      "bhm": 0.0
+    },
+    {
+      "id": 71,
+      "violation": "Transport vositalarini boshqarish huquqini beruvchi hujjatlari, transport vositasini roʻyxatdan oʻtkazganlik toʻgʻrisidagi, shuningdek transport vositasiga egalik qilish, egasi yoʻqligida undan foydalanish yoki uni tasarruf etish huquqini tasdiqlovchi hujjatlari, transport vositalari egalarining fuqarolik javobgarligini majburiy sugʻurta qilish boʻyicha sugʻurta polisi (ushbu Kodeks 135-1-moddasining ikkinchi qismida nazarda tutilgan hol bundan mustasno), qonunchilikda nazarda tutilgan hollarda esa lisenziya kartochkasi yoki yoʻl varaqasi, yuridik shaxslarning transport vositalari haydovchilarining, shu jumladan yoʻlovchi yoki yuk tashish faoliyatini amalga oshiruvchi haydovchilarning malaka oshirishdan oʻtganligi toʻgʻrisidagi sertifikati (transport vositalarini boshqarish huquqini beruvchi guvohnomani almashtirish yoki yoʻqolgan guvohnoma oʻrniga boshqasini berish hollarini istisno qilgan holda, guvohnoma olingan paytdan eʼtiboran ikki yillik davr bundan mustasno) yonida boʻlmagan haydovchilarning transport",
+      "article": "135-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 72,
+      "violation": "Transport vositalarini boshqarish huquqi boʻlmagan shaxslarning shu vositalarni boshqarishi, xuddi shuningdek boshqarish huquqi boʻlmagan shaxsga transport vositalarini boshqarishning topshirilishi (fuqarolarga bazaviy hisoblash miqdorining ikkidan bir qismi miqdorida, mansabdor shaxslarga esa – bazaviy hisoblash miqdorining ikki baravari miqdorida jarima solishga sabab boʻladi)",
+      "article": "135-modda",
+      "bhm": 0.5
+    },
+    {
+      "id": 73,
+      "violation": "Transport vositalarini boshqarish huquqidan mahrum etilgan shaxslarning bunday vositalarni boshqarishi",
+      "article": "135-modda",
+      "bhm": 10.0
+    },
+    {
+      "id": 74,
+      "violation": "Haydovchidan, agarda uning Oʻzbekiston Respublikasida berilgan biometrik pasporti yoki identifikasiya ID-kartasi yonida boʻlsa, transport vositalarini boshqarish huquqini beruvchi hujjatlar, transport vositasini roʻyxatdan oʻtkazganlik toʻgʻrisidagi hujjat, transport vositalari egalarining fuqarolik javobgarligini majburiy sugʻurta qilish boʻyicha sugʻurta polisini yonida olib yurish talab etilmaydi",
+      "article": "135-modda",
+      "bhm": 0.0
+    }
+  ]
+}

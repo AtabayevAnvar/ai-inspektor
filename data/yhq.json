@@ -1,0 +1,980 @@
+{
+  "title": "Yoʻl harakati qoidalari",
+  "chapterCount": 30,
+  "chapters": [
+    {
+      "id": 1,
+      "number": "1",
+      "title": "Umumiy qoidalar",
+      "items": [
+        {
+          "number": "1",
+          "text": "Ushbu Yoʻl harakati qoidalari (keyingi oʻrinlarda — Qoidalar) Oʻzbekiston Respublikasi hududida yoʻl harakatining yagona tartibini belgilaydi."
+        },
+        {
+          "number": "2",
+          "text": "Oʻzbekiston Respublikasi yoʻllarida transport vositalarining oʻng tomonlama harakatlanish tartibi belgilangan."
+        },
+        {
+          "number": "3",
+          "text": "Yoʻl harakati ishtirokchilari Oʻzbekiston Respublikasining \"Yoʻl harakati toʻgʻrisida\"gi Qonunini, ushbu Qoidalarni va ularda keltirilgan svetofor ishoralari, yoʻl belgilari (ushbu Qoidalarga 1-ilova), yoʻl chiziqlarining (ushbu Qoidalarga 2-ilova) talablarini bilishlari, ularga amal qilishlari, shuningdek, ularga berilgan vakolat doirasida yoʻllarda harakatni tartibga soluvchilarning koʻrsatmalarini soʻzsiz bajarishlari shart."
+        },
+        {
+          "number": "4",
+          "text": "Yoʻl harakati ishtirokchilari yoʻldagi boshqa harakat ishtirokchilarining harakatlanishiga toʻsqinlik qilmasligi va xavf tugʻdirmasliklari kerak. Tegishli vakolatga ega boʻlmagan yuridik va jismoniy shaxslarga yoʻl qoplamasini buzish, oʻzgartirish yoki unga zarar yetkazish, ifloslantirish, yoʻl belgilarini, svetoforlarni, shuningdek, yoʻl harakatini tashkil etishning boshqa texnik vositalarini oʻzboshimchalik bilan olib tashlash, oʻrnatish, toʻsib qoʻyish, shikastlantirish, yoʻllarda harakatlanishga toʻsqinlik qiluvchi qurilma va narsalarni qoldirish, tegishli ruxsatsiz yoʻlning qatnov qismiga toʻsiqlar oʻrnatish yoki ularni toʻsib qoʻyish, \"sunʼiy notekislik\" qurilmalarini oʻrnatish taqiqlanadi. Harakatlanishga toʻsqinlikni yuzaga keltiradigan shaxs uni tezda bartaraf qilish uchun imkoniyati darajasida barcha choralarni koʻrishi, agar buning iloji boʻlmasa, mavjud barcha vositalar bilan xavf-xatar haqida yoʻl harakati ishtirokchilarini ogohlantirishi va ichki ishlar organlariga (keyingi oʻrinlarda — IIO) xabar berishi shart."
+        },
+        {
+          "number": "5",
+          "text": "Mazkur Qoidalarni buzgan shaxslar Oʻzbekiston Respublikasining qonun hujjatlariga muvofiq javob beradilar."
+        },
+        {
+          "number": "6",
+          "text": "Qoidalarda asosiy tushuncha va atamalar (avariya holatini yuzaga keltirish, avtomagistral, avtopoyezd, ajratuvchi mintaqa, arava, asosiy yoʻl, aholi punkti, bolalar guruhini tashkiliy tashish, velosiped, velosipedchi, velosiped yoʻlkasi, velosipedchilar uchun tasma, gibrid avtomobil, yetarlicha koʻrinmaslik, yondosh hudud, imtiyoz, individual harakatlanish vositalari, yoʻl, yoʻlovchi, yoʻl berish, yoʻl yoqasi, yoʻnalishli transport vositasi, yoʻl-transport hodisasi, yoʻl harakati, yoʻl harakati ishtirokchisi, yoʻl harakatini tashkil etish, yoʻl harakatini tashkil etishning texnik vositalari, yoʻl harakati xavfsizligi, kichik hajmdagi mototransport vositalari, koʻrinishi cheklangan joylar, majburiy toʻxtash, mexanik transport vositasi, moped, mototsikl, ogohlantiruvchi ishoralar, piyoda, piyoda va velosiped yoʻlkasi, piyodalar yoʻlkasi, piyodalarning tashkiliy jamlanmasi, piyodalar oʻtish joyi, pulli toʻxtab turish joyi, reversiv harakatlanish, ruxsat etilgan toʻliq vazn, skuter, sutkaning qorongʻi vaqti, tartibga soluvchi, tashuvchi, temir yoʻl kesishmasi, tezkor va maxsus xizmatlarning transport vositasi, tirkama, transport vositasi, transport vositasining egasi, transport vositalarining tashkiliy jamlanmasi, transport vositalarining toʻxtab turish joylari, trotuar, toʻsiq, toʻxtab turish, toʻxtash, foto va video qayd etish, xavf, xavfli yuk, xavfsizlik orolchasi, xorijiy avtotransport vositalari, chorraha, elektromobil, elektromototsikl, yashil hududlar, oʻzib ketish, oʻt oʻchirgich, qayta tizilish, qatnov qismi, qatnov qismlari kesishmasi, quvib oʻtish, haydovchi, harakatlanish tasmasi, harakatlanish uchun xavf, haqiqiy vazn) belgilangan."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "number": "2",
+      "title": "Haydovchilarning umumiy vazifalari",
+      "items": [
+        {
+          "number": "7",
+          "text": "Mexanik transport vositasining haydovchisi haydovchilik guvohnomasi, transport vositasini roʻyxatdan oʻtkazish haqidagi guvohnoma, sugʻurta polisi va boshqa tegishli hujjatlarni yonida olib yurishi hamda IIO xodimlari talab qilganda tekshirish uchun berishi shart. Xorijiy avtotransport vositalari haydovchilari qoʻshimcha hujjatlarni ham taqdim etishlari kerak. DYHXX xodimlari baʼzi hujjatlarni planshet orqali tekshiradilar. Biometrik pasport yoki ID-karta mavjud boʻlganda ayrim hujjatlar talab etilmaydi."
+        },
+        {
+          "number": "8",
+          "text": "Haydovchi tegishli toifadagi transport vositasini boshqarish huquqini beruvchi haydovchilik guvohnomasiga ega boʻlishi shart: \"A1\" — moped va skuterlar hamda kichik hajmdagi mototransport vositalari; \"A\" — mototsikllar, elektromototsikllar; \"B\" — ruxsat etilgan toʻliq vazni 3500 kg gacha boʻlgan avtotransport vositalari; \"C\" — 3500 kg dan ortiq vaznli avtotransport vositalari; \"D\" — sakkiztadan ortiq oʻrindiqli yoʻlovchi tashish vositalari; \"BE\", \"CE\", \"DE\" — tirkamali tegishli toifadagi transport vositalari. Tramvay haydovchisiga faqat tramvay, trolleybus haydovchisiga faqat trolleybus boshqarishga ruxsat etiladi. Oʻziga tegishli boʻlmagan transport vositasini egasining roziligi yoki ishonchnoma asosida boshqarish mumkin."
+        },
+        {
+          "number": "9",
+          "text": "Xavfsizlik kamarlari nazarda tutilgan transport vositasini boshqarayotgan haydovchi va old oʻrindiqdagi yoʻlovchilar harakatni boshlashdan oldin xavfsizlik kamarlarini taqib olishlari shart. Bundan istisno: 12 yoshgacha boʻlgan bolalar (orqa oʻrindiqda), oʻquv mashgʻulot instruktori, homilador ayollar va tibbiy koʻrsatma boʻyicha bemorlar, tezkor xizmat xodimlari. Mototsikl, elektromototsikl, moped, skuter va kichik hajmdagi mototransport vositalarida harakatlanayotgan haydovchi va yoʻlovchilar motoshlem kiyishlari shart."
+        },
+        {
+          "number": "10",
+          "text": "Respublika hududida harakatlanayotgan xorijiy davlat fuqarosi boshqaruvidagi mexanik transport vositasi haydovchisining yonida yoʻl harakati haqidagi Konvensiya talablariga mos keladigan haydovchilik guvohnomasi va roʻyxatdan oʻtganlik hujjati boʻlishi, transport vositasida davlat raqam belgisi va taniqlik belgisi boʻlishi shart. Xalqaro yuk tashuvchi xorijiy haydovchilar nazorat punktlarida toʻxtashi va hujjatlarni koʻrsatishi shart."
+        },
+        {
+          "number": "11",
+          "text": "Transport vositasining haydovchisi: a) yoʻlga chiqishdan oldin transport vositasining texnik sozligi, tozaligi va jihozlanganligini tekshirishi; b) harakatlanish vaqtida texnik sozlikni taʼminlashi; v) yoʻlovchilarning joylarini egallaganligiga, eshiklarning yopiqligiga ishonch hosil qilishi; g) piyodalar, bolalar, nogironlar, qariyalar, velosipedchilarga nisbatan ehtiyotkorlik koʻrsatishi; d) yoʻlovchilarni xavfsizlik kamari va motoshlem haqida ogohlantirishi; e) qorongʻi vaqtda majburiy toʻxtaganda nur qaytargichli jilet kiyishi; yo) mastlik holatini aniqlash uchun tekshiruvdan oʻtishi; j) avariya holatini yuzaga keltirmasligi; z) belgilangan hollarda transport vositasini IIO, tibbiyot xodimlariga berishi; i) vazn-hajm nazorat punktlaridan oʻtishi shart."
+        },
+        {
+          "number": "12",
+          "text": "Haydovchiga taqiqlanadi: mast holatda yoki charchoq/betoblik holatida boshqarish; transport vositasini huquqi yoʻq yoki mast shaxsga topshirish; tormoz, rul, fara nosoz transport vositasini boshqarish; ruxsatsiz maxsus texnik jihoz oʻrnatish; transport vositalari jamlanmasi harakatiga xalaqit berish; boshqarish paytida telefondan (quloqchinlarsiz) foydalanish, video tomosha qilish; aholi punktlarida ovoz apparaturasidan baland foydalanish; xavfsizlik kamari yoki motoshlemsiz boshqarish; salondan tana qismlarini chiqargan holda harakatlanish."
+        },
+        {
+          "number": "121",
+          "text": "Individual harakatlanish vositalarini boshqaradigan shaxslarga taqiqlanadi: tasma/yoʻlka mavjud boʻlganda qatnov qismida harakatlanish; 0,5 metrdan ortiq chiqib turuvchi yuk tashish; piyodalar oʻtish joyida harakatlanish (yetaklash bundan mustasno); 14 yoshdan kichiklarning boshqarishi (ayrim istisnolardan tashqari); mast holatda boshqarish; boshqa vositani shatakka olish; nosoz tormoz/rul/chiroqli vositani boshqarish; rulni bir qoʻlda yoki ushlamasdan boshqarish; odam tashish; telefondan foydalanish."
+        },
+        {
+          "number": "122",
+          "text": "Individual harakatlanish vositalarini boshqaradigan shaxslar: yoʻl harakati qoidalariga qatʼiy rioya qilishi; trotuar/yoʻlkalarda 10 km/soatdan, ular boʻlmaganda yoʻl chetida 20 km/soatdan oshirmasligi; turar joy dahalaridan chiqishda yoʻl berishi; qatʼiy harakat yoʻnalishi boʻyicha boshqarishi kerak."
+        },
+        {
+          "number": "123",
+          "text": "Agar individual harakatlanish vositasini boshqaruvchi shaxs piyodalar harakatiga xavf tugʻdirsa, tushib yetaklashi yoki tezlikni kamaytirishi kerak. Piyodalar ustunlikka ega. Individual harakatlanish vositalari boshqa mexanik transport vositalariga nisbatan ustunlikka ega."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "number": "3",
+      "title": "Yoʻl-transport hodisasi sodir boʻlganda haydovchining majburiyatlari",
+      "items": [
+        {
+          "number": "13",
+          "text": "Yoʻl-transport hodisasi sodir boʻlganda unga daxldor haydovchilar: transport vositasini darhol toʻxtatishi, avariya ishoralarini yoqishi, avariya sababli toʻxtash belgisini oʻrnatishi, joyni oʻzgartirmasligi; tan jarohati olganlarga birinchi yordam koʻrsatishi, tez yordam chaqirishi; boshqa transport vositalari harakatiga toʻsqinlik qilsa, holatni qayd etib qatnov qismini boʻshatishi; IIOga xabar berishi va guvohlar maʼlumotini yozib olishi shart."
+        },
+        {
+          "number": "14",
+          "text": "Haydovchilar sugʻurta qonunchiligida belgilangan tartibda hodisa toʻgʻrisida xabarnoma tuzilganda, IIOga xabar bermasliklari mumkin."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "number": "4",
+      "title": "Piyodalarning majburiyatlari",
+      "items": [
+        {
+          "number": "15",
+          "text": "Piyodalar trotuarlardan, piyodalar yoʻlkalaridan, piyoda va velosiped yoʻlkalaridan, ular boʻlmaganda yoʻl yoqalaridan harakatlanishi kerak. Bular boʻlmaganda velosiped yoʻlkasi yoki qatnov qismi chetidan bir qator boʻlib harakatlanish mumkin. Qatnov qismi chetida piyodalar transport harakatiga qarama-qarshi yoʻnalishda yurishlari kerak (baʼzi istisnolar bundan mustasno)."
+        },
+        {
+          "number": "16",
+          "text": "Piyodalarning tashkiliy jamlanmasiga qatnov qismida bir qatorda toʻrt kishidan ortiq boʻlmasdan, faqat transport harakat yoʻnalishi boʻylab oʻng tomondan harakatlanishga ruxsat etiladi, kuzatuvchilar bayroqcha/chiroq bilan boʻlishi shart. Bolalar guruhini faqat yorugʻ vaqtda va kattalar kuzatuvida olib yurishga ruxsat etiladi."
+        },
+        {
+          "number": "17",
+          "text": "Piyodalar qatnov qismini piyodalar oʻtish joylaridan, yer osti/usti oʻtish joylaridan, ular boʻlmaganda chorrahalarda kesib oʻtishlari kerak. Koʻrinadigan oʻtish joyi boʻlmasa, toʻgʻri burchak ostida kesib oʻtishga ruxsat etiladi."
+        },
+        {
+          "number": "18",
+          "text": "Tartibga solingan joylarda piyodalar tartibga soluvchining yoki svetoforning ishoralariga amal qilishlari kerak."
+        },
+        {
+          "number": "19",
+          "text": "Tartibga solinmagan oʻtish joylarida piyodalar xavfsizlikka ishonch hosil qilgach oʻtishlari mumkin. Telefondan foydalanish, video koʻrish va boshqa chalgʻituvchi harakatlar taqiqlanadi. Avtobus/trolleybusning orqasidan, tramvayning oldidan oʻtish kerak."
+        },
+        {
+          "number": "20",
+          "text": "Qatnov qismiga chiqqan piyodalar ushlanib qolmasliklari kerak; ulgurmasa xavfsizlik orolchasida yoki ajratuvchi chiziqda toʻxtashi lozim."
+        },
+        {
+          "number": "21",
+          "text": "Tezkor va maxsus xizmat transport vositalari yaqinlashganda piyodalar qatnov qismidan oʻtmasligi, yoʻl berib qatnov qismini boʻshatishi kerak."
+        },
+        {
+          "number": "22",
+          "text": "Yoʻnalishli transport vositalarini kutish maydonchalarida yoki trotuar/yoʻl yoqasida kutish kerak; toʻliq toʻxtagandan keyin chiqishga ruxsat etiladi."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "number": "5",
+      "title": "Yoʻlovchilarning majburiyatlari",
+      "items": [
+        {
+          "number": "23",
+          "text": "Yoʻlovchilar transport vositasi toʻliq toʻxtagandan soʻng trotuar yoki yoʻl yoqasi tomondan chiqishi/tushishi kerak; imkon boʻlmasa qatnov qismi tomondan xavfsiz holatda amalga oshirilishi mumkin. Xavfsizlik kamari yoki motoshlemni taqib olish shart."
+        },
+        {
+          "number": "24",
+          "text": "Yoʻlovchilarga taqiqlanadi: haydovchini chalgʻitish; harakatlanayotgan yuk avtomobilida tik turish yoki yuk ustida oʻtirish; harakatlanayotganda eshiklarni ochish; salondan tana qismlarini chiqarish. Bu talablarni haydovchi nazorat qilishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "number": "6",
+      "title": "Maxsus transport vositalarining imtiyozlari",
+      "items": [
+        {
+          "number": "25",
+          "text": "Tezkor va maxsus xizmatlarning mayoqchali transport vositalari haydovchilari kechiktirib boʻlmaydigan vazifani bajarayotganda xavfsizlikni taʼminlash sharti bilan baʼzi Qoidalar talablaridan chetga chiqishlari mumkin. Imtiyozdan foydalanish uchun mayoqcha va tovushli ishora yoqilgan boʻlishi va yoʻl berilganligiga ishonch hosil qilinishi shart. Kuzatib kelinayotgan transport vositalari ham shu imtiyozdan foydalanadi."
+        },
+        {
+          "number": "26",
+          "text": "Haydovchilar mayoqchali va tovushli ishorali yaqinlashayotgan hamda ularning kuzatuvidagi transport vositalariga yoʻl berishlari shart; bunday vositalarni quvib oʻtish taqiqlanadi."
+        },
+        {
+          "number": "27",
+          "text": "Mayoqchani yoqib toʻxtab turgan maxsus transport vositasiga yaqinlashayotgan haydovchilar tezlikni darhol toʻxtash imkoniyatini beradigan darajada kamaytirishi shart."
+        },
+        {
+          "number": "28",
+          "text": "Zargʻaldoq yoki sariq mayoqchalar yoʻl qurilishi/taʼmirlashda, gabaritdan katta yuk tashishda, xavfli yuk tashishda va velosipedchilar jamlanmasini kuzatishda yoqilgan boʻlishi kerak. Bu mayoqcha imtiyoz bermaydi, faqat xavf haqida ogohlantiradi."
+        },
+        {
+          "number": "29",
+          "text": "Zargʻaldoq/sariq mayoqchali transport vositalari yoʻl qurilishi, taʼmirlash va boshqa transport vositalarini tashishda xavfsizlikni taʼminlash sharti bilan baʼzi yoʻl belgilari va chiziqlari talablaridan chetga chiqishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "number": "7",
+      "title": "Svetofor va tartibga soluvchining ishoralari",
+      "items": [
+        {
+          "number": "30",
+          "text": "Svetoforlarda yashil, sariq, qizil va oq rangli yorugʻlik ishoralari qoʻllaniladi; doirasimon, koʻrsatkichli, piyoda/velosiped tasvirli va X-simon koʻrinishlarda boʻlishi mumkin."
+        },
+        {
+          "number": "31",
+          "text": "Svetoforning doirasimon ishoralari: yashil — harakatlanishga ruxsat; miltillovchi yashil — ruxsat va tez orada taqiqlovchi ishora yonishi haqida ogohlantirish; sariq — taqiqlash va ishoralar almashuvi haqida ogohlantirish; miltillovchi sariq — ehtiyotkorlik bilan harakatlanishga ruxsat va tartibga solinmagan chorraha/oʻtish joyi haqida xabar; qizil (shu jumladan miltillovchi) — taqiqlash; qizil va sariq bir vaqtda — taqiqlash va yashil ishora yonishi haqida axborot."
+        },
+        {
+          "number": "32",
+          "text": "Yoʻnaltirgich koʻrinishidagi ishoralar doirasimon ishoralar bilan bir xil maʼnoga ega, faqat koʻrsatilgan yoʻnalishga taʼsir qiladi. Chapga burilishga ruxsat beruvchi yoʻnaltirgich qayrilib olishga ham ruxsat beradi."
+        },
+        {
+          "number": "33",
+          "text": "Asosiy yashil ishoraga yoʻnaltirgich shakli tushirilgan boʻlsa, u qoʻshimcha tarmoq borligi va ruxsat etilgan yoʻnalishlarni bildiradi."
+        },
+        {
+          "number": "34",
+          "text": "Piyoda tasviridagi svetofor faqat piyodalarga, velosiped tasviridagi esa velosipedchilar va individual harakatlanish vositalarini boshqaruvchilarga taʼsir qiladi."
+        },
+        {
+          "number": "35",
+          "text": "Reversiv svetoforlar X-simon qizil va pastga yoʻnalgan koʻrsatkichli yashil ishoralar bilan qatnov qismi tasmasidagi harakatlanish yoʻnalishini bildiradi. Ishoralari oʻchirilgan reversiv svetofor tasmaga kirishni taqiqlaydi."
+        },
+        {
+          "number": "36",
+          "text": "Tramvay va ajratilgan tasmadagi yoʻnalishli transport vositalari uchun \"T\" harfi koʻrinishidagi toʻrtta oq ishorali svetoforlar qoʻllanilishi mumkin; yuqori va pastki ishoralar kombinatsiyasi harakat yoʻnalishini bildiradi."
+        },
+        {
+          "number": "37",
+          "text": "Temir yoʻl kesishmasidagi miltillovchi oq ishora harakatlanishga ruxsat beradi; ishoralar oʻchirilgan va poyezd koʻrinmasa ham harakatlanishga ruxsat etiladi. Qizil miltillovchi ishora bilan birga tovushli ishora ham berilishi mumkin."
+        },
+        {
+          "number": "38",
+          "text": "Tartibga soluvchining ishoralari: qoʻllar yon tomonga uzatilganda/tushirilganda — yon tomondan tramvayga toʻgʻriga, relssiz vositalarga toʻgʻriga/oʻngga, piyodalarga oʻtishga ruxsat; old/orqadan taqiqlash. Oʻng qoʻl oldinga uzatilganda — chap yondan tramvayga chapga, relssiz vositalarga barcha yoʻnalishlarda, oldidan faqat oʻngga ruxsat, orqa va oʻng yondan taqiqlash, orqa tomondan piyodalarga oʻtishga ruxsat. Qoʻl yuqoriga koʻtarilganda — barcha yoʻnalishlarda taqiqlash (42-band bundan mustasno)."
+        },
+        {
+          "number": "39",
+          "text": "Tartibga soluvchi yoki IIO xodimi qoʻl ishorasi yoki ovoz kuchaytirgich bilan transport vositasini toʻxtatishni talab qilishi mumkin; haydovchi koʻrsatilgan joyda toʻxtashi shart."
+        },
+        {
+          "number": "40",
+          "text": "Eʼtiborni jalb etish uchun hushtak bilan qoʻshimcha ishora beriladi."
+        },
+        {
+          "number": "41",
+          "text": "Taqiqlovchi ishorada haydovchilar toʻxtash chizigʻi oldida, boʻlmasa chorrahada piyodalarga xalaqit bermay, temir yoʻl kesishmasida yoki boshqa joylarda harakatlanishga xalaqit bermay toʻxtashlari kerak."
+        },
+        {
+          "number": "42",
+          "text": "Yashildan keyin sariq yonganda yoki qoʻl yuqoriga koʻtarilganda, keskin tormozsiz toʻxtashga ulgurmaydigan haydovchilarga harakatni davom ettirishga ruxsat etiladi; piyodalar qatnov qismini boʻshatishi yoki ajratuvchi chiziqda toʻxtashi kerak."
+        },
+        {
+          "number": "43",
+          "text": "Tartibga soluvchining ishoralari svetofor, yoʻl belgilari va chiziqlariga zid boʻlsa, tartibga soluvchi ishoralariga amal qilinadi. Svetofor ishoralari imtiyoz belgilariga zid boʻlsa, svetoforga amal qilinadi. Svetofor ishlamasa, koʻndalang yoʻnalish ishlamayotganiga ishonch hosil qilib harakatlanish mumkin."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "number": "8",
+      "title": "Ogohlantiruvchi va avariya (xavf-xatar) ishoralari",
+      "items": [
+        {
+          "number": "44",
+          "text": "Ogohlantiruvchi ishoralar: burilish koʻrsatkichi yoki qoʻl ishorasi; toʻxtash fara chirogʻi; tovushli ishoralar; fara chiroqlarini yoqib-oʻchirish; kunduzi yaqinni yorituvchi chiroqni yoqish."
+        },
+        {
+          "number": "45",
+          "text": "Haydovchi harakatni boshlash, qayta tizilish, burilish va toʻxtashdan oldin yorugʻlik yoki qoʻl ishorasini berishi shart. Chapga burilish — chap qoʻlni yonga yoki oʻng qoʻlni tirsakdan bukib koʻtarish; oʻngga burilish — oʻng qoʻlni yonga yoki chap qoʻlni tirsakdan bukib koʻtarish; toʻxtash — istalgan qoʻlni yuqoriga koʻtarish."
+        },
+        {
+          "number": "46",
+          "text": "Ishora manyovrdan oldinroq berilishi va tugagach toʻxtatilishi kerak; boshqalarni chalgʻitmasligi va oldin oʻtish huquqi bermasligi kerak."
+        },
+        {
+          "number": "47",
+          "text": "Yoʻnalishni oʻzgartirish ishorasidan oldin haydovchi orqadan kelayotgan/quvib oʻtayotgan transport vositalariga xalaqit bermasligiga ishonch hosil qilishi kerak."
+        },
+        {
+          "number": "48",
+          "text": "Tovushli ishora faqat aholi punktlaridan tashqarida quvib oʻtish haqida ogohlantirish va yoʻl-transport hodisasining oldini olish uchun qoʻllaniladi."
+        },
+        {
+          "number": "49",
+          "text": "Quvib oʻtish haqida tovushli ishora oʻrniga yoki bilan birga fara chiroqlarini yoqib-oʻchirish mumkin."
+        },
+        {
+          "number": "50",
+          "text": "Barcha burilish ishoralarining bir vaqtda miltillashi avariya ishorasi hisoblanadi; hodisa, majburiy toʻxtash, koʻz qamashishi, shatakka olish va bolalarni tushirish/chiqarishda yoqilishi kerak."
+        },
+        {
+          "number": "51",
+          "text": "Transport vositasi toʻsatdan toʻxtaganda avariya ishorasi yoqiladi, ishlamasa avariya sababli toʻxtash belgisi oʻrnatiladi (aholi punktida 15 metr, undan tashqarida 30 metrdan kam boʻlmagan masofada)."
+        },
+        {
+          "number": "52",
+          "text": "Shatakka olingan transport vositada avariya ishoralari ishlamasa, orqasiga avariya sababli toʻxtash belgisi oʻrnatiladi."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "number": "9",
+      "title": "Harakatlanishni boshlash, manyovr qilish",
+      "items": [
+        {
+          "number": "53",
+          "text": "Harakatlanishni boshlash va manyovr (qayta tizilish, burilish, qayrilib olish, quvib oʻtish, aylanib oʻtish) hamda toʻxtashdan oldin bajarilayotgan harakat boshqalarga xavf tugʻdirmasligi kerak."
+        },
+        {
+          "number": "54",
+          "text": "Yondosh hududdan chiqayotgan haydovchi unda harakatlanayotgan piyoda va transport vositalariga hamda yoʻlni kesib oʻtayotgan piyoda/velosipedchilarga yoʻl berishi kerak."
+        },
+        {
+          "number": "55",
+          "text": "Qayta tizilishda yoʻnalishini oʻzgartirmayotgan yoʻlakay transport vositalariga yoʻl beriladi; bir vaqtda qayta tizilishda oʻng tomondagi vositaga yoʻl beriladi."
+        },
+        {
+          "number": "56",
+          "text": "Burilish yoki qayrilishdan oldin qatnov qismining eng chetki holatini egallash shart (aylanma harakatlanishga kirish bundan mustasno). Belgilangan hollarda tramvay iziga chapga burilish/qayrilishga ruxsat etiladi, lekin tramvayga xalaqit bermasligi kerak."
+        },
+        {
+          "number": "57",
+          "text": "Burilishda transport vositasi qarama-qarshi yoʻnalish tomoniga oʻtib ketmasligi kerak; oʻngga burilishda qatnov qismining oʻng chetiga yaqin harakatlanish kerak."
+        },
+        {
+          "number": "58",
+          "text": "Gabarit yoki boshqa sabablarga koʻra 56-band talabini bajara olmasa, xavfsizlikni taʼminlab boshqalarga xalaqit bermasdan chetga chiqishga ruxsat etiladi."
+        },
+        {
+          "number": "59",
+          "text": "Chorrahadan tashqarida chapga burilish/qayrilishda qarama-qarshi yoʻnalishdagi transport va bir yoʻnalishdagi tramvayga yoʻl berish shart; kenglik yetarli boʻlmasa oʻng chetdan qayrilishga ruxsat etiladi, lekin yoʻl berish shart."
+        },
+        {
+          "number": "60",
+          "text": "Yoʻnalishlar kesishganda va navbat Qoidalarda nazarda tutilmagan boʻlsa, oʻng tomondan yaqinlashayotgan vositaga yoʻl beriladi."
+        },
+        {
+          "number": "61",
+          "text": "Sekinlashish boʻlagi bor yoʻlda burilish uchun oʻz vaqtida qayta tizilib, faqat shu boʻlakda tezlikni kamaytirish kerak; tezlashish boʻlagida qoʻshni tasmadagilarga yoʻl berib oqimga qoʻshilish kerak."
+        },
+        {
+          "number": "62",
+          "text": "Qayrilib olish taqiqlanadi: piyodalar oʻtish joylarida, tunnellarda, koʻprik/yoʻl oʻtkazgich/estakadalarda va ularning ostida, temir yoʻl kesishmalarida, koʻrinish 100 metrdan kam boʻlgan joylarda."
+        },
+        {
+          "number": "63",
+          "text": "Orqaga harakatlanishda haydovchi xavfsizlikni taʼminlashi shart; chorrahalarda va qayrilish taqiqlangan joylarda orqaga harakatlanish taqiqlanadi."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "number": "10",
+      "title": "Yoʻlning qatnov qismida transport vositalarining joylashuvi",
+      "items": [
+        {
+          "number": "64",
+          "text": "Tasmalar soni chiziqlar yoki belgilar bilan aniqlanadi; ular boʻlmasa haydovchilar oʻzlari aniqlaydi. Tramvay yoʻli, ajratuvchi tasma yoki uzluksiz chiziq bilan ajratilgan yoʻllarda qarama-qarshi yoʻnalishga chiqish taqiqlanadi."
+        },
+        {
+          "number": "65",
+          "text": "Toʻrt va undan ortiq tasmali ikki tomonlama yoʻllarda qarama-qarshi yoʻnalish tasmalariga chiqish taqiqlanadi."
+        },
+        {
+          "number": "66",
+          "text": "Uch tasmali ikki tomonlama yoʻllarda oʻrta qatorga faqat quvib oʻtish, aylanib oʻtish, chapga burilish va qayrilish uchun chiqishga ruxsat etiladi; chetki chap qarama-qarshi yoʻnalish qatori taqiqlanadi."
+        },
+        {
+          "number": "67",
+          "text": "Aholi punktidan tashqarida haydovchilar qatnov qismining oʻng chetiga yaqin harakatlanishi kerak; boʻsh oʻng tasmalar boʻlsa chap tasmani egallash taqiqlanadi. Aholi punktida qulay boʻlakdan foydalanish mumkin, lekin serqatnovlik sababli boshqa boʻlaklar band boʻlganda faqat burilish/toʻxtash/toʻsiqni aylanib oʻtish uchun oʻzgartirish mumkin. Uch va undan ortiq tasmali yoʻlda chetki chap qator faqat serqatnovlik, quvib oʻtish yoki burilish uchun; yuk avtomobillariga faqat burilish uchun ruxsat etiladi."
+        },
+        {
+          "number": "68",
+          "text": "Tezligi 40 km/soatdan oshmaydigan transport vositalari faqat chetki oʻng qatorda harakatlanishi kerak (manyovr va toʻxtash holatlaridan tashqari)."
+        },
+        {
+          "number": "69",
+          "text": "Bir yoʻnalishdagi chap tomonda joylashgan tramvay yoʻlidan boshqa tasmalar band boʻlganda hamda aylanib oʻtish/burilish uchun foydalanishga ruxsat etiladi, lekin tramvayga xalaqit bermasligi kerak; qarama-qarshi yoʻnalish tramvay yoʻlidan harakatlanish taqiqlanadi."
+        },
+        {
+          "number": "70",
+          "text": "Tasmalarga ajratilgan qatnov qismida harakatlanish qatʼiy belgilangan tasmada boʻlishi kerak; faqat qayta tizilishda uzuq-uzuq chiziqni bosib oʻtish mumkin."
+        },
+        {
+          "number": "71",
+          "text": "Reversiv harakatlanishli yoʻlga burilishda transport vositasi chetki oʻng qatorni egallashi, boshqa tasmalar ruxsat etilganiga ishonch hosil qilingach qayta tizilishi mumkin."
+        },
+        {
+          "number": "72",
+          "text": "Ajratuvchi mintaqalar, yoʻl yoqalari, trotuarlar, piyodalar/velosiped yoʻlkalari va yashil hududlarda mexanik transport vositalari harakatlanishi taqiqlanadi (kommunal xizmat va yuk olib kirish uchun boshqa imkoni yoʻq vositalar bundan mustasno)."
+        },
+        {
+          "number": "73",
+          "text": "Haydovchi oldingi transport vositasi keskin tormoz berganda toʻqnashmaslikni taʼminlaydigan oraliq va yonlama masofani saqlashi kerak."
+        },
+        {
+          "number": "74",
+          "text": "Aholi yashash joylaridan tashqarida sekin yuruvchi yoki uzun transport vositalari haydovchilari orqadan quvib oʻtayotganlarga qayta tizilish imkonini beruvchi masofani saqlashi kerak (quvib oʻtish taqiqlangan yoʻllarda bu talab qoʻllanilmaydi)."
+        },
+        {
+          "number": "75",
+          "text": "Toʻsiq sababli qarama-qarshi harakatlanish qiyin boʻlsa, toʻsiq oʻz tomonida boʻlgan haydovchi yoʻl berishi kerak."
+        },
+        {
+          "number": "76",
+          "text": "Ajratuvchi boʻlagi boʻlmagan ikki tomonlama yoʻllarda xavfsizlik orolchalari, ustunlar va yoʻl inshoot qismlarini oʻng tomondan aylanib oʻtish kerak."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "number": "11",
+      "title": "Harakatlanish tezligi",
+      "items": [
+        {
+          "number": "77",
+          "text": "Haydovchi serqatnovlik, transport va yuk holati, yoʻl-obhavo sharoiti va koʻrinishni hisobga olib xavfsizlikni taʼminlovchi tezlikda harakatlanishi kerak; xavf yuzaga kelsa toʻxtashni taʼminlaydigan darajada tezlikni kamaytirishi yoki aylanib oʻtishi kerak."
+        },
+        {
+          "number": "78",
+          "text": "Aholi punktlarida tezlik 70 km/soatdan, maktablar yaqinida (300 metr masofada) 30 km/soatdan, turar joy dahalari va hovlilarda 20 km/soatdan oshmasligi kerak. Nukus, Toshkent, viloyat va tuman markazlarida 60 km/soatdan oshmasligi kerak."
+        },
+        {
+          "number": "79",
+          "text": "Aholi punktidan tashqarida: yengil avtomobil va 3,5 tonnagacha yuk avtomobili — 100 km/soat; shaharlararo avtobus/mikroavtobus — 90 km/soat; boshqa avtobuslar, tirkamali yengil avtomobil, mototsikl, 3,5 tonnadan ortiq yuk avtomobili — 80 km/soat; tirkamali yuk avtomobili — 70 km/soat."
+        },
+        {
+          "number": "80",
+          "text": "Har qanday yoʻlda: yukxonada odam tashiyotgan yuk avtomobili — 60 km/soat; bolalar guruhini tashiyotgan transport — 60 km/soat; shatakka olingan transport — 50 km/soat; xavfli/ogʻir/katta yuk tashiyotgan — DYHXX bilan kelishilgan tezlik."
+        },
+        {
+          "number": "81",
+          "text": "Haydovchiga taqiqlanadi: texnik tavsifda koʻrsatilgan tezlikdan oshirish; \"Tezligi cheklangan\" belgisida koʻrsatilgandan oshirish; sababsiz juda past tezlikda yurish; zarurat boʻlmaganda keskin tormoz berish."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "number": "12",
+      "title": "Quvib oʻtish",
+      "items": [
+        {
+          "number": "82",
+          "text": "Quvib oʻtishdan oldin haydovchi ishorasini yoqib, boʻlak boʻshligiga, orqadan kelayotgan vosita quvib oʻtmayotganiga, oldingi vosita ishora bermayotganiga va qaytib oʻtish imkoniga ishonch hosil qilishi shart."
+        },
+        {
+          "number": "83",
+          "text": "Bir yoʻnalishdagi relssiz vositalarni har ikki tomondan oʻzib ketishga ruxsat etiladi; burilishga kirgan vositani oʻng tomondan oʻzib oʻtish kerak."
+        },
+        {
+          "number": "84",
+          "text": "Quvib oʻtilayotgan haydovchiga tezlikni oshirish yoki boshqa toʻsqinlik qilish taqiqlanadi."
+        },
+        {
+          "number": "85",
+          "text": "Quvib oʻtishni tugatgach ilgari egallagan yoʻnalishga qaytish shart."
+        },
+        {
+          "number": "86",
+          "text": "Quvib oʻtish taqiqlanadi: tartibga solingan chorrahalarda; asosiy boʻlmagan yoʻlda tartibga solinmagan chorrahalarda; koʻprik, yoʻl oʻtkazgich, estakadalarda va ularning ostida; piyodalar oʻtish joylarida; temir yoʻl kesishmasi va undan 100 metr masofada; quvib/aylanib oʻtayotgan vositalarni; tepalik oxirida va koʻrinish cheklangan joylarda; 3.20 va 3.22 belgilar taʼsir oraligʻida."
+        },
+        {
+          "number": "87",
+          "text": "Sekin yuruvchi yoki katta hajmli yukni quvib oʻtish qiyin boʻlsa, haydovchi vositani oʻng tomonga olib, kerak boʻlsa toʻxtashi kerak."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "number": "13",
+      "title": "Toʻxtash va toʻxtab turish",
+      "items": [
+        {
+          "number": "88",
+          "text": "Toʻxtash va toʻxtab turishga yoʻlning oʻng tomonida yoʻl yoqasida yoki qatnov qismi chetida ruxsat etiladi; ayrim shartlarda trotuarda ham ruxsat etiladi. Aholi punktlarida tramvaysiz bir tasmali yoki bir tomonlama yoʻllarning chap tomonida ham ruxsat etiladi; 3,5 tonnadan ortiq yuk vositalari faqat yuk ortish/tushirish uchun toʻxtashi mumkin."
+        },
+        {
+          "number": "89",
+          "text": "Transport vositalarini bir qator parallel qoʻyish kerak; ikki gʻildirakli vositalarni ikki qator qoʻyish mumkin. Belgilangan joylarda yengil avtomobil, mototsikl va boshqalarga trotuar chetida toʻxtab turishga ruxsat etiladi."
+        },
+        {
+          "number": "90",
+          "text": "Aholi punktidan tashqarida uzoq toʻxtab turishga faqat maxsus maydonchalarda yoki yoʻldan tashqarida ruxsat etiladi."
+        },
+        {
+          "number": "91",
+          "text": "Toʻxtash taqiqlanadi: tramvay yoʻllarida; temir yoʻl kesishmalarida; tunnellarda; uch tasmadan kam koʻprik/yoʻl oʻtkazgich/estakada ustida; ularning ostida (ruxsat etilgan joylardan tashqari); harakatlanishga toʻsqinlik qiladigan joylarda; sidirgʻa chiziq/ajratuvchi mintaqagacha 3 metrdan kam joyda; piyodalar oʻtish joyi va undan 10 metr masofada; velosiped yoʻlkasi kesishuvi va 10 metr masofada; velosipedchilar tasmasida; koʻrinish 100 metrdan kam doʻngliklarda va xavfli burilishlarda; chorrahalarda va 30 metr masofada; bekat va yoʻnalishli transport toʻxtash joylaridan 15 metr masofada; svetofor/belgilarni toʻsadigan joylarda; qayrilish joylarida va 30 metr masofada; 3.27 belgisi yoki 1.4 chizigʻi taʼsirida."
+        },
+        {
+          "number": "92",
+          "text": "Toʻxtab turish taqiqlanadi: toʻxtash taqiqlangan joylarda; aholi punktidan tashqarida 2.1 belgili yoʻllarda; temir yoʻl kesishmasidan 50 metr yaqinida; 3.27-3.30 belgilar yoki 1.4, 1.10 chiziqlar taʼsirida; yuk avtomobillari tunda xavf tugʻdiradigan holatda; nogironlar transport vositasidan tashqari 5.15/7.17 belgilar taʼsirida."
+        },
+        {
+          "number": "93",
+          "text": "Toʻxtash taqiqlangan joyda majburiy toʻxtaganda, haydovchi transport vositasini yoʻl chetiga olib chiqish choralarini koʻrishi shart."
+        },
+        {
+          "number": "94",
+          "text": "Boshqalarga xalaqit beradigan yoki xavf tugʻdiradigan boʻlsa, eshiklarni ochish taqiqlanadi."
+        },
+        {
+          "number": "95",
+          "text": "Haydovchi transport vositasining oʻz-oʻzidan harakatlanib ketishini yoki ruxsatsiz foydalanishni istisno qiluvchi choralarni koʻrgach joyni tark etishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "number": "14",
+      "title": "Chorrahalarda harakatlanish",
+      "items": [
+        {
+          "number": "96",
+          "text": "Burilayotgan haydovchi kesishayotgan yoʻldan oʻtayotgan piyodalarga va velosiped yoʻlkasidan oʻtayotgan velosipedchilarga yoʻl berishi kerak."
+        },
+        {
+          "number": "97",
+          "text": "Tirbandlik sababli koʻndalang harakatga toʻsqinlik tugʻdiradigan boʻlsa, chorrahaga yoki toʻxtash chizigʻidan oʻtib kesishmaga kirish taqiqlanadi."
+        },
+        {
+          "number": "98",
+          "text": "Svetofor yoki tartibga soluvchi bilan boshqariladigan chorraha — tartibga solingan; ular ishlamasa yoki boʻlmasa — tartibga solinmagan hisoblanadi. Aylanma harakatlanish chorrahasida aylanadagi vositalar kiruvchilarga nisbatan ustunlikka ega."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "number": "15",
+      "title": "Tartibga solingan chorrahalar",
+      "items": [
+        {
+          "number": "99",
+          "text": "Ruxsat etuvchi ishorada chapga burilayotgan/qayrilayotgan haydovchi qarama-qarshi tomondan toʻgʻriga/oʻngga harakatlanayotgan vositalarga yoʻl berishi shart; tramvay haydovchilari ham shunga amal qiladi."
+        },
+        {
+          "number": "100",
+          "text": "Taqiqlovchi ishora bilan bir vaqtda yongan qoʻshimcha tarmoq yashil ishorasi yoʻnalishida harakatlanayotgan haydovchi boshqa yoʻnalishlardagilarga yoʻl berishi kerak."
+        },
+        {
+          "number": "101",
+          "text": "Svetofor/tartibga soluvchi tramvay va relssiz vositalarga bir vaqtda ruxsat bersa, tramvay birinchi oʻtish huquqiga ega."
+        },
+        {
+          "number": "102",
+          "text": "Ruxsat etuvchi ishorada chorrahaga kirgan haydovchi undan chiqishda ishoralardan qatʼi nazar harakatni davom ettirishi kerak, lekin har bir svetofor oldida toʻxtash chizigʻi boʻlsa unga amal qilishi shart."
+        },
+        {
+          "number": "103",
+          "text": "Ruxsat etuvchi ishorada haydovchi chorrahani tugallayotgan transport va oʻtishni tugallayotgan piyodalarga yoʻl berishi shart."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "number": "16",
+      "title": "Tartibga solinmagan chorrahalar",
+      "items": [
+        {
+          "number": "104",
+          "text": "Ikkinchi darajali yoʻldan harakatlanayotgan haydovchi asosiy yoʻldagi vositalarga yoʻl berishi kerak; tramvay teng ahamiyatli yoʻlda relssiz vositalarga nisbatan ustunlikka ega."
+        },
+        {
+          "number": "105",
+          "text": "Teng ahamiyatli yoʻllar kesishganda oʻngdan yaqinlashayotgan vositaga yoʻl beriladi; tramvay bunday holatda ham ustunlikka ega."
+        },
+        {
+          "number": "106",
+          "text": "Asosiy yoʻl yoʻnalishi chorrahada oʻzgarsa, haydovchilar teng ahamiyatli yoʻllar qoidasiga amal qiladilar."
+        },
+        {
+          "number": "107",
+          "text": "Chapga burilish/qayrilishda haydovchi teng ahamiyatli yoʻldan qarama-qarshi tomondan toʻgʻriga/oʻngga ketayotganlarga yoʻl berishi shart."
+        },
+        {
+          "number": "108",
+          "text": "Qoplama borligini aniqlab boʻlmasa va imtiyoz belgilari yoʻq boʻlsa, haydovchi oʻzini ikkinchi darajali yoʻlda deb hisoblashi kerak."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "number": "17",
+      "title": "Piyodalarning oʻtish joylari va yoʻnalishli transport vositalarining bekatlari",
+      "items": [
+        {
+          "number": "109",
+          "text": "Tartibga solinmagan oʻtish joyiga yaqinlashayotgan haydovchi piyodalarni oʻtkazish uchun tezlikni kamaytirishi yoki toʻxtashi shart."
+        },
+        {
+          "number": "110",
+          "text": "Boshqa haydovchilar toʻxtagan/sekinlashgan vosita oldida piyoda yoʻqligiga ishonch hosil qilgach harakatni davom ettirishi mumkin."
+        },
+        {
+          "number": "111",
+          "text": "Tartibga solingan oʻtish joylarida ruxsat etuvchi ishorada ham piyodalarga oʻtishni tugatish imkonini berish kerak."
+        },
+        {
+          "number": "112",
+          "text": "Piyodalar oʻtish joyida tirbandlik sababli toʻxtashga majbur boʻlsa, oʻtish joyiga kirish taqiqlanadi."
+        },
+        {
+          "number": "113",
+          "text": "Oq hassali koʻzi ojiz piyodalarni har qanday holatda oʻtkazib yuborish kerak."
+        },
+        {
+          "number": "114",
+          "text": "Yoʻlovchi tushirish/chiqarish qatnov qismida boʻlsa, bekatdagi yoʻnalishli transport eshiklariga borayotgan/kelayotgan piyodalarga yoʻl berish kerak."
+        },
+        {
+          "number": "115",
+          "text": "\"Bolalar guruhini tashish\" belgili, avariya ishorasi yoqilgan transport toʻxtaganda yaqinlashuvchi haydovchi tezlikni kamaytirishi, zarur boʻlsa toʻxtashi va bolalarni oʻtkazib yuborishi shart."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "number": "171",
+      "title": "Yoʻnalishli transport vositalari uchun alohida ajratilgan tasmasi bor yoʻl orqali harakatlanish",
+      "items": [
+        {
+          "number": "1151",
+          "text": "Ajratilgan tasmadan faqat yoʻnalishli jamoat transporti harakatlanishi mumkin; boshqa vositalarga taqiqlanadi (tezkor/maxsus xizmat bundan mustasno)."
+        },
+        {
+          "number": "1152",
+          "text": "Taqiqlangan vositalar yondosh hududga kirish/chiqish uchun cheklangan masofada ushbu tasmadan foydalanishi mumkin, yoʻnalishli transportga toʻsqinlik qilmasdan."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "number": "18",
+      "title": "Temir yoʻl kesishmalari orqali harakatlanish",
+      "items": [
+        {
+          "number": "116",
+          "text": "Haydovchilar temir yoʻllarni faqat kesishmalar orqali poyezdga yoʻl berib kesib oʻtishlari lozim."
+        },
+        {
+          "number": "117",
+          "text": "Kesishmaga yaqinlashayotgan haydovchi navbatchi koʻrsatmalariga, svetofor, belgilar, chiziqlar va shlagbaum holatiga amal qilib, poyezd yoʻqligiga ishonch hosil qilishi shart."
+        },
+        {
+          "number": "118",
+          "text": "Kesishmaga kirish taqiqlanadi: shlagbaum yopiq/yopilayotgan yoki toʻsuvchi qurilma koʻtarilgan/koʻtarilayotganda; taqiqlovchi svetofor ishorasida; navbatchining taqiqlovchi ishorasida; kesishmadan keyingi tirbandlikda; poyezd yaqinlashayotganda. Shuningdek taqiqlanadi: kesishmani aylanib oʻtish; shlagbaumni oʻzboshimchalik bilan ochish; transport holatiga keltirilmagan mashinalarni olib oʻtish; ruxsatsiz sekin tezlikdagi harakatlanish."
+        },
+        {
+          "number": "119",
+          "text": "Kesishma taqiqlangan hollarda haydovchi toʻxtash chizigʻi/belgisi yoki svetofor oldida, boʻlmasa shlagbaumga 5 metr, undan boʻlmasa temir yoʻliga 10 metr qolganda toʻxtashi kerak."
+        },
+        {
+          "number": "120",
+          "text": "Kesishmada majburan toʻxtab qolgan haydovchi darhol odamlarni tushirib kesishmani boʻshatishi, poyezd mashinistiga ogohlantirish yuborishi va umumiy xatar ishorasini berishi shart."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "number": "19",
+      "title": "Avtomagistrallarda harakatlanish",
+      "items": [
+        {
+          "number": "121",
+          "text": "Avtomagistrallarda taqiqlanadi: piyodalar, hayvonlar, velosiped, moped va tezligi 40 km/soatdan kam vositalarning harakatlanishi; yuk avtomobillarining chetki chap qatorda harakatlanishi; belgilangan joylardan tashqarida toʻxtash; ajratuvchi boʻlak texnologik uzilishlariga kirish/qayrilish; orqaga harakatlanish; oʻrgatish uchun boshqarish."
+        },
+        {
+          "number": "122",
+          "text": "Qatnov qismida majburiy toʻxtaganda haydovchi belgilash va maxsus tasmaga olib chiqish choralarini koʻrishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "number": "20",
+      "title": "Turar joy dahalarida harakatlanish",
+      "items": [
+        {
+          "number": "123",
+          "text": "Turar joy dahalarida piyodalar trotuar va qatnov qismida harakatlanishi mumkin, imtiyozga ega, lekin transport harakatiga asossiz xalaqit bermasligi kerak."
+        },
+        {
+          "number": "124",
+          "text": "Turar joy dahalarida taqiqlanadi: boshqarishni oʻrgatish; dvigateli ishlab turgan holda toʻxtab turish; 3,5 tonnadan ortiq yuk avtomobillarining belgilanmagan joyda toʻxtab turishi."
+        },
+        {
+          "number": "125",
+          "text": "Haydovchilar piyodalar xavfsizligi va inshootlarning shikastlanmasligini taʼminlashi kerak."
+        },
+        {
+          "number": "126",
+          "text": "Turar joy dahalaridan chiqishda haydovchilar boshqa ishtirokchilarga yoʻl berishi kerak."
+        },
+        {
+          "number": "127",
+          "text": "Ushbu bob talablari dahalar va hovli hududlariga ham tegishlidir."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "number": "21",
+      "title": "Tik balandlik va nishabliklarda harakatlanish",
+      "items": [
+        {
+          "number": "128",
+          "text": "Qiyalikda toʻsiq boʻlsa, nishablikka koʻtarilayotgan haydovchiga yoʻl beriladi."
+        },
+        {
+          "number": "129",
+          "text": "Tik nishablik/dovonda tormozi ishlamay qolgan transport vositasini haydovchi avariyali holatlarga moʻljallangan yoʻlga yoʻnaltirishi kerak."
+        },
+        {
+          "number": "130",
+          "text": "Tik nishablikda uzatma va ilashish mexanizmi ajratilgan holda harakatlanish taqiqlanadi."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "number": "22",
+      "title": "Yoʻnalishli transport vositalarining imtiyozlari",
+      "items": [
+        {
+          "number": "131",
+          "text": "Chorrahadan tashqarida qatnov qismini kesib oʻtuvchi tramvay yoʻli relssiz vositalarga nisbatan ustunlikka ega (depodan chiqish bundan mustasno)."
+        },
+        {
+          "number": "132",
+          "text": "Yoʻnalishli transport uchun ajratilgan tasmada boshqa vositalarning harakatlanishi va toʻxtashi taqiqlanadi; burilish uchun uzuq-uzuq chiziq orqali qayta tizilish mumkin."
+        },
+        {
+          "number": "133",
+          "text": "Bekatdan harakatlanishni boshlayotgan avtobus/trolleybusga yoʻl berish kerak; ular yoʻl berilganiga ishonch hosil qilgach harakatlanishni boshlaydi. Bekatdan tashqarida yoʻlovchi olish/tushirish taqiqlanadi (yoʻnalishli taksidan tashqari)."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "number": "23",
+      "title": "Tashqi yoritish asboblaridan foydalanish",
+      "items": [
+        {
+          "number": "134",
+          "text": "Qorongʻi vaqtda va yetarlicha koʻrinmaydigan sharoitda, tunnellarda mexanik vositalarda fara chiroqlari, velosipedlarda mavjud boʻlsa chiroqlar, tirkamalarda gabarit chiroqlari yoqilgan boʻlishi kerak."
+        },
+        {
+          "number": "135",
+          "text": "Yoʻl yoritilganda, qarama-qarshi vositaga 150 metr qolganda va koʻz qamashtiradigan holatlarda uzoqni yorituvchi oʻrniga yaqinni yorituvchi chiroq yoqiladi. Koʻzi qamashgan haydovchi avariya ishorasini yoqib tezlikni kamaytirishi kerak."
+        },
+        {
+          "number": "136",
+          "text": "Qorongʻi vaqtda yoritilmagan yoʻlda toʻxtagan transport vositada gabarit chiroqlari yoqilgan boʻlishi kerak."
+        },
+        {
+          "number": "137",
+          "text": "Tumanga qarshi fara chiroqlaridan yetarlicha koʻrinmaydigan sharoitda va boshqa belgilangan hollarda foydalanish mumkin."
+        },
+        {
+          "number": "138",
+          "text": "Yorugʻ vaqtda yaqinni yorituvchi chiroqlar quyidagi hollarda yoqiladi: jamlanmada harakatlanishda; yoʻlovchi tashiyotgan avtobus/yoʻnalishli transportda; bolalar guruhini tashishda; xavfli/katta yukni tashishda; shatakka olishda; kuchli yogʻin sharoitida; mototsikl, elektromototsikl, skuter, mopedlarda."
+        },
+        {
+          "number": "139",
+          "text": "Projektor-fara va izlovchi-fara aholi punktidan tashqarida hamda qarama-qarshi vosita yoʻqligida qoʻllanilishi mumkin; aholi punktida faqat 25 va 28-bandda koʻrsatilgan vositalarga ruxsat etiladi."
+        },
+        {
+          "number": "140",
+          "text": "Tumanga qarshi orqa fara faqat yetarlicha koʻrinmaydigan sharoitda qoʻllaniladi; stop-signalga ulash taqiqlanadi."
+        },
+        {
+          "number": "141",
+          "text": "\"Avtopoyezd\" taniqlik belgisi tirkama boʻlganda va qorongʻi/koʻrinmas sharoitda toʻxtash vaqtida ham yoqilgan boʻlishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "number": "24",
+      "title": "Mexanik transport vositalarini shatakka olish",
+      "items": [
+        {
+          "number": "142",
+          "text": "Shatakka olish faqat shatakka olingan vositada haydovchi boʻlganda amalga oshiriladi (konstruktiv istisnolardan tashqari)."
+        },
+        {
+          "number": "143",
+          "text": "Shatakka olingan avtobus/trolleybus/yuk avtomobilida odam tashish taqiqlanadi (qisman ortish holatlaridan tashqari)."
+        },
+        {
+          "number": "144",
+          "text": "Egiluvchan ulagichda masofa 4-6 metr, qattiq ulagichda 4 metrdan koʻp boʻlmasligi kerak; egiluvchan ulagich belgilanishi shart."
+        },
+        {
+          "number": "145",
+          "text": "Shatakka olish taqiqlanadi: rul boshqaruvi ishlamaydigan vositalarni (qisman ortishdan tashqari); ikki va undan koʻp vositani; umumiy uzunlik 20 metrdan ortiq boʻlsa; tormozsiz vosita vazni yarmidan ortiq boʻlsa; ikki gʻildirakli mototsikl/moped/skuter/individual harakatlanish vositasini va ular bilan; yaxmalak/sirpanchiq yoʻlda egiluvchan ulagichda."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "number": "25",
+      "title": "Transport vositalarini boshqarishni oʻrgatish",
+      "items": [
+        {
+          "number": "146",
+          "text": "Dastlabki oʻrgatish yopiq maydonchalarda yoki avtodromlarda oʻtkazilishi kerak."
+        },
+        {
+          "number": "147",
+          "text": "Yoʻllarda oʻrgatish faqat instruktor ishtirokida dastlabki koʻnikmaga ega oʻrganuvchiga ruxsat etiladi."
+        },
+        {
+          "number": "148",
+          "text": "Instruktorda oʻrgatish huquqini beruvchi hujjat va tegishli toifadagi haydovchilik guvohnomasi boʻlishi shart."
+        },
+        {
+          "number": "149",
+          "text": "Boshqarish huquqiga ega boʻlish uchun yosh chegaralari: \"A\" — 16 yosh; \"B\", \"C\" — 18 yosh; \"BE\", \"CE\" — 19 yosh; \"D\", \"DE\", tramvay/trolleybus — 21 yosh."
+        },
+        {
+          "number": "150",
+          "text": "Oʻrgatish transport vositalari \"Boshqarishni oʻrgatish transport vositasi\" belgisi, qoʻshimcha tepkilar, koʻzgu va GPS qurilmasi bilan jihozlanishi kerak."
+        },
+        {
+          "number": "151",
+          "text": "Boshqarishni oʻrgatish yoʻnalishlari DYHXX bilan kelishilishi shart; boshqa yoʻllarda oʻrgatish taqiqlanadi."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "number": "26",
+      "title": "Odam tashish",
+      "items": [
+        {
+          "number": "152",
+          "text": "Yuk avtomobili yukxonasida odam tashish tegishli toifa va tajribaga ega haydovchi tomonidan amalga oshiriladi; 8 kishidan koʻp boʻlsa \"D\" toifasi ham talab etiladi."
+        },
+        {
+          "number": "153",
+          "text": "Odam tashish uchun yukxona borti 1,3 metrdan kam boʻlmasligi va maxsus oʻrindiqlar boʻlishi kerak."
+        },
+        {
+          "number": "154",
+          "text": "Moslashtirilmagan yukxonada faqat yukni kuzatuvchi shaxslarga, oʻrindiq bilan taʼminlangan holda, boʻlishga ruxsat etiladi."
+        },
+        {
+          "number": "155",
+          "text": "Shaharlararo, sayyohlik va bolalar guruhini tashish belgilangan qoidalarga muvofiq amalga oshiriladi."
+        },
+        {
+          "number": "156",
+          "text": "Bolalar guruhini tashishda katta yoshli kuzatuvchi boʻlishi va \"Bolalar guruhini tashish\" belgisi oʻrnatilishi shart."
+        },
+        {
+          "number": "157",
+          "text": "Harakatni boshlashdan oldin haydovchi yoʻlovchilarga xavfsizlik qoidalarini tushuntirishi kerak."
+        },
+        {
+          "number": "158",
+          "text": "Toʻliq toʻxtagandan keyin eshiklar ochilishi, harakatlanishdan oldin yopilishi kerak."
+        },
+        {
+          "number": "159",
+          "text": "Odam tashish taqiqlanadi: bolalarni yuk avtomobili yukxonasida; kabinadan tashqarida (moslashtirilgan vositalar bundan mustasno); traktor va tirkamalar yukxonasida; mototsikl/moped/skuter konstruksiyasida koʻzda tutilmagan joyda; 12 yoshgacha bolalarni orqa oʻrindiqda yoki maxsus qurilmasiz old oʻrindiqda; texnik tavsifdagidan ortiq odam sonida."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "number": "27",
+      "title": "Yuk tashish",
+      "items": [
+        {
+          "number": "160",
+          "text": "Yuk vazni va oʻqlarga taqsimlanishi ishlab chiqaruvchi belgilagan miqdordan oshmasligi kerak."
+        },
+        {
+          "number": "161",
+          "text": "Haydovchi yukning toʻgʻri joylashgani va mahkamlanganligiga ishonch hosil qilishi, harakatlanishda holatini kuzatib borishi kerak."
+        },
+        {
+          "number": "162",
+          "text": "Yuk tashishga ruxsat: koʻrinishni cheklamasa, boshqarishni qiyinlashtirmasa, yoritish/raqam belgilarini toʻsmasa, sochiluvchan yuklar tent bilan yopilgan boʻlsa, shovqin/chang chiqarmasa, tomdagi yuk balandligi 1 metr va uzunligi gabaritdan 0,5 metrdan oshmasa."
+        },
+        {
+          "number": "163",
+          "text": "Gabaritdan oldi/orqaga 1 metrdan, yon tomonga 0,4 metrdan ortiq chiqib turgan yuk \"Katta oʻlchamli yuk\" belgisi va qorongʻi vaqtda chiroq/nur qaytargich bilan belgilanishi kerak."
+        },
+        {
+          "number": "164",
+          "text": "Katta hajmli, ogʻir vaznli va xavfli yuk tashish uchun gabarit chegaralari (eni 2,55 metr, balandligi 4 metr, uzunligi 12-20 metr) belgilangan; bundan ortiq vositalar DYHXX bilan kelishilishi shart."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "number": "28",
+      "title": "Velosiped, moped va aravalar harakatlanishiga, shuningdek, hayvonlarni haydab oʻtishga doir qoʻshimcha talablar",
+      "items": [
+        {
+          "number": "165",
+          "text": "Velosiped, individual harakatlanish vositasi va arava boshqarish, hayvon haydash — 14 yoshdan; moped, skuter, kichik hajmdagi mototransport — 16 yoshdan kichik boʻlmagan shaxslarga ruxsat etiladi."
+        },
+        {
+          "number": "166",
+          "text": "Velosiped, moped, aravalar va hayvonlar yoʻlning oʻng chetida bir qator boʻlib, piyodalarga xalaqit bermasa yoʻl yoqasidan harakatlanishi mumkin; guruhlar quvib oʻtishni osonlashtiradigan qismlarga boʻlinishi kerak."
+        },
+        {
+          "number": "167",
+          "text": "Velosiped tovushli ishora va tormoz bilan jihozlangan, qorongʻi vaqtda oq/qizil/zargʻaldoq nur qaytargichlar bilan taʼminlangan boʻlishi kerak; velosipedchi nur qaytaruvchi kiyim kiyishi shart (velosiped yoʻlkasi boʻlmaganda)."
+        },
+        {
+          "number": "168",
+          "text": "Velosipedchi va individual harakatlanish vositasi boshqaruvchilariga taqiqlanadi: bir qoʻlda yoki rulsiz boshqarish; odam tashish (istisnodan tashqari); 0,5 metrdan ortiq yuk tashish; velosiped yoʻlkasi bor joyda qatnov qismida harakatlanish; tramvay yoʻlida yoki koʻp tasmali yoʻlda chapga burilish/qayrilish; piyodalar oʻtish joyidan velosipedni boshqarib oʻtish; shatakka olish/olinish."
+        },
+        {
+          "number": "169",
+          "text": "Chorrahadan tashqaridagi tartibga solinmagan kesishmada velosiped/individual harakatlanish vositasi boshqa transportga yoʻl berishi kerak; velosiped yoʻlkasi va trotuar kesishganda piyodaga yoʻl berish kerak."
+        },
+        {
+          "number": "170",
+          "text": "Ot-aravalarda toʻxtatuvchi va tirgak moslamalar boʻlishi, qorongʻi vaqtda chiroq/nur qaytargich oʻrnatilishi kerak; koʻrinishi cheklangan joyda jilovni qoʻyib yubormaslik kerak."
+        },
+        {
+          "number": "171",
+          "text": "Hayvonlarni asosan yorugʻ vaqtda, yoʻl yoqasi boʻylab haydash kerak."
+        },
+        {
+          "number": "172",
+          "text": "Temir yoʻl kesishmasidan hayvon haydashda podachilar sonini hisobga olib xavfsiz toʻdalarga boʻlish kerak."
+        },
+        {
+          "number": "173",
+          "text": "Taqiqlanadi: hayvonlarni nazoratsiz qoldirish; temir yoʻl/belgilanmagan joydan qorongʻi vaqtda haydash; mukammal qoplamali yoʻldan haydash (boshqa yoʻl boʻlsa); koʻkalamzorlashtirilgan joyda boqish/bogʻlash."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "number": "29",
+      "title": "Mansabdor shaxslarning va fuqarolarning yoʻl harakati xavfsizligini taʼminlash, transport vositalarini yoʻlga chiqarish, raqam va taniqli belgilarini oʻrnatish boʻyicha majburiyatlari",
+      "items": [
+        {
+          "number": "174",
+          "text": "Transport vositalarining texnik holati qonunchilik talablariga mos boʻlishi, roʻyxatdan oʻtkazish va sugʻurta belgilangan muddatlarda amalga oshirilishi kerak."
+        },
+        {
+          "number": "175",
+          "text": "Mexanik transport vositalari va tirkamalarda davlat raqam belgilari oʻrnatilgan boʻlishi shart; yuk avtomobillari va avtobuslarning kuzoviga raqam yozilishi kerak."
+        },
+        {
+          "number": "176",
+          "text": "Transport vositalariga taniqlik belgilari (\"Avtopoyezd\", \"Turumlangan\", \"Bolalar guruhini tashish\", \"Kar haydovchi\", \"Boshqarishni oʻrgatish uchun moʻljallangan\", \"Tezlik cheklangan\", \"Xavfli yuk\", \"Katta oʻlchamli yuk\", \"Uzun oʻlchamli transport vositasi\", \"Avariya sababli toʻxtash\", ixtiyoriy \"Shifokor\", \"Nogironligi boʻlgan shaxs\", \"Haydovchilikni endi boshlagan\") oʻrnatilishi kerak."
+        },
+        {
+          "number": "177",
+          "text": "Shatakka olishda egiluvchan ulagichni koʻrsatuvchi ogohlantiruvchi belgi oʻrnatilishi kerak."
+        },
+        {
+          "number": "178",
+          "text": "Qattiq ulagich konstruksiyasi normativ talablarga mos boʻlishi kerak."
+        },
+        {
+          "number": "179",
+          "text": "Texnik nosozlik, roʻyxatdan oʻtmaganlik, ruxsatsiz qayta jihozlanganlik va boshqa holatlarda transport vositalaridan foydalanish taqiqlanadi."
+        },
+        {
+          "number": "180",
+          "text": "Mansabdor shaxslarga taqiqlanadi: nosoz/hujjatsiz transport vositasini yoʻlga chiqarish; mast yoki huquqi yoʻq shaxsni boshqarishga qoʻyish; zanjirli traktorlarni asfalt yoʻlga chiqarish."
+        },
+        {
+          "number": "181",
+          "text": "Yoʻl va inshootlar holatiga javobgar shaxslar ularni xavfsiz holatda saqlash, cheklovlar haqida xabardor qilish va toʻsqinliklarni bartaraf etish choralarini koʻrishi shart."
+        },
+        {
+          "number": "182",
+          "text": "Taʼmirlash ishlariga javobgar shaxslar ish joylarida xavfsizlikni taʼminlashi va tugagach xavfsiz harakatlanishni taʼminlashi shart."
+        },
+        {
+          "number": "183",
+          "text": "Qonunchilikda koʻzda tutilgan holatlarda yoʻl harakatini tashkil etish, transport vositalarini qayta jihozlash, gabaritdan katta yuk tashish va boshqa masalalar DYHXX bilan kelishilishi shart."
+        },
+        {
+          "number": "184",
+          "text": "Zargʻaldoq/sariq miltillovchi mayoqcha yoʻl ishlarini bajaruvchi, katta/xavfli yuk tashuvchi va velosipedchilar guruhini kuzatuvchi transport vositalariga oʻrnatiladi."
+        },
+        {
+          "number": "185",
+          "text": "Koʻk/qizil mayoqchalar tezkor xizmat transport vositalarining istalgan qismiga xavfsizlikni taʼminlab oʻrnatilishi mumkin."
+        },
+        {
+          "number": "186",
+          "text": "Transport vositalarining mayoqcha va tovushli ishora bilan jihozlanganligi roʻyxatdan oʻtkazish guvohnomasida koʻrsatilgan boʻlishi kerak."
+        }
+      ]
+    }
+  ]
+}
