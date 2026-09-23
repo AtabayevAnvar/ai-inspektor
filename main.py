@@ -56,7 +56,9 @@ else:
 CANDIDATE_MODELS = [
     "gemini-3.5-flash-lite",
     "gemini-3.5-flash",
-    "gemini-3.6-flash"
+    "gemini-3.6-flash",
+    "gemini-2.5-flash",
+    "gemini-1.5-flash"
 ]
 
 def build_prompt(user_query: str, relevant_rules: str, is_first_message: bool = False) -> str:
@@ -216,16 +218,18 @@ async def get_me(request: Request):
     """Joriy foydalanuvchi yoki mehmon statusini olish"""
     user, guest = get_current_user_and_guest(request)
     can_ask = db.can_guest_ask(guest["guest_id"])
+    used_count = guest.get("question_count", 0) if guest else 0
+    questions_left = 9999 if user else max(0, 3 - used_count)
     
     res = JSONResponse({
         "authenticated": user is not None,
         "user": user,
-        "guest_id": guest["guest_id"],
-        "questions_left": 9999 if user else (1 if can_ask else 0),
+        "guest_id": guest["guest_id"] if guest else "",
+        "questions_left": questions_left,
         "google_client_id": GOOGLE_CLIENT_ID
     })
     # Mehmon cookie si doimo saqlanishi kerak
-    if not user:
+    if not user and guest:
         res.set_cookie(COOKIE_GUEST, guest["guest_id"], max_age=30*86400, httponly=True, samesite="lax")
     return res
 

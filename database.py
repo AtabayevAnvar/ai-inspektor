@@ -15,13 +15,28 @@ SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("VITE_SUPABASE_ANON_KEY", "")
 
 supabase_client = None
+
+def _handle_supabase_error(e: Exception):
+    global supabase_client
+    err_str = str(e)
+    # Agar tarmoq, DNS yoki host xatosi bo'lsa, keyingi so'rovlar qotib qolmasligi uchun darhol SQLite ga o'tkazamiz
+    if any(k in err_str.lower() for k in ["getaddrinfo", "timeout", "connecterror", "connection refused", "not resolved", "name resolution", "failed to resolve"]):
+        print(f"[Database] Supabase bilan tarmoq aloqasi yo'q ({type(e).__name__}). Lokal SQLite rejimiga o'tildi.")
+        supabase_client = None
+    else:
+        print(f"[Supabase fallback]: {err_str}")
+
 if SUPABASE_URL and SUPABASE_KEY:
     try:
         from supabase import create_client
-        supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        test_client = create_client(SUPABASE_URL, SUPABASE_KEY)
+        # Tezkor ulanishni tekshiramiz
+        test_client.table("users").select("id").limit(1).execute()
+        supabase_client = test_client
         print("[Database] Supabase bulutli bazasiga ulanish sozlandi.")
     except Exception as e:
-        print(f"[Database] Supabase ulanish xatosi: {e}")
+        print(f"[Database] Supabase ga ulanishda xatolik ({e}). Lokal SQLite rejimiga o'tildi.")
+        supabase_client = None
 
 # ─── SQLite Fallback (Vercel Serverless-ga moslashtirilgan) ─────────
 import tempfile
@@ -224,9 +239,9 @@ def can_guest_ask(guest_id: str) -> bool:
         try:
             res = supabase_client.table("guest_sessions").select("question_count").eq("guest_id", guest_id).execute()
             if res.data and len(res.data) > 0:
-                return res.data[0]["question_count"] < 1
+                return res.data[0]["question_count"] < 3
         except Exception as e:
-            print(f"[Supabase can_ask fallback]: {e}")
+            _handle_supabase_error(e)
 
     with get_sqlite_conn() as conn:
         cursor = conn.cursor()
@@ -234,7 +249,7 @@ def can_guest_ask(guest_id: str) -> bool:
         row = cursor.fetchone()
         if not row:
             return True
-        return row["question_count"] < 1
+        return row["question_count"] < 3
 
 def increment_guest_count(guest_id: str):
     if supabase_client:

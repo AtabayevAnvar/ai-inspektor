@@ -1115,10 +1115,10 @@
 
         <h3 class="auth-modal-title">Davom ettirish uchun kiring</h3>
         <p class="auth-modal-desc">
-            Mehmon sifatida sizga ajratilgan 1 ta bepul savol tugadi. Suhbatni cheklovlarsiz davom ettirish va chatlarni saqlab qolish uchun Google orqali kiring.
+            Mehmon sifatida sizga ajratilgan bepul savollar tugadi. Suhbatni cheklovlarsiz davom ettirish va chatlarni saqlab qolish uchun Google orqali kiring yoki Demo hisob bilan davom eting.
         </p>
 
-        <div class="auth-actions-wrap">
+        <div class="auth-actions-wrap" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
             <!-- 100% O'zbekcha rasmiy Google Sign-In tugmasi -->
             <button class="google-login-btn" id="customGoogleLoginBtn" onclick="triggerGoogleLogin()" style="display:flex;">
                 <svg width="20" height="20" viewBox="0 0 24 24">
@@ -1130,6 +1130,15 @@
                 <span>Google orqali kirish</span>
             </button>
             <div id="googleSignInBtnContainer" style="display:none;"></div>
+
+            <!-- Demo hisob orqali tezkor kirish -->
+            <button class="demo-login-btn" id="demoLoginBtn" onclick="handleDemoLogin()" style="width: 100%; height: 44px; background: #161616; border: 1px solid #333333; border-radius: 12px; color: #e5e5e5; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.2s;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Demo hisob bilan sinash (Tezkor kirish)</span>
+            </button>
         </div>
 
         <div class="auth-modal-footer">
@@ -1344,6 +1353,32 @@
             }
         }
         alert("Google xizmatlari yuklanmoqda, iltimos bir necha soniyadan so'ng qayta bosing.");
+    }
+
+    async function handleDemoLogin() {
+        try {
+            const res = await fetch('/api/auth/demo-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: "Foydalanuvchi",
+                    email: "user@avtoai.uz",
+                    local_chats: chats
+                })
+            });
+            const data = await res.json();
+            if (data.status === 'ok') {
+                currentUser = data.user;
+                guestQuestionsLeft = 9999;
+                updateProfileUI();
+                closeAuthModal();
+                await loadChats();
+            } else {
+                alert("Demo kirishda xatolik: " + (data.error || "Noma'lum xato"));
+            }
+        } catch (e) {
+            alert("Server bilan bog'lanishda xatolik: " + e.message);
+        }
     }
 
     async function handleLogout(e) {

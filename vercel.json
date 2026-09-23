@@ -1,4 +1,10 @@
 {
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "templates/**,static/**,icon/**,qoidalar.txt",
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
