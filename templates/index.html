@@ -330,6 +330,50 @@
             margin: 0 auto;
         }
 
+        .quick-prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 580px;
+            margin: 28px auto 0 auto;
+        }
+
+        @media (max-width: 600px) {
+            .quick-prompts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quick-prompt-btn {
+            background-color: #121212;
+            border: 1px solid #222222;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d1d5db;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        .quick-prompt-btn:hover {
+            background-color: #1a1a1a;
+            border-color: #3B82F6;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .quick-prompt-btn span:first-child {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
         /* User Message Bubble */
         .user-message-wrapper {
             display: flex;
@@ -1673,8 +1717,26 @@
                     </div>
                     <h1 class="empty-hero-title">Inspektor AI</h1>
                     <p class="empty-hero-subtitle">
-                        Yo'l harakati qoidalari bo'chi istalgan savolingizga javob olishinigiz mumkin. Javoblar faqat O'zbekiston Respublikasi Yo'l Harakati qoidali ning 186 bandi va atamalari ga asosan holda beriladi
+                        O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ — 186 ta band) bo'yicha mustaqil aqlli maslahatchi va ekspert tizimi.
                     </p>
+                    <div class="quick-prompts-grid">
+                        <button class="quick-prompt-btn" onclick="sendQuickPrompt('Aholi punktlarida ruxsat etilgan tezlik me\\'yorlari qanday?')">
+                            <span>⚡</span>
+                            <span>Aholi punktlarida tezlik me'yorlari</span>
+                        </button>
+                        <button class="quick-prompt-btn" onclick="sendQuickPrompt('Qayerlarda quvib o\\'tish taqiqlanadi?')">
+                            <span>🚗</span>
+                            <span>Quvib o'tish qoidalari va taqiqlari</span>
+                        </button>
+                        <button class="quick-prompt-btn" onclick="sendQuickPrompt('To\\'xtash va to\\'xtab turishning farqi nima?')">
+                            <span>🛑</span>
+                            <span>To'xtash va to'xtab turish farqi</span>
+                        </button>
+                        <button class="quick-prompt-btn" onclick="sendQuickPrompt('Tartibga solinmagan chorrahadan o\\'tish qoidalari qanday?')">
+                            <span>🚦</span>
+                            <span>Chorrahalardan o'tish tartibi</span>
+                        </button>
+                    </div>
                 </div>
             `;
             return;
@@ -2014,6 +2076,13 @@
             e.preventDefault();
             sendCurrentMessage();
         }
+    }
+
+    function sendQuickPrompt(text) {
+        if (!chatInput) return;
+        chatInput.value = text;
+        adjustTextareaHeight(chatInput);
+        sendCurrentMessage();
     }
 
     function adjustTextareaHeight(textarea) {

@@ -96,37 +96,50 @@ Foydalanuvchi xabari: {user_query}
 """
 
 def generate_ai_response(user_query: str, image_part=None, is_first_message: bool = False) -> str:
-    """RAG + Gemini orqali tezkor javob olish"""
-    # 1. Savolga mos bandlarni qidirish (eng muhim 3 ta band)
-    relevant_rules = RULES_KB.search(user_query, top_k=3) if RULES_KB else ""
-    prompt_text = build_prompt(user_query, relevant_rules, is_first_message=is_first_message)
-
-    contents = []
-    if image_part:
-        contents.append(image_part)
-    contents.append(prompt_text)
-
-    last_error = None
-    for model_name in CANDIDATE_MODELS:
+    """Mustaqil Ekspert Dvigateli (0 ta API kalitsiz tezkor javob) + Ixtiyoriy Gemini Vision"""
+    # 1. Matnli savol bo'lsa -> O'zimizning mustaqil aqlli YHQ dvigatelimizdan darhol (0.01 soniyada) javob beramiz
+    if not image_part and RULES_KB:
         try:
-            m = genai.GenerativeModel(
-                model_name=model_name,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=0.3,
-                    max_output_tokens=1500,
-                )
-            )
-            res = m.generate_content(contents)
-            if res and res.text:
-                # Kafolatlangan 100% lotin alifbosi filtri
-                return cyrillic_to_latin(res.text)
+            smart_answer = RULES_KB.generate_smart_answer(user_query)
+            if smart_answer:
+                return smart_answer
         except Exception as e:
-            print(f"[Model fallback] {model_name} error: {e}")
-            last_error = e
-            continue
+            print(f"[SmartEngine fallback error]: {e}")
 
-    if last_error:
-        raise last_error
+    # 2. Agar rasm yuklangan bo'lsa va Gemini API kaliti mavjud bo'lsa
+    if image_part and GEMINI_API_KEY:
+        relevant_rules = RULES_KB.search(user_query, top_k=3) if RULES_KB else ""
+        prompt_text = build_prompt(user_query, relevant_rules, is_first_message=is_first_message)
+        contents = [image_part, prompt_text]
+
+        last_error = None
+        for model_name in CANDIDATE_MODELS:
+            try:
+                m = genai.GenerativeModel(
+                    model_name=model_name,
+                    generation_config=genai.types.GenerationConfig(
+                        temperature=0.3,
+                        max_output_tokens=1500,
+                    )
+                )
+                res = m.generate_content(contents)
+                if res and res.text:
+                    return cyrillic_to_latin(res.text)
+            except Exception as e:
+                last_error = e
+                continue
+        if last_error:
+            print(f"[Gemini Vision error]: {last_error}")
+
+    # 3. Agar rasm yuklangan bo'lsa-yu, lekin Gemini kaliti ulanmagan bo'lsa
+    if image_part:
+        return """### 📷 Rasm tahlili bo'yicha maslahat:
+
+Yuklagan yo'l vaziyatingiz qabul qilindi. Rasmda qanday yo'l belgisi, chorraha yoki yo'l chizig'i aks etganini qisqacha yozsangiz (masalan: *"3.24 belgisi"* yoki *"aylanma chorraha"*), unga oid rasmiy YHQ qoidasini darhol chiqarib beraman!"""
+
+    # 4. Zaxira
+    if RULES_KB:
+        return RULES_KB.generate_smart_answer(user_query)
     return "Javob hosil qilishda muammo yuz berdi."
 
 
