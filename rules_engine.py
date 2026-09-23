@@ -830,16 +830,20 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
             if fines:
                 bhm_info = bhm_service.get_current_bhm()
                 fine_cards = [bhm_service.format_fine_card(f['article'], f['violation'], f['bhm']) for f in fines]
+                fines_body = "\n\n".join(fine_cards)
                 return f"""### ⚖️ Ma'muriy Javobgarlik To'g'risidagi Kodeks (MJtK) bo'yicha jarimalar:
 
-{chr(10).join(fine_cards)}
+{fines_body}
 
 ---
-💡 **To'lov imtiyozlari va qoidalar:**
+
+### 💡 To'lov imtiyozlari va qoidalar:
+
 * 🟢 **15 kun ichida:** Jarimaning **50 foizi** to'lansa, qolgan qismi bekor qilinadi.
 * 🟡 **30 kun ichida:** Jarimaning **70 foizi** to'lansa (30% chegirma), jarima yopiladi.
 * 🔴 **30 kundan keyin:** To'liq **100%** miqdorda to'lanadi.
-* 📌 *Hisob-kitob amaldagi 1 BHM = {bhm_info['formatted']} ({bhm_info.get('label', '')}) asosida real vaqtda amalga oshirildi.*"""
+
+📌 *Hisob-kitob amaldagi 1 BHM = {bhm_info['formatted']} ({bhm_info.get('label', '')}) asosida real vaqtda amalga oshirildi.*"""
 
         # 3. Aniq yo'l belgisi so'ralgan holat (masalan: "3.24 belgisi", "1.1", "3.27")
         sign_code_m = re.search(r'(\d+\.\d+(?:\.\d+)?)', clean_q)

@@ -418,34 +418,57 @@
             background-color: #0F0F0F;
             border: 1px solid #222222;
             border-radius: 18px;
-            padding: 22px 26px;
+            padding: 24px 28px;
             font-size: 14.5px;
-            line-height: 1.7;
+            line-height: 1.8;
             color: #d1d5db;
             word-break: break-word;
         }
 
-        .ai-bubble p { margin-bottom: 10px; }
-        .ai-bubble p:last-child { margin-bottom: 0; }
-        .ai-bubble strong { color: #ffffff; font-weight: 700; }
+        .ai-bubble p {
+            margin-bottom: 14px;
+            line-height: 1.8;
+        }
+        .ai-bubble p:last-child {
+            margin-bottom: 0;
+        }
+        .ai-bubble strong {
+            color: #ffffff;
+            font-weight: 700;
+        }
         .ai-bubble h1, .ai-bubble h2, .ai-bubble h3, .ai-bubble h4 {
             color: #ffffff;
             font-weight: 700;
-            margin-top: 14px;
-            margin-bottom: 8px;
+            margin-top: 22px;
+            margin-bottom: 12px;
+            line-height: 1.45;
+        }
+        .ai-bubble h1:first-child, .ai-bubble h2:first-child, .ai-bubble h3:first-child, .ai-bubble h4:first-child {
+            margin-top: 0;
+        }
+        .ai-bubble hr {
+            border: none;
+            border-top: 1px solid #2a2a2a;
+            margin: 28px 0;
+            display: block;
         }
         .ai-bubble ul, .ai-bubble ol {
-            margin: 10px 0;
+            margin: 14px 0 18px 0;
             padding-left: 22px;
         }
         .ai-bubble li {
-            margin-bottom: 5px;
+            margin-bottom: 9px;
+            line-height: 1.75;
+        }
+        .ai-bubble li:last-child {
+            margin-bottom: 0;
         }
         .ai-bubble blockquote {
             border-left: 3px solid #1133A3;
-            padding-left: 12px;
-            margin: 10px 0;
+            padding-left: 14px;
+            margin: 16px 0;
             color: #9ca3af;
+            line-height: 1.75;
         }
         .ai-bubble code {
             background-color: #171717;
@@ -823,13 +846,41 @@
                 border: none;
                 padding: 4px 0;
                 font-size: 15px;
-                line-height: 1.65;
+                line-height: 1.75;
                 color: #d1d5db;
+            }
+
+            .ai-bubble hr {
+                border: none;
+                border-top: 1px solid #2a2a2a;
+                margin: 26px 0;
+                display: block;
+            }
+
+            .ai-bubble p {
+                margin-bottom: 14px;
+                line-height: 1.75;
+            }
+
+            .ai-bubble ul, .ai-bubble ol {
+                margin: 12px 0 16px 0;
+                padding-left: 20px;
+            }
+
+            .ai-bubble li {
+                margin-bottom: 8px;
+                line-height: 1.7;
             }
 
             .ai-bubble h1, .ai-bubble h2, .ai-bubble h3, .ai-bubble h4, .ai-bubble strong {
                 color: #ffffff;
                 font-weight: 700;
+            }
+
+            .ai-bubble h1, .ai-bubble h2, .ai-bubble h3, .ai-bubble h4 {
+                margin-top: 20px;
+                margin-bottom: 12px;
+                line-height: 1.45;
             }
 
             .empty-state-hero {

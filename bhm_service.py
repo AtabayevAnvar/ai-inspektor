@@ -186,13 +186,13 @@ def format_fine_card(article: str, violation: str, multiplier: float) -> str:
     calc = calculate_fine(multiplier)
 
     if multiplier <= 0:
-        return f"""- **{article}:** {violation}
-  ⚠️ **Jarima:** Jarima solinmaydi (ma'muriy ogohlantirish yoki haydovchilik huquqidan mahrum etish jazosi qo'llaniladi)."""
+        return f"""📌 **{article}:** {violation}
+* ⚠️ **Jarima:** Jarima solinmaydi (ma'muriy ogohlantirish yoki haydovchilik huquqidan mahrum etish jazosi qo'llaniladi)."""
 
-    return f"""- **{article}:** {violation}
-  💰 **Jarima miqdori:** **{calc['multiplier_str']} BHM** — **{calc['total_formatted']}** *(1 BHM = {calc['bhm_formatted']})*
-  ⚡ **15 kun ichida (50% chegirma):** **{calc['discount_50_formatted']}**
-  ⏱ **30 kun ichida (70% to'lov):** **{calc['discount_70_formatted']}**"""
+    return f"""📌 **{article}:** {violation}
+* 💰 **Jarima miqdori:** **{calc['multiplier_str']} BHM — {calc['total_formatted']}** *(1 BHM = {calc['bhm_formatted']})*
+* ⚡ **15 kun ichida (50% chegirma):** **{calc['discount_50_formatted']}**
+* ⏱ **30 kun ichida (70% to'lov):** **{calc['discount_70_formatted']}**"""
 
 
 def get_bhm_overview_markdown() -> str:
@@ -204,20 +204,24 @@ def get_bhm_overview_markdown() -> str:
     schedule_lines = []
     for item in schedule:
         active_mark = " *(amalda)*" if item.get("start_date") == bhm_info.get("start_date") else ""
-        schedule_lines.append(f"- **{item.get('label')}:** **{format_sum(item.get('amount'))}**{active_mark} — _{item.get('decree')}_")
+        schedule_lines.append(f"* **{item.get('label')}:** **{format_sum(item.get('amount'))}**{active_mark} — _{item.get('decree')}_")
 
     return f"""### 📊 O'zbekiston Respublikasida Bazaviy hisoblash miqdori (BHM)
 
 Ayni vaqtda O'zbekistonda amaldagi Bazaviy hisoblash miqdori:
-👉 **1 BHM = {bhm_info['formatted']}**
+👉 **1 BHM = {bhm_info['formatted']}**  
 📌 *Asos:* {bhm_info.get('decree', 'Prezident Farmoni')} ({bhm_info.get('label', '')})
 
 ---
+
 ### 📅 BHM o'zgarishlar dinamikasi (xronologiya):
+
 {chr(10).join(schedule_lines)}
 
 ---
+
 ### ⚖️ Yo'l harakati jarimalarini to'lashda imtiyozli chegirmalar:
+
 O'zbekiston Respublikasi Ma'muriy javobgarlik to'g'risidagi kodeksiga binoan:
 * 🟢 **15 kun ichida:** Jarima miqdorining **50 foizi** to'lansa, qolgan qismidan to'liq ozod qilinadi.
 * 🟡 **30 kun ichida:** Jarima miqdorining **70 foizi** to'lansa (30% chegirma), jarima to'langan hisoblanadi.
