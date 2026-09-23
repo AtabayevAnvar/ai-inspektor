@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/index.py": {
-      "includeFiles": "templates/**,static/**,icon/**,data/**,qoidalar.txt",
+      "includeFiles": "templates/**,static/**,icon/**,data/**,qoidalar.txt,bhm_service.py",
       "maxDuration": 60
     }
   },

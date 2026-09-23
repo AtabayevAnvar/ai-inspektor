@@ -8,6 +8,7 @@ import re
 import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
+import bhm_service
 
 CYR_TO_LAT_MAP = {
     'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
@@ -576,28 +577,77 @@ class RulesKnowledgeBase:
         return [item[1] for item in scored[:top_k]]
 
     def search_fines(self, query: str, top_k: int = 2) -> List[Dict[str, Any]]:
-        """Savolga mos jarimalarni topish"""
+        """Savolga mos jarimalarni topish (aniq soha kalit so'zlari va moddalar bilan)"""
         if not query or not self.fines_items:
             return []
         query_norm = normalize_text(query)
         keywords = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
-        if "qizil" in query_norm or "chiroq" in query_norm:
-            keywords.extend(["svetofor", "taqiqlovchi"])
-        if "telefon" in query_norm:
+
+        # Maxsus sinonimlar va tegishli moddalar
+        is_speed = any(w in query_norm for w in ["tezlik", "radar", "oshirib", "tezlikni"])
+        is_red_light = any(w in query_norm for w in ["qizil", "chiroq", "svetofor"]) and not ("stop" in query_norm or "chiziq" in query_norm)
+        is_stop_line = any(w in query_norm for w in ["stop", "liniya", "to'xtash chizig'i"])
+        is_phone = any(w in query_norm for w in ["telefon", "smartfon", "gadjet"])
+        is_belt = any(w in query_norm for w in ["kamar", "xavfsizlik kamari"])
+        is_tint = any(w in query_norm for w in ["tonirovka", "qoraytirish", "oyna"])
+        is_drink = any(w in query_norm for w in ["mast", "ichgan", "alkogol", "aroq"])
+        is_oncoming = any(w in query_norm for w in ["qarama-qarshi", "qarshi", "vstrechka"])
+
+        if is_red_light:
+            keywords.extend(["svetofor", "taqiqlovchi", "bo'ysunmasdan"])
+        if is_stop_line:
+            keywords.extend(["to'xtash", "chizig'ini", "bosib"])
+        if is_phone:
             keywords.extend(["telefondan", "foydalanish"])
-        if "kamar" in query_norm:
-            keywords.extend(["xavfsizlik", "kamari"])
+        if is_belt:
+            keywords.extend(["xavfsizlik", "kamaridan", "taqmasdan"])
+        if is_speed:
+            keywords.extend(["tezlikni", "oshirib", "belgilangan"])
+        if is_tint:
+            keywords.extend(["tusi", "o'zgartirilgan", "qoraytirilgan"])
+        if is_drink:
+            keywords.extend(["mast", "holatda", "mastlik"])
+        if is_oncoming:
+            keywords.extend(["qarama-qarshi", "avariya"])
+
         scored = []
         for item in self.fines_items:
             score = 0
             for kw in keywords:
                 if kw in item["search_text"]:
                     score += 3
+
+            # Aniq modda raqami kiritilgan bo'lsa
             for digit in re.findall(r"\b\d+\b", query_norm):
                 if digit in item["article"]:
-                    score += 15
+                    score += 20
+
+            # Mavzu bo'yicha mos moddalarga bonus
+            art = item.get("article", "")
+            viol = item.get("violation", "").lower()
+            if is_speed and "128-3" in art:
+                score += 25
+            if is_red_light and "128-4" in art and "svetofor" in viol:
+                score += 25
+            if is_stop_line and "128-4" in art and "to'xtash chizi" in viol:
+                score += 30
+            if is_phone and "128-1" in art:
+                score += 30
+            if is_belt and "kamar" in viol:
+                score += 35
+            if is_tint and "126" in art:
+                score += 30
+            if is_drink and "131" in art:
+                score += 30
+            if is_oncoming and "128-5" in art:
+                score += 30
+
+            if item.get("bhm", 0) > 0:
+                score += 5
+
             if score > 0:
                 scored.append((score, item))
+
         scored.sort(key=lambda x: x[0], reverse=True)
         return [item[1] for item in scored[:top_k]]
 
@@ -606,25 +656,27 @@ class RulesKnowledgeBase:
         RAG uchun integratsiyalashgan to'liq kontekst tayyorlaydi:
         - Eng mos YHQ bandlari
         - Tegishli yo'l belgilari
-        - Tegishli jarimalar miqdori
+        - Tegishli jarimalar miqdori (amaldagi BHM va so'mdagi to'liq summalar bilan)
         """
+        query_lower = normalize_text(query)
+        is_fine_query = any(w in query_lower for w in ["jarima", "bhm", "modda", "jazo", "qancha", "so'm", "to'lanadi", "shtraf"])
+        is_sign_query = any(w in query_lower for w in ["belgi", "belgisi", "shlagbaum", "taqiq"]) or bool(re.search(r"\b\d+\.\d+\b", query))
+
+        top_k_fines = 3 if ("tezlik" in query_lower or "radar" in query_lower) else 2
         rules = self.search_rules(query, top_k=3)
         signs = self.search_signs(query, top_k=2)
-        fines = self.search_fines(query, top_k=2)
+        fines = self.search_fines(query, top_k=top_k_fines)
 
         blocks = []
-        query_lower = normalize_text(query)
-
-        is_sign_query = any(w in query_lower for w in ["belgi", "belgisi", "shlagbaum", "taqiq"]) or bool(re.search(r"\b\d+\.\d+\b", query))
-        is_fine_query = any(w in query_lower for w in ["jarima", "bhm", "modda", "jazo", "qancha", "so'm", "to'lanadi"])
+        bhm_info = bhm_service.get_current_bhm()
 
         if is_sign_query and signs:
             sign_texts = [f"🚸 [{s['category']}: {s['name']}]" for s in signs]
             blocks.append("--- TEGISHLI YO'L BELGILARI ---\n" + "\n".join(sign_texts))
 
         if is_fine_query and fines:
-            fine_texts = [f"⚖️ [{f['article']}]: {f['violation']} (Jarima: {f['bhm']} BHM)" for f in fines]
-            blocks.append("--- TEGISHLI JARIMALAR (MJtK) ---\n" + "\n".join(fine_texts))
+            fine_texts = [bhm_service.format_fine_card(f['article'], f['violation'], f['bhm']) for f in fines]
+            blocks.append(f"--- TEGISHLI JARIMALAR (MJtK) [Amaldagi BHM: {bhm_info['formatted']}] ---\n" + "\n\n".join(fine_texts))
 
         if rules:
             rule_texts = [f"📌 [{r['full_label']}]\n{r['text']}" for r in rules]
@@ -634,9 +686,9 @@ class RulesKnowledgeBase:
             sign_texts = [f"🚸 [{s['category']}: {s['name']}]" for s in signs]
             blocks.append("--- TEGISHLI YO'L BELGILARI ---\n" + "\n".join(sign_texts))
 
-        if not is_fine_query and fines and any(w in query_lower for w in ["jarima", "bhm", "modda"]):
-            fine_texts = [f"⚖️ [{f['article']}]: {f['violation']} (Jarima: {f['bhm']} BHM)" for f in fines]
-            blocks.append("--- TEGISHLI JARIMALAR (MJtK) ---\n" + "\n".join(fine_texts))
+        if not is_fine_query and fines and any(w in query_lower for w in ["jarima", "bhm", "modda", "jazo"]):
+            fine_texts = [bhm_service.format_fine_card(f['article'], f['violation'], f['bhm']) for f in fines]
+            blocks.append(f"--- TEGISHLI JARIMALAR (MJtK) [Amaldagi BHM: {bhm_info['formatted']}] ---\n" + "\n\n".join(fine_texts))
 
         combined = "\n\n".join(blocks)
         if len(combined) > 4500:
@@ -666,19 +718,35 @@ Sizga qoidalar, yo'l belgilari, ruxsat etilgan tezlik me'yorlari yoki jarimalar 
 
 Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
 
+        # 1.5. BHM (Bazaviy hisoblash miqdori) haqidagi to'g'ridan-to'g'ri so'rovlar
+        # Masalan: "bhm qancha", "bazaviy hisoblash miqdori qancha", "1 bhm necha pul", "bhm jadvali"
+        if re.search(r'\b(bhm|bazaviy\s*hisoblash|brv)\b', q_norm):
+            if any(w in q_norm for w in ["qancha", "necha", "nima", "haqida", "miqdori", "som", "so'm", "qiymati", "jadval", "tarix"]) or len(q_norm.split()) <= 3:
+                return bhm_service.get_bhm_overview_markdown()
+
         # 2. Jarimalar bo'yicha so'rovlar (MJtK)
-        if any(w in q_norm for w in ["jarima", "bhm", "jazo", "shtraf", "modda"]):
-            fines = self.search_fines(clean_q, top_k=2)
+        # Masalan: "qizil chiroq jarimasi", "kamar jarimasi", "tezlik jarimasi", "jarima qancha", "128-modda"
+        is_fine_topic = any(w in q_norm for w in [
+            "jarima", "bhm", "jazo", "shtraf", "modda", 
+            "qizil chiroq", "stop liniya", "tonirovka jarimasi", 
+            "kamar jarimasi", "tezlik jarimasi", "sug'urta jarimasi"
+        ])
+        if is_fine_topic:
+            top_k = 3 if ("tezlik" in q_norm or "radar" in q_norm) else 2
+            fines = self.search_fines(clean_q, top_k=top_k)
             if fines:
-                fine_lines = []
-                for f in fines:
-                    fine_lines.append(f"- **{f['article']}:** {f['violation']}\n  💰 **Jarima miqdori:** **{f['bhm']} BHM**")
+                bhm_info = bhm_service.get_current_bhm()
+                fine_cards = [bhm_service.format_fine_card(f['article'], f['violation'], f['bhm']) for f in fines]
                 return f"""### ⚖️ Ma'muriy Javobgarlik To'g'risidagi Kodeks (MJtK) bo'yicha jarimalar:
 
-{chr(10).join(fine_lines)}
+{chr(10).join(fine_cards)}
 
 ---
-💡 **Eslatma:** O'zbekistonda BHM (Bazaviy hisoblash miqdori) miqdoriga ko'ra jarimalar belgilanadi. 15 kun ichida to'langanda 50% chegirma amal qiladi."""
+💡 **To'lov imtiyozlari va qoidalar:**
+* 🟢 **15 kun ichida:** Jarimaning **50 foizi** to'lansa, qolgan qismi bekor qilinadi.
+* 🟡 **30 kun ichida:** Jarimaning **70 foizi** to'lansa (30% chegirma), jarima yopiladi.
+* 🔴 **30 kundan keyin:** To'liq **100%** miqdorda to'lanadi.
+* 📌 *Hisob-kitob amaldagi 1 BHM = {bhm_info['formatted']} ({bhm_info.get('label', '')}) asosida real vaqtda amalga oshirildi.*"""
 
         # 3. Aniq yo'l belgisi so'ralgan holat (masalan: "3.24 belgisi", "1.1", "3.27")
         sign_code_m = re.search(r'(\d+\.\d+(?:\.\d+)?)', clean_q)

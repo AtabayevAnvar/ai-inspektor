@@ -1,0 +1,57 @@
+{
+  "currency": "so'm",
+  "discounts": {
+    "day_15_percent": 50,
+    "day_30_percent": 30,
+    "day_30_pay_percent": 70,
+    "exceptions": [
+      "Transport vositasini mast holda boshqarish (MJtK 131, 136-moddalar)",
+      "Qaror ustidan shikoyat qilingan yoki protest bildirilgan holatlar",
+      "Xuddi shunday huquqbuzarlik 1 yil davomida takror sodir etilganda"
+    ]
+  },
+  "schedule": [
+    {
+      "start_date": "2026-09-01",
+      "amount": 440000,
+      "label": "2026-yil 1-sentabrdan",
+      "decree": "Prezident Farmoni"
+    },
+    {
+      "start_date": "2025-08-01",
+      "amount": 412000,
+      "label": "2025-yil 1-avgustdan",
+      "decree": "Prezident Farmoni"
+    },
+    {
+      "start_date": "2024-10-01",
+      "amount": 375000,
+      "label": "2024-yil 1-oktabrdan",
+      "decree": "PF-108-son Farmon"
+    },
+    {
+      "start_date": "2023-12-01",
+      "amount": 340000,
+      "label": "2023-yil 1-dekabrdan",
+      "decree": "PF-196-son Farmon"
+    },
+    {
+      "start_date": "2023-05-01",
+      "amount": 330000,
+      "label": "2023-yil 1-maydan",
+      "decree": "Prezident Farmoni"
+    },
+    {
+      "start_date": "2022-06-01",
+      "amount": 300000,
+      "label": "2022-yil 1-iyundan",
+      "decree": "Prezident Farmoni"
+    },
+    {
+      "start_date": "2021-09-01",
+      "amount": 270000,
+      "label": "2021-yil 1-sentabrdan",
+      "decree": "Prezident Farmoni"
+    }
+  ]
+}

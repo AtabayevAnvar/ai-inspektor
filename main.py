@@ -25,6 +25,7 @@ from google.auth.transport import requests as google_requests
 
 from rules_engine import RulesKnowledgeBase, cyrillic_to_latin
 import database as db
+import bhm_service
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
 load_dotenv()
@@ -71,6 +72,7 @@ CANDIDATE_MODELS = [
 ]
 
 def build_prompt(user_query: str, relevant_context: str, is_first_message: bool = False) -> str:
+    bhm_info = bhm_service.get_current_bhm()
     return f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha eng nufuzli, aqlli va rasmiy AI maslahatchisan.
 
 MUHIM QOIDALAR VA XULQ-ATVOR:
@@ -83,17 +85,24 @@ MUHIM QOIDALAR VA XULQ-ATVOR:
    - Agar foydalanuvchi faqat salom bersa ("salom", "assalomu alaykum"), shundagina qisqa va samimiy salomlash.
    - AGAR FOYDALANUVCHI ANIQ YO'L QOIDASI, BELGI, JARIMA YOKI VAZIYAT HAQIDA SAVOL BERSA:
      Salomlashish va o'zingni tanishtirishni mutlaqo chetlab o't! Ortiqcha kirish so'zlarsiz, to'g'ridan-to'g'ri masalaning javobiga o't!
-     Masalan: "Aholi punktida tezlik qancha?" deb so'ralsa:
-     "O'zbekiston Respublikasi YHQning 11-bob 78-bandiga ko'ra, aholi punktlarida barcha transport vositalarining tezligini soatiga 60 km dan oshirmasdan harakatlanishga ruxsat etiladi..." deb boshla.
 
 3. SAVOLLARGA JAVOB BERISH TARTIBI:
    - Qaysi band yoki bobga, yo'l belgisiga yoki MJtK moddasiga asoslanganingni doimo aniq ko'rsat (masalan: "YHQ 78-band", "3.24 belgisi", "MJtK 128-modda").
    - Bandma-band, tartibli, lo'nda, qonuniy va tushunarli qilib tushuntir.
 
-4. AGAR MINNATDORCHILIK BILDIRILSA (masalan: "rahmat", "tushunarli", "zo'r"):
+4. BAZAVIY HISOBLASH MIQDORI (BHM) VA JARIMALARNI HISOBLASH:
+   - O'zbekistonda AMALDAGI BHM: {bhm_info['formatted']} ({bhm_info.get('label', '')}).
+   - Jarimalar haqida so'ralganda DOIMO:
+     1) MJtK moddasi va qoidabuzarlik tavsifi
+     2) BHM miqdori va SO'MDA TO'LIQ SUMMASI (masalan: 2 BHM = 880 000 so'm)
+     3) 15 kun ichida 50% chegirmali to'lov (masalan: 440 000 so'm)
+     4) 30 kun ichida 70% to'lov (30% chegirma, masalan: 616 000 so'm)
+   - Hech qachon eski BHM summalarini aytma, faqat amaldagi {bhm_info['formatted']} bo'yicha hisobla!
+
+5. AGAR MINNATDORCHILIK BILDIRILSA (masalan: "rahmat", "tushunarli", "zo'r"):
    - Qisqa javob ber (masalan: "Arzimaydi! Yana biror savolingiz bo'lsa, bemalol so'rang.").
 
-5. JAVOBNI HECH QACHON YARIMTA QILIB TO'XTATIB QO'YMA:
+6. JAVOBNI HECH QACHON YARIMTA QILIB TO'XTATIB QO'YMA:
    - Javobni mantiqan to'liq va tugallangan holda ber. Barcha ro'yxat va fikrlarni to'liq oxiriga yetkaz.
 
 TEGISHLI YHQ QOIDALARI VA MANBALAR:
@@ -682,6 +691,35 @@ QAT'IY TALABLAR:
     if last_error:
         return JSONResponse(status_code=500, content={"error": f"AI tahlilida xatolik: {str(last_error)}"})
     return JSONResponse(content={"reply": "Savolni tahlil qilishda muammo yuz berdi.", "status": "ERROR"})
+
+
+# ─── BHM va Jarimalar Endpointlari ──────────────────────────────────
+
+@app.get("/api/bhm")
+async def get_bhm_endpoint():
+    """Hozirgi real vaqt BHM miqdori, o'zgarishlar dinamikasi va chegirmalar haqida ma'lumot"""
+    bhm_info = bhm_service.get_current_bhm()
+    config = bhm_service.load_bhm_config()
+    return JSONResponse({
+        "status": "ok",
+        "current_bhm": bhm_info["amount"],
+        "formatted": bhm_info["formatted"],
+        "label": bhm_info["label"],
+        "decree": bhm_info["decree"],
+        "start_date": bhm_info["start_date"],
+        "discounts": config.get("discounts", {}),
+        "schedule": config.get("schedule", [])
+    })
+
+
+@app.get("/api/bhm/calculate")
+async def calculate_bhm_fine(bhm: float = 1.0):
+    """BHM koeffitsiyenti bo'yicha to'liq so'm summasi va chegirmalarni hisoblash"""
+    calc = bhm_service.calculate_fine(bhm)
+    return JSONResponse({
+        "status": "ok",
+        "result": calc
+    })
 
 
 # ─── Serverni ishga tushirish ─────────────────────────────────────

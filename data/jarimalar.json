@@ -1,6 +1,12 @@
 {
   "fines": [
     {
+      "id": 100,
+      "violation": "Haydovchilarning xavfsizlik kamaridan foydalanish qoidalariga rioya etmasligi (xavfsizlik kamarini taqmasdan harakatlanish)",
+      "article": "125-modda",
+      "bhm": 0.5
+    },
+    {
       "id": 1,
       "violation": "Haydovchilarning tormoz tizimida, rul boshqaruvida yoki ulovchi qurilmada nosozligi bo‘lgan yoxud tegishli ruxsatnomasiz qayta jihozlangan transport vositalarini boshqarishi",
       "article": "125-modda",
@@ -376,7 +382,7 @@
       "id": 70,
       "violation": "Transport vositalari haydovchilarining belgilangan harakat tezligini soatiga 20 kilometrdan koʻp boʻlmagan kattalikda oshirib yuborishi. Ushbu moddaning birinchi – beshinchi qismlarida nazarda tutilgan huquqbuzarliklar sodir etilganda, tezlikni oʻlchaydigan maxsus uskunalar va transport vositalari spidometrlari koʻrsatkichlaridagi yoʻl qoʻyilishi mumkin boʻlgan jami nuqsonlar hisobga olinib, tezlikni oʻlchaydigan maxsus uskunalar qayd etgan tezlikdan soatiga 5 kilometr ayirib tashlangan holda, maʼmuriy jazo chorasi qoʻllaniladi",
       "article": "128-3-modda",
-      "bhm": 0.0
+      "bhm": 1.0
     },
     {
       "id": 71,
