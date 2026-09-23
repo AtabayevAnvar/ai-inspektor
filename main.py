@@ -14,6 +14,7 @@ from typing import Optional, Dict, Any, List
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, File, UploadFile, Form, Response
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -27,11 +28,14 @@ import database as db
 
 # ─── Konfiguratsiya ───────────────────────────────────────────────
 load_dotenv()
-GEMINI_API_KEY = (
+RAW_GEMINI_KEY = (
     os.getenv("GEMINI_API_KEY")
     or os.getenv("VITE_GEMINI_API_KEY")
     or os.getenv("GOOGLE_API_KEY", "")
-)
+).strip()
+# Haqiqiy Gemini API kaliti doimo AIza bilan boshlanadi
+GEMINI_API_KEY = RAW_GEMINI_KEY if RAW_GEMINI_KEY.startswith("AIza") else ""
+
 DEFAULT_GOOGLE_CLIENT_ID = "782363295217-vsa4as0eiav5lrs80udf0r7hih1l286f.apps.googleusercontent.com"
 GOOGLE_CLIENT_ID = (
     os.getenv("GOOGLE_CLIENT_ID")
@@ -51,27 +55,23 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # ─── Bilimlar bazasini yuklash ────────────────────────────────────
 RULES_KB = None
-rules_file = BASE_DIR / "qoidalar.txt"
-if rules_file.exists():
-    try:
-        RULES_KB = RulesKnowledgeBase(str(rules_file))
-    except Exception as e:
-        print(f"[RulesKB Warning]: {e}")
-else:
-    print("[RulesKB Warning]: qoidalar.txt topilmadi, umumiy rejimda ishlaydi.")
+try:
+    data_folder = BASE_DIR / "data"
+    RULES_KB = RulesKnowledgeBase(str(data_folder if data_folder.exists() else BASE_DIR))
+except Exception as e:
+    print(f"[RulesKB Warning]: {e}")
 
-# ─── Modellarni sinash tartibi ────────────────────────────────────
-# ─── Modellarni sinash tartibi (Eng tezkor modellar birinchi) ───
+# ─── Modellarni sinash tartibi (Eng tezkor va aqlli modellar) ─────
 CANDIDATE_MODELS = [
-    "gemini-3.5-flash-lite",
-    "gemini-3.5-flash",
-    "gemini-3.6-flash",
     "gemini-2.5-flash",
-    "gemini-1.5-flash"
+    "gemini-1.5-flash",
+    "gemini-2.0-flash",
+    "gemini-3.5-flash",
+    "gemini-1.5-pro"
 ]
 
-def build_prompt(user_query: str, relevant_rules: str, is_first_message: bool = False) -> str:
-    return f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha aqlli va professional maslahatchisan.
+def build_prompt(user_query: str, relevant_context: str, is_first_message: bool = False) -> str:
+    return f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha eng nufuzli, aqlli va rasmiy AI maslahatchisan.
 
 MUHIM QOIDALAR VA XULQ-ATVOR:
 1. QAT'IY TALAB: BARCHA JAVOBLARNI FAQAT VA FAQAT O'ZBEKCHA LOTIN ALIFBOSIDA BERISH SHART! 
@@ -81,14 +81,14 @@ MUHIM QOIDALAR VA XULQ-ATVOR:
 2. QAT'IY TAQIQLANADI — HAR BIR XABARDA O'ZINGNI QAYTA-QAYTA TANISHTIRMA:
    - Hech qachon "Assalomu alaykum! Men Inspektor AI..." deb har bir savolda takrorlama!
    - Agar foydalanuvchi faqat salom bersa ("salom", "assalomu alaykum"), shundagina qisqa va samimiy salomlash.
-   - AGAR FOYDALANUVCHI ANIQ YO'L QOIDASI, BELGI YOKI VAZIYAT HAQIDA SAVOL BERSA:
+   - AGAR FOYDALANUVCHI ANIQ YO'L QOIDASI, BELGI, JARIMA YOKI VAZIYAT HAQIDA SAVOL BERSA:
      Salomlashish va o'zingni tanishtirishni mutlaqo chetlab o't! Ortiqcha kirish so'zlarsiz, to'g'ridan-to'g'ri masalaning javobiga o't!
-     Masalan: "Quvib o'tish nima?" deb so'ralsa, "Assalomu alaykum..." deb o'tirma, to'g'ridan-to'g'ri:
-     "O'zbekiston Respublikasi Yo'l harakati qoidalariga ko'ra, quvib o'tish — ..." deb boshla.
+     Masalan: "Aholi punktida tezlik qancha?" deb so'ralsa:
+     "O'zbekiston Respublikasi YHQning 11-bob 78-bandiga ko'ra, aholi punktlarida barcha transport vositalarining tezligini soatiga 60 km dan oshirmasdan harakatlanishga ruxsat etiladi..." deb boshla.
 
 3. SAVOLLARGA JAVOB BERISH TARTIBI:
-   - Qaysi band yoki bobga asoslanganingni aniq ko'rsat (masalan: "YHQning 78-bandiga asosan...").
-   - Bandma-band, tartibli, lo'nda va aniq qilib tushuntir.
+   - Qaysi band yoki bobga, yo'l belgisiga yoki MJtK moddasiga asoslanganingni doimo aniq ko'rsat (masalan: "YHQ 78-band", "3.24 belgisi", "MJtK 128-modda").
+   - Bandma-band, tartibli, lo'nda, qonuniy va tushunarli qilib tushuntir.
 
 4. AGAR MINNATDORCHILIK BILDIRILSA (masalan: "rahmat", "tushunarli", "zo'r"):
    - Qisqa javob ber (masalan: "Arzimaydi! Yana biror savolingiz bo'lsa, bemalol so'rang.").
@@ -96,16 +96,16 @@ MUHIM QOIDALAR VA XULQ-ATVOR:
 5. JAVOBNI HECH QACHON YARIMTA QILIB TO'XTATIB QO'YMA:
    - Javobni mantiqan to'liq va tugallangan holda ber. Barcha ro'yxat va fikrlarni to'liq oxiriga yetkaz.
 
-TEGISHLI YHQ QOIDALARI:
+TEGISHLI YHQ QOIDALARI VA MANBALAR:
 ---
-{relevant_rules}
+{relevant_context}
 ---
 
 Foydalanuvchi xabari: {user_query}
 """
 
 def generate_ai_response(user_query: str, image_part=None, is_first_message: bool = False) -> str:
-    """Mustaqil Ekspert Dvigateli (0 ta API kalitsiz tezkor javob) + Ixtiyoriy Gemini Vision"""
+    """Mustaqil Ekspert Dvigateli (0 ta API kalitsiz tezkor javob) + Ixtiyoriy Gemini Vision / RAG"""
     # 1. Matnli savol bo'lsa -> O'zimizning mustaqil aqlli YHQ dvigatelimizdan darhol (0.01 soniyada) javob beramiz
     if not image_part and RULES_KB:
         try:
@@ -113,13 +113,16 @@ def generate_ai_response(user_query: str, image_part=None, is_first_message: boo
             if smart_answer:
                 return smart_answer
         except Exception as e:
-            print(f"[SmartEngine fallback error]: {e}")
+            print(f"[SmartEngine fallback notice]: {e}")
 
-    # 2. Agar rasm yuklangan bo'lsa va Gemini API kaliti mavjud bo'lsa
-    if image_part and GEMINI_API_KEY:
-        relevant_rules = RULES_KB.search(user_query, top_k=3) if RULES_KB else ""
-        prompt_text = build_prompt(user_query, relevant_rules, is_first_message=is_first_message)
-        contents = [image_part, prompt_text]
+    # 2. Agar rasm yuklangan bo'lsa va Gemini API kaliti mavjud bo'lsa yoki RAG
+    if GEMINI_API_KEY:
+        relevant_context = RULES_KB.search_all(user_query) if RULES_KB else ""
+        prompt_text = build_prompt(user_query, relevant_context, is_first_message=is_first_message)
+        contents = []
+        if image_part:
+            contents.append(image_part)
+        contents.append(prompt_text)
 
         last_error = None
         for model_name in CANDIDATE_MODELS:
@@ -138,7 +141,7 @@ def generate_ai_response(user_query: str, image_part=None, is_first_message: boo
                 last_error = e
                 continue
         if last_error:
-            print(f"[Gemini Vision error]: {last_error}")
+            print(f"[Gemini generation error]: {last_error}")
 
     # 3. Agar rasm yuklangan bo'lsa-yu, lekin Gemini kaliti ulanmagan bo'lsa
     if image_part:
@@ -148,8 +151,12 @@ Yuklagan yo'l vaziyatingiz qabul qilindi. Rasmda qanday yo'l belgisi, chorraha y
 
     # 4. Zaxira
     if RULES_KB:
-        return RULES_KB.generate_smart_answer(user_query)
+        try:
+            return RULES_KB.generate_smart_answer(user_query)
+        except Exception:
+            return RULES_KB.search_all(user_query)
     return "Javob hosil qilishda muammo yuz berdi."
+
 
 
 # ─── Auth & Session Yordamchilari ─────────────────────────────────
@@ -237,6 +244,15 @@ def verify_google_token(token_str: str) -> Optional[dict]:
 # ─── FastAPI ilovasi ──────────────────────────────────────────────
 app = FastAPI(title="Inspektor AI — YHQ Maslahatchi")
 
+# ─── CORS Sozlamalari (Flutter & Web mijozlar uchun) ──────────────
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # ─── Vercel Serverless Routing Fix ────────────────────────────────
 @app.middleware("http")
 async def vercel_route_fix(request: Request, call_next):
@@ -259,6 +275,13 @@ class ChatRequest(BaseModel):
     message: str
     session_id: str = "default"
 
+class ExplainTestRequest(BaseModel):
+    question: str
+    options: Optional[List[str]] = []
+    correct_answer: Optional[str] = ""
+    explanation: Optional[str] = ""
+    image_base64: Optional[str] = None
+
 class SaveChatRequest(BaseModel):
     chat_id: str
     title: str
@@ -279,7 +302,12 @@ class DemoLoginRequest(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Asosiy sahifa"""
-    return templates.TemplateResponse("index.html", {"request": request})
+    is_flutter_app = request.query_params.get("app") == "flutter" or request.query_params.get("view") == "mobile"
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "is_flutter_app": is_flutter_app
+    })
+
 
 
 @app.get("/favicon.ico", include_in_schema=False)
@@ -559,6 +587,103 @@ async def chat_with_image(
         return JSONResponse(content={"reply": f"Rasm tahlilida xatolik: {type(e).__name__} - {str(e)}"})
 
 
+@app.post("/api/explain-test")
+async def explain_test(req: ExplainTestRequest):
+    """Bilet / Test savolini YHQ qoidalari va yo'l belgilari asosida tahlil qilib beruvchi maxsus endpoint (Flutter uchun)"""
+    question_text = req.question.strip()
+    if not question_text:
+        return JSONResponse(status_code=400, content={"error": "Savol matni kiritilmadi"})
+
+    search_query = f"{question_text} {req.correct_answer or ''} {req.explanation or ''}"
+    relevant_context = RULES_KB.search_all(search_query) if RULES_KB else ""
+
+    options_formatted = "\n".join([f"- {opt}" for opt in req.options]) if req.options else "Ko'rsatilmagan"
+
+    prompt_text = f"""Sen — O'zbekiston Respublikasi Yo'l harakati qoidalari (YHQ) bo'yicha eng nufuzli imtihon ekspertisan.
+
+VAZIFA:
+Quyidagi haydovchilik imtihoni test savolini to'liq tahlil qil. Nega aynan to'g'ri javob to'g'riligini va boshqa variantlar nima uchun noto'g'riligini amaldagi YHQ bandi yoki Yo'l belgisiga tayangan holda tushuntirib ber.
+
+SAVOL:
+{question_text}
+
+VARIANTLAR:
+{options_formatted}
+
+TO'G'RI JAVOB: {req.correct_answer or "Ko'rsatilmagan"}
+{"IZOH: " + req.explanation if req.explanation else ""}
+
+TEGISHLI YHQ QOIDALARI VA BELGILAR:
+---
+{relevant_context}
+---
+
+QAT'IY TALABLAR:
+1. FAQAT VA FAQAT O'ZBEK LOTIN ALIFBOSIDA JAVOB YOZ (birorta kirill harfi bo'lmasin).
+2. Qaysi YHQ bandi (masalan: 11-bob, 78-band) yoki Yo'l belgisi (masalan: 3.24 belgisi) asos qilib olinganini aniq manba sifatida ko'rsat.
+3. Salomlashishsiz, to'g'ridan-to'g'ri tushuntirishga o't.
+4. Javobni quyidagi chiroyli tuzilishda qaytar:
+   - 🎯 **To'g'ri javob:** ...
+   - 📖 **YHQ Asosi (Manba):** ...
+   - 💡 **Tushuntirish:** ...
+"""
+
+    contents = []
+    if req.image_base64:
+        contents.append({
+            "inline_data": {
+                "mime_type": "image/jpeg",
+                "data": req.image_base64
+            }
+        })
+    contents.append(prompt_text)
+
+    if not GEMINI_API_KEY:
+        fallback_reply = f"""### 🎯 To'g'ri javob: {req.correct_answer or "Ko'rsatilmagan"}
+
+### 📖 YHQ Asosi va Tegishli Qoidalar:
+{relevant_context or "Tegishli qoida topilmadi."}
+
+---
+💡 **Izoh:** {req.explanation or "Ushbu test O'zbekiston Respublikasi Yo'l harakati qoidalarining yuqoridagi tegishli bandlariga asosan tuzilgan."}"""
+        return JSONResponse(content={"status": "OK", "reply": fallback_reply})
+
+    last_error = None
+    for model_name in CANDIDATE_MODELS:
+        try:
+            m = genai.GenerativeModel(
+                model_name=model_name,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=0.2,
+                    max_output_tokens=1200,
+                )
+            )
+            res = m.generate_content(contents)
+            if res and res.text:
+                return JSONResponse(content={
+                    "status": "OK",
+                    "reply": cyrillic_to_latin(res.text)
+                })
+        except Exception as e:
+            print(f"[Model fallback /api/explain-test] {model_name} error: {e}")
+            last_error = e
+            continue
+
+    if relevant_context:
+        fallback_reply = f"""### 🎯 To'g'ri javob: {req.correct_answer or "Ko'rsatilmagan"}
+
+### 📖 YHQ Asosi:
+{relevant_context}
+
+---
+💡 **Izoh:** {req.explanation or "Tahlil qoidalarga asosan amalga oshirildi."}"""
+        return JSONResponse(content={"status": "OK", "reply": fallback_reply})
+
+    if last_error:
+        return JSONResponse(status_code=500, content={"error": f"AI tahlilida xatolik: {str(last_error)}"})
+    return JSONResponse(content={"reply": "Savolni tahlil qilishda muammo yuz berdi.", "status": "ERROR"})
+
+
 # ─── Serverni ishga tushirish ─────────────────────────────────────
 if __name__ == "__main__":
     import uvicorn
@@ -566,3 +691,5 @@ if __name__ == "__main__":
     print("[*] Brauzerda oching: http://localhost:8000\n")
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
+
+# yangilash kere 

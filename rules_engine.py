@@ -1,9 +1,11 @@
 """
 Avto AI — O'zbekiston Yo'l Harakati Qoidalari (YHQ) Mustaqil Aqlli Ekspert Tizimi
+YHQ qoidalarini, Yo'l belgilarini, Jarimalarni va Biletlar tahlilini aqlli qidiruv moduli (To'liq Lotin alifbosida).
 Tashqi AI / API kalitsiz 100% mustaqil, tezkor (0.01s) va aniq javob beruvchi dvigatel.
 """
 import os
 import re
+import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
 
@@ -15,7 +17,7 @@ CYR_TO_LAT_MAP = {
     'ъ': "'", 'ы': 'i', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya',
     'ў': "o'", 'ғ': "g'", 'қ': 'q', 'ҳ': 'h',
     'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo',
-    'Ж': 'J', 'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M',
+    'Ж': 'J', 'З': 'Z', 'I': 'I', 'Й': 'Y', 'К': 'K', 'L': 'L', 'М': 'M',
     'Н': 'N', 'О': 'O', 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U',
     'Ф': 'F', 'Х': 'X', 'Ц': 'Ts', 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sh',
     'Ъ': "'", 'Ы': 'I', 'Ь': '', 'Э': 'E', 'Ю': 'Yu', 'Я': 'Ya',
@@ -44,7 +46,6 @@ def normalize_text(text: str) -> str:
     t = text.lower()
     t = t.replace("‘", "'").replace("’", "'").replace("`", "'").replace("ʻ", "'").replace("ʼ", "'")
     return t
-
 
 # ─── MAVZULAR BO'YICHA AMALIY ESLATMALAR VA TAHLILLAR ─────────────
 THEMATIC_GUIDES = {
@@ -245,26 +246,70 @@ Haydovchiga transport vositasini boshqarish vaqtida **telefondan (qo'l bilan ush
 
 
 class RulesKnowledgeBase:
-    """O'zbekiston YHQ bo'yicha to'liq mustaqil bilimlar bazasi va qidiruv dvigateli"""
+    """
+    O'zbekiston YHQ (30 ta bob, 187 ta band), 74 ta rasmiy atama, Yo'l belgilari, 
+    Yo'l chiziqlari, Jarimalar (MJtK) va Biletlar bo'yicha to'liq integratsiyalashgan aqlli dvigatel.
+    """
 
-    def __init__(self, filepath: str):
-        self.filepath = filepath
+    def __init__(self, data_path: Optional[str] = None):
+        base_dir = Path(__file__).resolve().parent
+        data_dir = None
+
+        if data_path:
+            p = Path(data_path)
+            if p.is_dir():
+                data_dir = p
+
+        if not data_dir:
+            data_candidate = base_dir / "data"
+            if data_candidate.is_dir():
+                data_dir = data_candidate
+
+        txt_file = base_dir / "qoidalar.txt"
+
         self.bands: Dict[int, Dict[str, Any]] = {}
         self.terms: Dict[str, str] = {}
         self.signs: Dict[str, Dict[str, str]] = {}
         self.sections: List[Dict[str, Any]] = []
 
-        self._load_and_parse(filepath)
-        print(f"[RulesKB] Tizim tayyor: {len(self.bands)} ta band, {len(self.terms)} ta atama va {len(self.signs)} ta yo'l belgisi yuklandi.")
+        self.rules_items: List[Dict[str, Any]] = []
+        self.signs_items: List[Dict[str, Any]] = []
+        self.fines_items: List[Dict[str, Any]] = []
+        self.tickets_items: List[Dict[str, Any]] = []
 
-    def _load_and_parse(self, filepath: str):
+        # 1. qoidalar.txt dan yuklash (187 ta band, 74 ta atama, belgilar)
+        if txt_file.exists():
+            self._load_from_txt(str(txt_file))
+
+        # 2. data/ papkasidagi JSON fayllardan yuklash
+        if data_dir and data_dir.exists():
+            self._load_yhq_data(data_dir)
+            self._load_signs_data(data_dir)
+            self._load_fines_data(data_dir)
+            self._load_tickets_data(data_dir)
+
+        # 3. Agar JSON'dan rules_items yuklanmagan bo'lsa, self.bands dan to'ldiramiz
+        if not self.rules_items and self.bands:
+            for num, b in sorted(self.bands.items()):
+                self.rules_items.append({
+                    "chapter_number": "",
+                    "chapter_title": b["bob"],
+                    "item_number": str(num),
+                    "text": b["text"],
+                    "full_label": f"{b['bob']} — {num}-band",
+                    "search_text": normalize_text(f"{b['bob']} {b['text']} {num}")
+                })
+
+        print(f"[RulesKB] Tizim tayyor: {len(self.bands) or len(self.rules_items)} ta band, {len(self.terms)} ta atama, {len(self.signs_items) or len(self.signs)} ta yo'l belgisi, {len(self.fines_items)} ta jarima, {len(self.tickets_items)} ta bilet yuklandi.")
+
+    def _load_from_txt(self, filepath: str):
         """qoidalar.txt faylidan bandlar, atamalar va belgilarni to'liq ajratib olish"""
-        if not os.path.exists(filepath):
-            print(f"[RulesKB Warning]: {filepath} fayli topilmadi.")
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                raw_content = f.read()
+        except Exception as e:
+            print(f"[RulesKB Warning]: {e}")
             return
-
-        with open(filepath, 'r', encoding='utf-8') as f:
-            raw_content = f.read()
 
         content = raw_content.replace('\ufffd', '"')
 
@@ -341,7 +386,6 @@ class RulesKnowledgeBase:
             for m in re.findall(sign_pattern, ilova1_text):
                 code = m[0].strip()
                 raw_text = m[1].strip()
-                # Nomini ajratish
                 name_m = re.search(r'["“«\u201c\u201d]([^"”»\u201c\u201d]+)["”»\u201c\u201d]', raw_text)
                 name = name_m.group(1).strip() if name_m else raw_text.split('.')[0].strip()
                 self.signs[code] = {
@@ -350,19 +394,99 @@ class RulesKnowledgeBase:
                     "full_text": raw_text
                 }
 
+    def _load_yhq_data(self, data_dir: Path):
+        """yhq.json dan bandlarni yuklash"""
+        yhq_json = data_dir / "yhq.json"
+        if yhq_json.exists():
+            try:
+                with open(yhq_json, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                chapters = data.get("chapters", [])
+                for ch in chapters:
+                    ch_num = ch.get("number", "")
+                    ch_title = ch.get("title", "")
+                    for item in ch.get("items", []):
+                        item_num = item.get("number", "")
+                        item_text = item.get("text", "")
+                        self.rules_items.append({
+                            "chapter_number": ch_num,
+                            "chapter_title": ch_title,
+                            "item_number": str(item_num),
+                            "text": item_text,
+                            "full_label": f"{ch_num}-bob. {ch_title} — {item_num}-band",
+                            "search_text": normalize_text(f"{ch_title} {item_text} {item_num}")
+                        })
+            except Exception as e:
+                print(f"[RulesKB Error loading yhq.json]: {e}")
+
+    def _load_signs_data(self, data_dir: Path):
+        """belgilar.json dan yo'l belgilarini yuklash"""
+        signs_json = data_dir / "belgilar.json"
+        if signs_json.exists():
+            try:
+                with open(signs_json, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                for cat in data.get("categories", []):
+                    cat_name = cat.get("category", "")
+                    for it in cat.get("items", []):
+                        name = it.get("name", "")
+                        title = it.get("title", "")
+                        alt = it.get("alt", "")
+                        self.signs_items.append({
+                            "category": cat_name,
+                            "name": name,
+                            "title": title or alt or name,
+                            "image": it.get("image", ""),
+                            "search_text": normalize_text(f"{cat_name} {name} {title} {alt}")
+                        })
+            except Exception as e:
+                print(f"[RulesKB Error loading belgilar.json]: {e}")
+
+    def _load_fines_data(self, data_dir: Path):
+        """jarimalar.json dan jarimalar ma'lumotlarini yuklash"""
+        fines_json = data_dir / "jarimalar.json"
+        if fines_json.exists():
+            try:
+                with open(fines_json, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                for fine in data.get("fines", []):
+                    violation = fine.get("violation", "")
+                    article = fine.get("article", "")
+                    bhm = fine.get("bhm", 0)
+                    self.fines_items.append({
+                        "article": article,
+                        "bhm": bhm,
+                        "violation": violation,
+                        "search_text": normalize_text(f"{article} {violation} jarima bhm")
+                    })
+            except Exception as e:
+                print(f"[RulesKB Error loading jarimalar.json]: {e}")
+
+    def _load_tickets_data(self, data_dir: Path):
+        """biletlar.json dan savollar va tushuntirishlarni yuklash"""
+        biletlar_json = data_dir / "biletlar.json"
+        if biletlar_json.exists():
+            try:
+                with open(biletlar_json, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                bilet_dict = data.get("biletlar", data) if isinstance(data, dict) else {}
+                for ticket_num, questions in bilet_dict.items():
+                    if isinstance(questions, list):
+                        for q in questions:
+                            self.tickets_items.append({
+                                "ticket_num": ticket_num,
+                                "id": q.get("id"),
+                                "text": q.get("text", ""),
+                                "options": q.get("options", []),
+                                "correct_answer": q.get("correct_answer", ""),
+                                "explanation": q.get("explanation", ""),
+                                "search_text": normalize_text(f"{q.get('text', '')} {q.get('explanation', '')} {q.get('correct_answer', '')}")
+                            })
+            except Exception as e:
+                print(f"[RulesKB Error loading biletlar.json]: {e}")
+
     def get_band(self, num: int) -> Optional[Dict[str, Any]]:
         return self.bands.get(num)
-
-    def search(self, query: str, top_k: int = 3) -> str:
-        """Eski RAG interfeysi bilan moslik uchun"""
-        if not query:
-            return "\n\n".join([s["text"] for s in self.sections[:top_k]])
-        
-        # Aqlli javobdan kontekst olish
-        scored = self._rank_bands(query)
-        selected = [item[1] for item in scored[:top_k]] if scored else list(self.bands.values())[:top_k]
-        result_texts = [f"[{s['bob']}]\n{s['number']}. {s['text']}" for s in selected]
-        return "\n\n---\n\n".join(result_texts)
 
     def _rank_bands(self, query: str) -> List[Tuple[float, Dict[str, Any]]]:
         """Kalit so'zlar va semantika bo'yicha bandlarni baholash"""
@@ -378,10 +502,8 @@ class RulesKnowledgeBase:
             score = 0.0
 
             for kw in keywords:
-                # Bob nomida uchrasa yuqori ball
                 if kw in bob_norm:
                     score += 6.0
-                # Band matnida uchrasa
                 count = text_norm.count(kw)
                 if count > 0:
                     score += min(count * 2.0, 10.0)
@@ -391,6 +513,139 @@ class RulesKnowledgeBase:
 
         scored.sort(key=lambda x: x[0], reverse=True)
         return scored
+
+    def search_rules(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+        """Savolga mos eng yaxshi YHQ bandlarini topish"""
+        if not query:
+            return self.rules_items[:top_k]
+
+        query_norm = normalize_text(query)
+        keywords = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
+        alt_keywords = set(keywords)
+        for kw in keywords:
+            if "'" in kw:
+                alt_keywords.add(kw.replace("'", ""))
+
+        scored = []
+        for item in self.rules_items:
+            score = 0
+            text_norm = item["search_text"]
+            ch_title_norm = normalize_text(item.get("chapter_title", ""))
+
+            if query_norm in text_norm:
+                score += 30
+
+            for kw in alt_keywords:
+                if kw in ch_title_norm:
+                    score += 8
+                if kw in text_norm:
+                    score += text_norm.count(kw) * 3
+
+            for digit_match in re.findall(r"\b\d+\b", query_norm):
+                if digit_match == item.get("item_number"):
+                    score += 25
+                elif digit_match == item.get("chapter_number"):
+                    score += 10
+
+            if score > 0:
+                scored.append((score, item))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [item[1] for item in scored[:top_k]] if scored else self.rules_items[:top_k]
+
+    def search_signs(self, query: str, top_k: int = 2) -> List[Dict[str, Any]]:
+        """Savolga mos yo'l belgilarini topish"""
+        if not query or not self.signs_items:
+            return []
+        query_norm = normalize_text(query)
+        keywords = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
+        scored = []
+        for item in self.signs_items:
+            score = 0
+            code_match = re.search(r"\b\d+\.\d+(\.\d+)?\b", query)
+            if code_match and code_match.group(0) in item["name"]:
+                score += 50
+
+            for kw in keywords:
+                if kw in item["search_text"]:
+                    score += 4
+            if score > 0:
+                scored.append((score, item))
+
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [item[1] for item in scored[:top_k]]
+
+    def search_fines(self, query: str, top_k: int = 2) -> List[Dict[str, Any]]:
+        """Savolga mos jarimalarni topish"""
+        if not query or not self.fines_items:
+            return []
+        query_norm = normalize_text(query)
+        keywords = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
+        if "qizil" in query_norm or "chiroq" in query_norm:
+            keywords.extend(["svetofor", "taqiqlovchi"])
+        if "telefon" in query_norm:
+            keywords.extend(["telefondan", "foydalanish"])
+        if "kamar" in query_norm:
+            keywords.extend(["xavfsizlik", "kamari"])
+        scored = []
+        for item in self.fines_items:
+            score = 0
+            for kw in keywords:
+                if kw in item["search_text"]:
+                    score += 3
+            for digit in re.findall(r"\b\d+\b", query_norm):
+                if digit in item["article"]:
+                    score += 15
+            if score > 0:
+                scored.append((score, item))
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [item[1] for item in scored[:top_k]]
+
+    def search_all(self, query: str) -> str:
+        """
+        RAG uchun integratsiyalashgan to'liq kontekst tayyorlaydi:
+        - Eng mos YHQ bandlari
+        - Tegishli yo'l belgilari
+        - Tegishli jarimalar miqdori
+        """
+        rules = self.search_rules(query, top_k=3)
+        signs = self.search_signs(query, top_k=2)
+        fines = self.search_fines(query, top_k=2)
+
+        blocks = []
+        query_lower = normalize_text(query)
+
+        is_sign_query = any(w in query_lower for w in ["belgi", "belgisi", "shlagbaum", "taqiq"]) or bool(re.search(r"\b\d+\.\d+\b", query))
+        is_fine_query = any(w in query_lower for w in ["jarima", "bhm", "modda", "jazo", "qancha", "so'm", "to'lanadi"])
+
+        if is_sign_query and signs:
+            sign_texts = [f"🚸 [{s['category']}: {s['name']}]" for s in signs]
+            blocks.append("--- TEGISHLI YO'L BELGILARI ---\n" + "\n".join(sign_texts))
+
+        if is_fine_query and fines:
+            fine_texts = [f"⚖️ [{f['article']}]: {f['violation']} (Jarima: {f['bhm']} BHM)" for f in fines]
+            blocks.append("--- TEGISHLI JARIMALAR (MJtK) ---\n" + "\n".join(fine_texts))
+
+        if rules:
+            rule_texts = [f"📌 [{r['full_label']}]\n{r['text']}" for r in rules]
+            blocks.append("--- YHQ QOIDALARI ---\n" + "\n\n".join(rule_texts))
+
+        if not is_sign_query and signs:
+            sign_texts = [f"🚸 [{s['category']}: {s['name']}]" for s in signs]
+            blocks.append("--- TEGISHLI YO'L BELGILARI ---\n" + "\n".join(sign_texts))
+
+        if not is_fine_query and fines and any(w in query_lower for w in ["jarima", "bhm", "modda"]):
+            fine_texts = [f"⚖️ [{f['article']}]: {f['violation']} (Jarima: {f['bhm']} BHM)" for f in fines]
+            blocks.append("--- TEGISHLI JARIMALAR (MJtK) ---\n" + "\n".join(fine_texts))
+
+        combined = "\n\n".join(blocks)
+        if len(combined) > 4500:
+            combined = combined[:4500] + "\n... (qisqartirildi)"
+        return combined
+
+    def search(self, query: str, top_k: int = 3) -> str:
+        """Eski interfeys bilan moslik uchun"""
+        return self.search_all(query)
 
     def generate_smart_answer(self, query: str) -> str:
         """Tashqi sun'iy intellektsiz, 100% mustaqil professional YHQ javobi hosil qilish"""
@@ -411,7 +666,21 @@ Sizga qoidalar, yo'l belgilari, ruxsat etilgan tezlik me'yorlari yoki jarimalar 
 
 Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
 
-        # 2. Aniq yo'l belgisi so'ralgan holat (masalan: "3.24 belgisi", "1.1", "3.27")
+        # 2. Jarimalar bo'yicha so'rovlar (MJtK)
+        if any(w in q_norm for w in ["jarima", "bhm", "jazo", "shtraf", "modda"]):
+            fines = self.search_fines(clean_q, top_k=2)
+            if fines:
+                fine_lines = []
+                for f in fines:
+                    fine_lines.append(f"- **{f['article']}:** {f['violation']}\n  💰 **Jarima miqdori:** **{f['bhm']} BHM**")
+                return f"""### ⚖️ Ma'muriy Javobgarlik To'g'risidagi Kodeks (MJtK) bo'yicha jarimalar:
+
+{chr(10).join(fine_lines)}
+
+---
+💡 **Eslatma:** O'zbekistonda BHM (Bazaviy hisoblash miqdori) miqdoriga ko'ra jarimalar belgilanadi. 15 kun ichida to'langanda 50% chegirma amal qiladi."""
+
+        # 3. Aniq yo'l belgisi so'ralgan holat (masalan: "3.24 belgisi", "1.1", "3.27")
         sign_code_m = re.search(r'(\d+\.\d+(?:\.\d+)?)', clean_q)
         if sign_code_m:
             code = sign_code_m.group(1)
@@ -425,7 +694,7 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
 ---
 💡 **Haydovchilar uchun eslatma:** Yo'l belgilarining talablariga rioya qilmaslik yo'l harakati qoidalarini buzish hisoblanadi va belgilangan tartibda javobgarlikka sabab bo'ladi."""
 
-        # 3. Aniq band raqami so'ralgan holat (masalan: "78-band", "band 82", "82-qoida", "78")
+        # 4. Aniq band raqami so'ralgan holat (masalan: "78-band", "band 82", "82-qoida", "78")
         band_match = re.search(r'(?:^|[^\d.])(\d{1,3})\s*(?:-?\s*(?:band|qoida)|-?\s*modda)?(?![.\d])', clean_q)
         if band_match and ("band" in q_norm or "qoida" in q_norm or len(q_norm.split()) <= 2):
             try:
@@ -443,7 +712,7 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
             except Exception:
                 pass
 
-        # 4. 6-banddagi rasmiy atamalar ta'rifi (masalan: "quvib o'tish nima?", "avtomagistral nima?", "chorraha nima?")
+        # 5. 6-banddagi rasmiy atamalar ta'rifi (masalan: "quvib o'tish nima?", "avtomagistral nima?", "chorraha nima?")
         is_asking_definition = bool(re.search(r'\b(nima|ta\'rif|tarif|tushuncha|ma\'nosi|manosi|atama)\b', q_norm)) or len(q_norm.split()) <= 2
         if is_asking_definition:
             sorted_terms = sorted(self.terms.items(), key=lambda x: len(x[0]), reverse=True)
@@ -459,7 +728,7 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
 💡 **Bilasizmi?** Ushbu atama YHQning barcha boblari va bandlarida aynan shu ma'noda qo'llaniladi.
 🔗 **Asosiy manba:** O'zbekiston Respublikasi YHQ, 1-bob ("Umumiy qoidalar"), 6-band."""
 
-        # 5. Keng tarqalgan asosiy mavzular (Tezlik, Quvib o'tish, To'xtash, Chorraha, Kamar, Telefon, va b.)
+        # 6. Keng tarqalgan asosiy mavzular (Tezlik, Quvib o'tish, To'xtash, Chorraha, Kamar, Telefon, va b.)
         if any(w in q_norm for w in ["tezlik", "km/s", "soatiga", "shahar ichida", "aholi punktida tezlik"]):
             return THEMATIC_GUIDES["speed"]["response"]
 
@@ -484,7 +753,7 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
         if any(w in q_norm for w in ["svetofor", "sariq chiroq", "qizil chiroq", "tartibga soluvchi"]):
             return THEMATIC_GUIDES["traffic_lights"]["response"]
 
-        # 6. Umumiy semantik qidiruv (Barcha 186 band bo'yicha)
+        # 7. Umumiy semantik qidiruv (Barcha bandlar bo'yicha)
         scored_bands = self._rank_bands(clean_q)
         if scored_bands and scored_bands[0][0] >= 4.0:
             top_band = scored_bands[0][1]
@@ -509,16 +778,33 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
 💡 **Izoh:** Ushbu javob savolingiz mazmuni bo'yicha O'zbekiston Respublikasi Yo'l harakati qoidalarining eng tegishli bandlariga asosan shakllantirildi."""
             return res
 
-        # 7. Mavzudan tashqari savollar
+        # 8. Mavzudan tashqari savollar
         return f"""ℹ️ **Avto AI — YHQ Maslahatchi:**
 
-Savolingiz bo'yicha aniq YHQ bandini aniqlash uchun iltimos, savolni yo'l harakati qoidalari, belgilar yoki haydovchilik vaziyatlariga bog'lab bering.
+Savolingiz bo'yicha aniq YHQ bandi yoki belgisini aniqlash uchun iltimos, savolni yo'l harakati qoidalari, belgilar, jarimalar yoki haydovchilik vaziyatlariga bog'lab bering.
 
 **Masalan, quyidagi savollarni berishingiz mumkin:**
 - ⚡ *"Aholi punktida ruxsat etilgan tezlik necha?"*
 - 🚗 *"Qayerlarda quvib o'tish taqiqlanadi?"*
 - 🛑 *"To'xtash va to'xtab turishning qanday farqi bor?"*
 - 🚦 *"Chorrahada chapga burilishda kimga yo'l beriladi?"*
-- 🦺 *"Xavfsizlik kamarini kimlar taqmasligi mumkin?"*
+- ⚖️ *"Qizil chiroqda o'tish jarimasi qancha?"*
 - 📄 *"78-bandda nima deyilgan?"*"""
 
+
+if __name__ == '__main__':
+    import sys
+    if sys.platform == "win32":
+        sys.stdout.reconfigure(encoding='utf-8')
+    kb = RulesKnowledgeBase()
+    print("\n1. Test qidiruv: 'aholi punktida tezlik'")
+    print(kb.search_all("aholi punktida tezlik")[:400])
+
+    print("\n2. Test qidiruv: '3.24 belgisi'")
+    print(kb.search_all("3.24 belgisi")[:400])
+
+    print("\n3. Test qidiruv: 'qizil chiroqda o'tish jarimasi'")
+    print(kb.search_all("qizil chiroqda o'tish jarimasi")[:400])
+
+    print("\n4. Test smart answer: 'qizil chiroq jarimasi'")
+    print(kb.generate_smart_answer("qizil chiroq jarimasi"))

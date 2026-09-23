@@ -1548,6 +1548,18 @@
                 }
             });
         }
+
+        // Flutter yoki URL orqali savol yuborilganda avtomatik ishga tushirish
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get('q');
+        if (initialQuery && initialQuery.trim()) {
+            setTimeout(() => {
+                if (chatInput) {
+                    chatInput.value = initialQuery.trim();
+                    handleSendMessage();
+                }
+            }, 300);
+        }
     }
 
     // ─── STORAGE & CLOUD CHAT SYNC ──────────────────────────
