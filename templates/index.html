@@ -1289,9 +1289,14 @@
                                 }
                             } catch (e) {
                                 console.error('OAuth profile fetch error:', e);
-                                alert("Google profilingizni yuklashda xatolik yuz berdi.");
+                                alert("Google profilingizni yuklashda xatolik yuz berdi: " + e.message);
                             }
                         }
+                    },
+                    error_callback: (err) => {
+                        console.error("Google OAuth error:", err);
+                        if (err && err.type === 'popup_closed') return;
+                        alert("Google orqali kirishda xatolik yuz berdi: " + (err.message || err.type || JSON.stringify(err)) + "\n\nEslatma: Google Cloud Console'da ushbu sayt domeni (Authorized JavaScript origins) qo'shilganligini tekshiring yoki pastdagi 'Demo hisob' tugmasidan foydalaning.");
                     }
                 });
             }
@@ -1336,7 +1341,7 @@
 
     async function triggerGoogleLogin() {
         if (!googleClientId) {
-            alert("Google Client ID hali sozlanmagan.");
+            alert("Google Client ID sozlanmagan.\n\nIltimos, Vercel sozlamalarida GOOGLE_CLIENT_ID ni 'Preview' muhiti uchun ham yoqing yoki darhol 'Demo hisob bilan sinash' tugmasidan foydalaning.");
             return;
         }
         if (window.google && window.google.accounts) {
@@ -1344,15 +1349,23 @@
                 initGoogleSignInClient();
             }
             if (googleTokenClient) {
-                googleTokenClient.requestAccessToken({ prompt: 'select_account' });
-                return;
+                try {
+                    googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+                    return;
+                } catch (e) {
+                    console.warn("requestAccessToken xatosi:", e);
+                }
             }
             if (window.google.accounts.id) {
-                google.accounts.id.prompt();
-                return;
+                try {
+                    google.accounts.id.prompt();
+                    return;
+                } catch (e) {
+                    console.warn("One-tap xatosi:", e);
+                }
             }
         }
-        alert("Google xizmatlari yuklanmoqda, iltimos bir necha soniyadan so'ng qayta bosing.");
+        alert("Google xizmatlari yuklanmadi. Brauzeringizda pop-up blokeri o'chirilganligini tekshiring yoki 'Demo hisob' tugmasidan foydalaning.");
     }
 
     async function handleDemoLogin() {
