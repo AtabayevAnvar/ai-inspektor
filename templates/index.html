@@ -1163,7 +1163,10 @@
         </p>
 
         <div class="auth-actions-wrap" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-            <!-- 100% O'zbekcha rasmiy Google Sign-In tugmasi -->
+            <!-- Google Identity Services rasmiy tugmasi -->
+            <div id="googleSignInBtnContainer" style="width: 100%; display: flex; justify-content: center; align-items: center; min-height: 44px;"></div>
+
+            <!-- Zaxira Google Sign-In tugmasi (agar rasmiy tugma bloklansa yoki yuklanmasa) -->
             <button class="google-login-btn" id="customGoogleLoginBtn" onclick="triggerGoogleLogin()" style="display:flex;">
                 <svg width="20" height="20" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -1173,7 +1176,6 @@
                 </svg>
                 <span>Google orqali kirish</span>
             </button>
-            <div id="googleSignInBtnContainer" style="display:none;"></div>
 
             <!-- Demo hisob orqali tezkor kirish -->
             <button class="demo-login-btn" id="demoLoginBtn" onclick="handleDemoLogin()" style="width: 100%; height: 44px; background: #161616; border: 1px solid #333333; border-radius: 12px; color: #e5e5e5; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; transition: all 0.2s;">
@@ -1233,6 +1235,16 @@
     const customGoogleLoginBtn = document.getElementById('customGoogleLoginBtn');
     const googleSignInBtnContainer = document.getElementById('googleSignInBtnContainer');
 
+    // ─── AUTH HEADERS HELPER ─────────────────────────────────
+    function getAuthHeaders(extra = {}) {
+        const headers = { ...extra };
+        const token = localStorage.getItem('inspektor_session');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
+    }
+
     // ─── AUTH & MODAL FUNKSIYALARI ──────────────────────────
     function openAuthModal() {
         if (authModal) authModal.classList.add('active');
@@ -1255,7 +1267,7 @@
 
     async function checkAuthStatus() {
         try {
-            const res = await fetch('/api/auth/me');
+            const res = await fetch('/api/auth/me', { headers: getAuthHeaders() });
             const data = await res.json();
             currentUser = data.user;
             guestQuestionsLeft = data.questions_left;
@@ -1291,74 +1303,75 @@
     }
 
     let googleTokenClient = null;
+    let googleSignInRendered = false;
 
     function initGoogleSignInClient() {
         if (!googleClientId) return;
         if (!window.google || !window.google.accounts) {
-            setTimeout(initGoogleSignInClient, 300);
+            setTimeout(initGoogleSignInClient, 350);
             return;
         }
 
         try {
-            // 1. Google OAuth2 Token Client (Sizning chiroyli o'zbekcha tugmangiz uchun)
+            // 1. Google Identity Services ID Token (Rasmiy Google tugmasi)
+            if (window.google.accounts.id) {
+                window.google.accounts.id.initialize({
+                    client_id: googleClientId,
+                    callback: handleGoogleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
+
+                const container = document.getElementById('googleSignInBtnContainer');
+                if (container && (!googleSignInRendered || container.children.length === 0)) {
+                    container.innerHTML = '';
+                    window.google.accounts.id.renderButton(container, {
+                        type: 'standard',
+                        theme: 'outline',
+                        size: 'large',
+                        text: 'signin_with',
+                        shape: 'pill',
+                        logo_alignment: 'left',
+                        width: 320,
+                        locale: 'uz'
+                    });
+                    googleSignInRendered = true;
+                    if (customGoogleLoginBtn) {
+                        customGoogleLoginBtn.style.display = 'none';
+                    }
+                }
+            }
+
+            // 2. Google OAuth2 Token Client (Zaxira pop-up rejimi)
             if (window.google.accounts.oauth2) {
-                googleTokenClient = google.accounts.oauth2.initTokenClient({
+                googleTokenClient = window.google.accounts.oauth2.initTokenClient({
                     client_id: googleClientId,
                     scope: 'email profile openid',
                     callback: async (tokenResponse) => {
                         if (tokenResponse && tokenResponse.access_token) {
-                            try {
-                                const infoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                                    headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
-                                });
-                                const profile = await infoRes.json();
-                                const res = await fetch('/api/auth/google-oauth', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        sub: profile.sub,
-                                        email: profile.email,
-                                        name: profile.name,
-                                        picture: profile.picture,
-                                        local_chats: chats
-                                    })
-                                });
-                                const data = await res.json();
-                                if (data.status === 'ok') {
-                                    currentUser = data.user;
-                                    guestQuestionsLeft = 9999;
-                                    updateProfileUI();
-                                    closeAuthModal();
-                                    await loadChats();
-                                }
-                            } catch (e) {
-                                console.error('OAuth profile fetch error:', e);
-                                alert("Google profilingizni yuklashda xatolik yuz berdi: " + e.message);
-                            }
+                            await handleGoogleAccessToken(tokenResponse.access_token);
                         }
                     },
                     error_callback: (err) => {
-                        console.error("Google OAuth error:", err);
+                        console.warn("Google OAuth error:", err);
                         if (err && err.type === 'popup_closed') return;
-                        alert("Google orqali kirishda xatolik yuz berdi: " + (err.message || err.type || JSON.stringify(err)) + "\n\nEslatma: Google Cloud Console'da ushbu sayt domeni (Authorized JavaScript origins) qo'shilganligini tekshiring yoki pastdagi 'Demo hisob' tugmasidan foydalaning.");
+                        alert("Google orqali kirishda xatolik yuz berdi: " + (err.message || err.type || JSON.stringify(err)) + "\n\nEslatma: Google Cloud Console'da ushbu sayt domeni (Authorized JavaScript origins) qo'shilganligini tekshiring yoki 'Demo hisob' tugmasidan foydalaning.");
                     }
-                });
-            }
-
-            // 2. Google Identity Services ID Token (Fallback)
-            if (window.google.accounts.id) {
-                google.accounts.id.initialize({
-                    client_id: googleClientId,
-                    callback: handleGoogleCredentialResponse,
-                    auto_select: false
                 });
             }
         } catch (err) {
             console.warn("Google Sign-In init xatosi:", err);
+            if (customGoogleLoginBtn) {
+                customGoogleLoginBtn.style.display = 'flex';
+            }
         }
     }
 
     async function handleGoogleCredentialResponse(response) {
+        if (!response || !response.credential) {
+            alert("Google avtorizatsiya ma'lumotlari qabul qilinmadi.");
+            return;
+        }
         try {
             const res = await fetch('/api/auth/google', {
                 method: 'POST',
@@ -1370,6 +1383,38 @@
             });
             const data = await res.json();
             if (data.status === 'ok') {
+                if (data.token) {
+                    localStorage.setItem('inspektor_session', data.token);
+                }
+                currentUser = data.user;
+                guestQuestionsLeft = 9999;
+                updateProfileUI();
+                closeAuthModal();
+                await loadChats();
+            } else {
+                alert("Google orqali kirishda xatolik yuz berdi: " + (data.error || "Noma'lum"));
+            }
+        } catch (e) {
+            console.error("Auth google fetch error:", e);
+            alert("Server bilan bog'lanishda xatolik yuz berdi!");
+        }
+    }
+
+    async function handleGoogleAccessToken(accessToken) {
+        try {
+            const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    access_token: accessToken,
+                    local_chats: chats
+                })
+            });
+            const data = await res.json();
+            if (data.status === 'ok') {
+                if (data.token) {
+                    localStorage.setItem('inspektor_session', data.token);
+                }
                 currentUser = data.user;
                 guestQuestionsLeft = 9999;
                 updateProfileUI();
@@ -1379,7 +1424,8 @@
                 alert("Google orqali kirishda xatolik yuz berdi: " + (data.error || ""));
             }
         } catch (e) {
-            alert("Server bilan bog'lanishda xatolik!");
+            console.error("AccessToken auth error:", e);
+            alert("Google hisobini tasdiqlashda xatolik!");
         }
     }
 
@@ -1402,7 +1448,7 @@
             }
             if (window.google.accounts.id) {
                 try {
-                    google.accounts.id.prompt();
+                    window.google.accounts.id.prompt();
                     return;
                 } catch (e) {
                     console.warn("One-tap xatosi:", e);
@@ -1418,13 +1464,16 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: "Foydalanuvchi",
-                    email: "user@avtoai.uz",
+                    name: "Atabayev Anvar",
+                    email: "atabayev@gmail.com",
                     local_chats: chats
                 })
             });
             const data = await res.json();
             if (data.status === 'ok') {
+                if (data.token) {
+                    localStorage.setItem('inspektor_session', data.token);
+                }
                 currentUser = data.user;
                 guestQuestionsLeft = 9999;
                 updateProfileUI();
@@ -1442,18 +1491,22 @@
         if (e) e.stopPropagation();
         if (!confirm("Hisobingizdan chiqmoqchimisiz?")) return;
         try {
-            await fetch('/api/auth/logout', { method: 'POST' });
-            currentUser = null;
-            chats = [];
-            activeChatId = null;
-            localStorage.removeItem(STORAGE_CHATS_KEY);
-            localStorage.removeItem(STORAGE_ACTIVE_KEY);
-            updateProfileUI();
-            await checkAuthStatus();
-            await loadChats();
+            await fetch('/api/auth/logout', { 
+                method: 'POST',
+                headers: getAuthHeaders()
+            });
         } catch (err) {
             console.error(err);
         }
+        localStorage.removeItem('inspektor_session');
+        currentUser = null;
+        chats = [];
+        activeChatId = null;
+        localStorage.removeItem(STORAGE_CHATS_KEY);
+        localStorage.removeItem(STORAGE_ACTIVE_KEY);
+        updateProfileUI();
+        await checkAuthStatus();
+        await loadChats();
     }
 
     // ─── BROWSER & KEYBOARD ADAPTATION (YANDEX vs CHROME) ───
@@ -1501,7 +1554,7 @@
     async function loadChats() {
         if (currentUser) {
             try {
-                const res = await fetch('/api/chats');
+                const res = await fetch('/api/chats', { headers: getAuthHeaders() });
                 const data = await res.json();
                 if (data.chats && data.chats.length > 0) {
                     const currentActive = activeChatId;
@@ -1552,7 +1605,7 @@
         if (!chat) return;
         if (currentUser) {
             try {
-                const res = await fetch(`/api/chats/${chatId}/messages`);
+                const res = await fetch(`/api/chats/${chatId}/messages`, { headers: getAuthHeaders() });
                 const data = await res.json();
                 if (data.messages) {
                     chat.messages = data.messages.map(m => ({
@@ -1606,7 +1659,7 @@
             // Yangi chatni darhol foydalanuvchining bulutdagi hisobiga saqlash
             fetch('/api/chats', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({ chat_id: newId, title: 'Yangi chat' })
             }).catch(console.warn);
         }
@@ -1632,7 +1685,7 @@
         if (e) e.stopPropagation();
         if (currentUser) {
             try {
-                await fetch(`/api/chats/${chatId}`, { method: 'DELETE' });
+                await fetch(`/api/chats/${chatId}`, { method: 'DELETE', headers: getAuthHeaders() });
             } catch (err) {
                 console.warn(err);
             }
@@ -1657,7 +1710,7 @@
         if (confirm("Barcha suhbatlar tarixini o'chirib yubormoqchimisiz?")) {
             if (currentUser) {
                 try {
-                    await fetch('/api/clear', { method: 'POST' });
+                    await fetch('/api/clear', { method: 'POST', headers: getAuthHeaders() });
                 } catch (err) {}
             }
             chats = [];
@@ -1926,13 +1979,14 @@
 
                 const res = await fetch('/api/chat-image', {
                     method: 'POST',
+                    headers: getAuthHeaders(),
                     body: formData
                 });
                 data = await res.json();
             } else {
                 const res = await fetch('/api/chat', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
                         message: userText,
                         session_id: currentChat.id
