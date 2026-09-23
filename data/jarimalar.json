@@ -194,9 +194,21 @@
     },
     {
       "id": 33,
-      "violation": "Transport vositalari haydovchilarining to‘xtash yoki to‘xtab turish qoidalarini buzishi",
+      "violation": "Transport vositalari haydovchilarining to‘xtash yoki to‘xtab turish qoidalarini buzishi (to‘xtash taqiqlangan yoki to‘xtab turish taqiqlangan joylarda to‘xtash, 3.27 va 3.28 belgilari talabini buzish, noto‘g‘ri parkovka)",
       "article": "128-6-modda",
       "bhm": 2.0
+    },
+    {
+      "id": 34,
+      "violation": "To‘xtash yoki to‘xtab turish qoidalarini ma’muriy jazo qo‘llanilganidan keyin bir yil davomida takror sodir etish",
+      "article": "128-6-modda",
+      "bhm": 3.0
+    },
+    {
+      "id": 35,
+      "violation": "To‘xtash yoki to‘xtab turish qoidalarini bir yil davomida uchinchi marta takror sodir etish",
+      "article": "128-6-modda",
+      "bhm": 5.0
     },
     {
       "id": 37,

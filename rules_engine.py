@@ -444,7 +444,7 @@ class RulesKnowledgeBase:
                 print(f"[RulesKB Error loading belgilar.json]: {e}")
 
     def _load_fines_data(self, data_dir: Path):
-        """jarimalar.json dan jarimalar ma'lumotlarini yuklash"""
+        """jarimalar.json dan jarimalar ma'lumotlarini yuklash (kengaytirilgan semantik qidiruv teglari bilan)"""
         fines_json = data_dir / "jarimalar.json"
         if fines_json.exists():
             try:
@@ -454,11 +454,46 @@ class RulesKnowledgeBase:
                     violation = fine.get("violation", "")
                     article = fine.get("article", "")
                     bhm = fine.get("bhm", 0)
+
+                    clean_norm = normalize_text(f"{article} {violation} jarima bhm shtraf jazo")
+                    unquoted = re.sub(r"['’‘`]", "", clean_norm)
+                    extra_tags = []
+                    viol_low = violation.lower()
+                    if "128-6" in article or "to‘xtash" in viol_low or "to'xtash" in viol_low:
+                        extra_tags.append("toxtash toxtab turish parkovka taqiqlangan joyda toxtash mashina qoyish toxtash taqiqlangan 3.27 3.28 toxtatish")
+                    if "128-4" in article:
+                        if "to'xtash chizi" in viol_low or "to‘xtash chizi" in viol_low:
+                            extra_tags.append("stop liniya stop chiziq toxtash chizigi stop liniyani bosish")
+                        else:
+                            extra_tags.append("qizil chiroq svetofor sariq chiroq qizilga otish svetofordan otish")
+                    if "128-3" in article:
+                        extra_tags.append("tezlik radar tezlik oshirish tezlikni oshirish kms soatiga tez haydash")
+                    if "125" in article and "kamar" in viol_low:
+                        extra_tags.append("kamar xavfsizlik kamari kamar taqmaslik remen kamarsiz remensiz")
+                    if "125" in article and "raqam" in viol_low:
+                        extra_tags.append("nomer nomersiz nomer yoq raqamsiz davlat raqami nomer yechilgan")
+                    if "126" in article:
+                        extra_tags.append("tonirovka qoraytirish qora oyna tonirovka jarimasi plyonka oynani qoraytirish")
+                    if "128-1" in article:
+                        extra_tags.append("telefon telefonda gaplashish smartfon ruldaligida telefon gadjet")
+                    if "128-5" in article:
+                        extra_tags.append("qarama qarshi vstrechka qarshi polosaga chiqish avariya holati")
+                    if "128-modda" == article:
+                        extra_tags.append("piyoda piyodaga yol bermaslik zebra chiziq liniya bosish quvib otish quvish")
+                    if "131" in article:
+                        extra_tags.append("mast ichgan alkogol aroq mastlik mast holda haydash piyanitsa")
+                    if "135-1" in article:
+                        extra_tags.append("sugurta sugurtasiz polis straxovka straxovkasiz majburiy sugurta")
+                    if "135-modda" == article:
+                        extra_tags.append("prava hujjatsiz haydovchilik guvohnomasi prava yoq texpasport yoq")
+
+                    search_text = f"{clean_norm} {unquoted} {' '.join(extra_tags)}"
+
                     self.fines_items.append({
                         "article": article,
                         "bhm": bhm,
                         "violation": violation,
-                        "search_text": normalize_text(f"{article} {violation} jarima bhm")
+                        "search_text": search_text
                     })
             except Exception as e:
                 print(f"[RulesKB Error loading jarimalar.json]: {e}")
@@ -577,70 +612,123 @@ class RulesKnowledgeBase:
         return [item[1] for item in scored[:top_k]]
 
     def search_fines(self, query: str, top_k: int = 2) -> List[Dict[str, Any]]:
-        """Savolga mos jarimalarni topish (aniq soha kalit so'zlari va moddalar bilan)"""
+        """Savolga mos jarimalarni topish (aniq soha kalit so'zlari, to'xtash/parkovka va boshqa moddalar bo'yicha)"""
         if not query or not self.fines_items:
             return []
         query_norm = normalize_text(query)
-        keywords = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
+        query_unquoted = re.sub(r"['’‘`]", "", query_norm)
 
-        # Maxsus sinonimlar va tegishli moddalar
-        is_speed = any(w in query_norm for w in ["tezlik", "radar", "oshirib", "tezlikni"])
-        is_red_light = any(w in query_norm for w in ["qizil", "chiroq", "svetofor"]) and not ("stop" in query_norm or "chiziq" in query_norm)
-        is_stop_line = any(w in query_norm for w in ["stop", "liniya", "to'xtash chizig'i"])
-        is_phone = any(w in query_norm for w in ["telefon", "smartfon", "gadjet"])
-        is_belt = any(w in query_norm for w in ["kamar", "xavfsizlik kamari"])
-        is_tint = any(w in query_norm for w in ["tonirovka", "qoraytirish", "oyna"])
-        is_drink = any(w in query_norm for w in ["mast", "ichgan", "alkogol", "aroq"])
-        is_oncoming = any(w in query_norm for w in ["qarama-qarshi", "qarshi", "vstrechka"])
+        # Xalaqit beruvchi yordamchi so'zlarni filtrlaymiz
+        STOP_WORDS = {
+            "joyda", "joy", "uchun", "bilan", "qilish", "haqida", "qancha", 
+            "necha", "nima", "qanday", "bormi", "mumkinmi", "deb", "ham", 
+            "yoki", "boladi", "bo'ladi", "qilib", "qayta", "yurish"
+        }
+        raw_kw = [w for w in re.findall(r"[\w']+", query_norm) if len(w) >= 3]
+        keywords = [w for w in raw_kw if w not in STOP_WORDS]
+        for kw in list(keywords):
+            unq = re.sub(r"['’‘`]", "", kw)
+            if unq != kw and unq not in STOP_WORDS and len(unq) >= 3:
+                keywords.append(unq)
 
-        if is_red_light:
-            keywords.extend(["svetofor", "taqiqlovchi", "bo'ysunmasdan"])
-        if is_stop_line:
-            keywords.extend(["to'xtash", "chizig'ini", "bosib"])
-        if is_phone:
-            keywords.extend(["telefondan", "foydalanish"])
-        if is_belt:
-            keywords.extend(["xavfsizlik", "kamaridan", "taqmasdan"])
-        if is_speed:
-            keywords.extend(["tezlikni", "oshirib", "belgilangan"])
-        if is_tint:
-            keywords.extend(["tusi", "o'zgartirilgan", "qoraytirilgan"])
-        if is_drink:
-            keywords.extend(["mast", "holatda", "mastlik"])
-        if is_oncoming:
-            keywords.extend(["qarama-qarshi", "avariya"])
+        # 1. To'xtash va to'xtab turish (Parkovka) - MJtK 128-6-modda
+        is_stop_line = any(w in query_norm for w in ["stop liniya", "stop chiziq", "to'xtash chizig'i", "stop-liniya", "toxtash chizigi"]) or ("stop" in query_norm and "liniya" in query_norm)
+        is_parking = (any(w in query_norm or w in query_unquoted for w in [
+            "to'xtash", "toxtash", "to'xtab", "toxtab", "to'xtatish", "toxtatish",
+            "parkovka", "parkovkani", "mashinani qo'yish", "mashina qo'yish",
+            "mashinani qoyish", "mashina qoyish", "turish qoidasi",
+            "taqiqlangan joyda", "to'xtash taqiqlangan", "toxtash taqiqlangan", "3.27", "3.28"
+        ])) and not is_stop_line
+
+        # 2. Svetofor qizil chirog'i - MJtK 128-4-modda 2-qism
+        is_red_light = any(w in query_norm for w in ["qizil", "chiroq", "svetofor"]) and not is_stop_line
+
+        # 3. Tezlik oshirish - MJtK 128-3-modda
+        is_speed = any(w in query_norm for w in ["tezlik", "radar", "oshirib", "tezlikni", "km/s", "soatiga"])
+
+        # 4. Xavfsizlik kamari - MJtK 125-modda 1-qism
+        is_belt = any(w in query_norm for w in ["kamar", "xavfsizlik kamari", "remen", "kamarsiz", "taqmaslik"])
+
+        # 5. Telefon - MJtK 128-1-modda
+        is_phone = any(w in query_norm for w in ["telefon", "smartfon", "gadjet", "telefonda"])
+
+        # 6. Tonirovka - MJtK 126-modda
+        is_tint = any(w in query_norm for w in ["tonirovka", "qoraytirish", "qora oyna", "plyonka"])
+
+        # 7. Qarama-qarshi yo'nalish (vstrechka) - MJtK 128-5-modda
+        is_oncoming = any(w in query_norm for w in ["qarama-qarshi", "qarshi", "vstrechka", "qarama qarshi"])
+
+        # 8. Sug'urta (Straxovka) - MJtK 135-1-modda
+        is_insurance = any(w in query_norm for w in ["sug'urta", "sugurta", "sug'urtasiz", "sugurtasiz", "straxovka", "straxovkasiz"])
+
+        # 9. Hujjat / Prava - MJtK 135-modda
+        is_docs = (any(w in query_norm for w in ["hujjat", "hujjatsiz", "prava", "pravasiz", "guvohnoma", "guvohnomasiz"]) or "prava yo'q" in query_norm) and not is_insurance
+
+        # 10. Davlat raqami / Nomer - MJtK 125-modda 5-qism
+        is_plate = any(w in query_norm for w in ["nomer", "nomersiz", "raqam", "raqamsiz", "davlat raqami"])
+
+        # 11. Mast holda haydash - MJtK 131-modda
+        is_drunk = any(w in query_norm for w in ["mast", "ichgan", "alkogol", "aroq", "mastlik", "ichib"])
+
+        # 12. Piyodaga yo'l bermaslik / Zebra - MJtK 128-modda
+        is_pedestrian = any(w in query_norm for w in ["piyoda", "piyodaga", "zebra", "peshexod"])
+
+        # 13. Chiziq bosish / Yo'l belgisiga rioya qilmaslik - MJtK 128-modda
+        is_marking = any(w in query_norm for w in ["chiziq", "chiziqni", "liniya", "yaxlit", "sploshnoy", "belgiga"]) and not is_stop_line
+
+        # 14. Quvib o'tish qoidasi - MJtK 128-modda
+        is_overtaking = any(w in query_norm for w in ["quvib", "quvish", "quvib o'tish", "quvib otish"])
 
         scored = []
         for item in self.fines_items:
             score = 0
             for kw in keywords:
                 if kw in item["search_text"]:
-                    score += 3
+                    score += 4
 
             # Aniq modda raqami kiritilgan bo'lsa
             for digit in re.findall(r"\b\d+\b", query_norm):
                 if digit in item["article"]:
                     score += 20
 
-            # Mavzu bo'yicha mos moddalarga bonus
+            # Mavzu bo'yicha mos moddalarga ustuvor bonus
             art = item.get("article", "")
             viol = item.get("violation", "").lower()
-            if is_speed and "128-3" in art:
-                score += 25
-            if is_red_light and "128-4" in art and "svetofor" in viol:
-                score += 25
+
+            if is_parking and "128-6" in art:
+                score += 60
             if is_stop_line and "128-4" in art and "to'xtash chizi" in viol:
-                score += 30
-            if is_phone and "128-1" in art:
-                score += 30
+                score += 60
+            if is_red_light and "128-4" in art and "svetofor" in viol:
+                score += 60
+            if is_speed and "128-3" in art:
+                score += 60
             if is_belt and "kamar" in viol:
-                score += 35
+                score += 60
+            if is_phone and "128-1" in art:
+                score += 60
             if is_tint and "126" in art:
-                score += 30
-            if is_drink and "131" in art:
-                score += 30
+                score += 60
             if is_oncoming and "128-5" in art:
-                score += 30
+                score += 60
+            if is_insurance and "135-1" in art:
+                score += 60
+            if is_docs and "135-modda" == art:
+                score += 60
+            if is_plate and "125-modda" == art and "raqam" in viol:
+                score += 60
+            if is_drunk and "131" in art:
+                score += 60
+            if is_pedestrian and "128-modda" == art and "piyoda" in viol:
+                score += 60
+            if is_marking and "128-modda" == art and "chiziq" in viol:
+                score += 60
+            if is_overtaking and "128-modda" == art and "quvib" in viol:
+                score += 60
+
+            # Agar to'xtash so'ralgan bo'lsa, korxona transportini saqlashga penalti beramiz
+            if is_parking and "125-modda" in art:
+                score -= 30
 
             if item.get("bhm", 0) > 0:
                 score += 5
@@ -725,12 +813,17 @@ Yana biror savolingiz bo'lsa, bemalol so'rashingiz mumkin! 🚗"""
                 return bhm_service.get_bhm_overview_markdown()
 
         # 2. Jarimalar bo'yicha so'rovlar (MJtK)
-        # Masalan: "qizil chiroq jarimasi", "kamar jarimasi", "tezlik jarimasi", "jarima qancha", "128-modda"
+        # Masalan: "to'xtash taqiqlangan joyda toxtash jarimasi qancha", "qizil chiroq jarimasi", "kamar jarimasi"
         is_fine_topic = any(w in q_norm for w in [
-            "jarima", "bhm", "jazo", "shtraf", "modda", 
+            "jarima", "bhm", "jazo", "shtraf", "modda", "tolayman", "to'layman", 
+            "nima boladi", "nima bo'ladi", "qancha to'lanadi", "yozadimi",
             "qizil chiroq", "stop liniya", "tonirovka jarimasi", 
-            "kamar jarimasi", "tezlik jarimasi", "sug'urta jarimasi"
-        ])
+            "kamar jarimasi", "tezlik jarimasi", "sug'urta jarimasi",
+            "to'xtash jarimasi", "parkovka jarimasi"
+        ]) or (
+            any(w in q_norm for w in ["to'xtash", "toxtash", "parkovka", "tezlik", "qizil", "kamar", "nomer", "sug'urta", "sugurta", "tonirovka", "vstrechka"])
+            and any(w in q_norm for w in ["qancha", "necha", "jazo", "shtraf", "jarima", "narxi"])
+        )
         if is_fine_topic:
             top_k = 3 if ("tezlik" in q_norm or "radar" in q_norm) else 2
             fines = self.search_fines(clean_q, top_k=top_k)
